@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="297mm" height="210mm" viewBox="0 0 297 210">
+  <style>
+    *{fill:none;stroke:#000;stroke-width:.55}.cut{stroke-width:1}.guide{stroke:#777;stroke-dasharray:4 3}.wire{stroke:#17798e;stroke-width:1}.danger{fill:#ffe0e0;stroke:#b51f2e}.label{fill:#000;stroke:none;font:4px sans-serif}.title{font-size:6px;font-weight:700}.small{font-size:3.4px}
+  </style>
+  <text class="label title" x="10" y="12">ATLAS ARC BOW — RISER / HALL SENSOR REFERENCE (A4 LANDSCAPE)</text>
+  <text class="label small" x="10" y="19">Reference only. Verify the exact ESP32, connector and Hall sensor before cutting final EVA.</text>
+  <rect class="cut" x="18" y="30" width="80" height="160" rx="18"/>
+  <rect class="guide" x="31" y="49" width="54" height="112" rx="14"/>
+  <rect class="guide" x="25" y="72" width="68" height="74" rx="7"/>
+  <text class="label" x="35" y="84">REMOVABLE COVER</text>
+  <rect class="cut" x="35" y="92" width="46" height="24" rx="4"/>
+  <text class="label small" x="44" y="106">ESP32 110 × 58 × 28*</text>
+  <rect class="cut" x="77" y="124" width="7" height="18" rx="2"/>
+  <text class="label small" x="45" y="136">HALL SENSOR</text>
+  <path class="wire" d="M80 124V116H74M81 142V153H58V161"/>
+  <text class="label small" x="23" y="180">* cavity dimensions; drawing is a placement diagram, not a direct cavity cut.</text>
+  <path class="cut" d="M125 48H268V72H125Z"/>
+  <path class="guide" d="M125 60H268"/>
+  <rect class="guide" x="145" y="52" width="44" height="16" rx="4"/>
+  <rect class="cut" x="205" y="50" width="9" height="20" rx="3"/>
+  <circle class="cut" cx="232" cy="60" r="5"/>
+  <path class="wire" d="M214 60H227"/>
+  <path d="M214 45V75M232 45V75"/>
+  <text class="label small" x="202" y="39">8–25 mm CALIBRATION GAP</text>
+  <text class="label small" x="145" y="83">HALL SENSOR FIXED IN RISER</text>
+  <text class="label small" x="218" y="83">MAGNET ON SOFT SLIDER</text>
+  <path class="guide" d="M232 60H274"/>
+  <text class="label small" x="250" y="55">CORD</text>
+  <rect class="danger" x="122" y="99" width="152" height="35" rx="5"/>
+  <text class="label title" x="160" y="114">NO ARROW REST / NO PROJECTILE GEOMETRY</text>
+  <text class="label small" x="154" y="124">This space remains empty in every revision.</text>
+  <text class="label title" x="122" y="153">LAYER SECTION</text>
+  <rect x="122" y="162" width="152" height="9"/><text class="label small" x="126" y="168">5 mm EVA cosmetic skin</text>
+  <rect x="122" y="171" width="152" height="13"/><text class="label small" x="126" y="179">10 mm soft structure + protected wire route</text>
+  <rect x="122" y="184" width="152" height="9"/><text class="label small" x="126" y="190">5 mm removable rear service cover</text>
+  <path d="M10 202H110M10 198V206M110 198V206"/><text class="label small" x="45" y="197">100 mm PRINT CHECK</text>
+</svg>

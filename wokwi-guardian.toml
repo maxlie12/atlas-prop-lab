@@ -1,0 +1,6 @@
+[wokwi]
+version = 1
+firmware = 'firmware/guardian-shield/.pio/build/esp32-s3-devkitc-1/firmware.bin'
+elf = 'firmware/guardian-shield/.pio/build/esp32-s3-devkitc-1/firmware.elf'
+diagram = 'wokwi/guardian-diagram.json'
+

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="430mm" height="900mm" viewBox="0 0 430 900">
+  <style>
+    *{fill:none;stroke:#000;stroke-width:.8}.cut{stroke-width:1.3}.guide{stroke:#777;stroke-dasharray:6 4}.cord{stroke:#197b91;stroke-width:1.5}.forbidden{fill:#ffd9d9;stroke:#b51f2e;stroke-dasharray:5 3}.label{fill:#000;stroke:none;font:8px sans-serif}.small{font-size:6px}.warning{fill:#9b1524;font-weight:700}
+  </style>
+  <path class="cut" d="M326 18C224 75 82 286 112 450C82 614 224 825 326 882L310 853C220 778 118 600 142 450C118 300 220 122 310 47Z"/>
+  <path class="cut" d="M106 348Q91 380 96 450Q91 520 106 552H174V348Z"/>
+  <rect class="guide" x="112" y="370" width="54" height="160" rx="18"/>
+  <rect class="guide" x="105" y="396" width="68" height="108" rx="9"/>
+  <path class="cord" d="M326 18V882"/>
+  <circle class="guide" cx="326" cy="450" r="8"/>
+  <path class="guide" d="M326 450H171"/>
+  <rect class="forbidden" x="174" y="420" width="122" height="60" rx="8"/>
+  <path class="guide" d="M0 450H430M215 0V900"/>
+  <path d="M322 14h8M326 10v8M322 886h8M326 882v8"/>
+  <text class="label" x="14" y="22">ATLAS ARC BOW — 900 mm FULL-SCALE POWERLESS MOCK-UP</text>
+  <text class="label small" x="14" y="34">CUT: limb + riser outlines · GUIDE: grip, service cavity and magnet travel · BLUE: cosmetic low-tension cord</text>
+  <text class="label small warning" x="184" y="443">KEEP EMPTY</text>
+  <text class="label small warning" x="184" y="456">NO ARROW REST</text>
+  <text class="label small warning" x="184" y="469">NO PROJECTILE</text>
+  <text class="label small" x="14" y="870">Print 100% / Actual size. Disable Fit to page. Cardboard first. This controller must not store projectile energy.</text>
+  <path d="M18 842H118M18 837V847M118 837V847"/>
+  <text class="label small" x="50" y="833">100 mm CHECK</text>
+</svg>

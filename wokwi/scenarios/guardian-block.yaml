@@ -1,0 +1,18 @@
+name: 'Guardian block start and end'
+version: 1
+author: 'Atlas Prop Lab'
+steps:
+  - wait-serial: 'ATLAS_PROP_READY v1 guardian-shield-01'
+  - set-control:
+      part-id: trigger
+      control: pressed
+      value: 1
+  - delay: 100ms
+  - wait-serial: '"action":"BLOCK_START"'
+  - set-control:
+      part-id: trigger
+      control: pressed
+      value: 0
+  - delay: 100ms
+  - wait-serial: '"action":"BLOCK_END"'
+

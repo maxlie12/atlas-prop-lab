@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#071117" />
+    <meta name="description" content="Thiết kế, mô phỏng và lắp ráp đạo cụ ESP32 cho Project Atlas bằng tiếng Việt hoặc tiếng Anh." />
+    <title>Atlas Prop Lab</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="journey.css" />
+    <link rel="stylesheet" href="physical-gate.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand-mark" aria-hidden="true">A</div>
+      <div class="brand-copy">
+        <strong>ATLAS PROP LAB</strong>
+        <span>ESP32 prototype workspace</span>
+      </div>
+      <div class="language-switch" role="group" aria-label="Language">
+        <button type="button" data-language="vi">VI</button>
+        <button type="button" data-language="en" class="is-active">EN</button>
+      </div>
+      <div class="header-status"><i></i><span id="headerStatusText">V0.12 HARDWARE GATE</span></div>
+    </header>
+
+    <nav class="mode-tabs" aria-label="Lab views">
+      <button class="tab is-active" data-view="event-kit">01 Event kit</button>
+      <button class="tab" data-view="prototype">02 ESP32 lab</button>
+      <button class="tab" data-view="field">03 Field simulator</button>
+      <a class="tab" href="product-lab.html">04 Product engine · thử nghiệm</a>
+    </nav>
+
+    <main>
+      <section id="event-kit" class="view is-active" aria-labelledby="event-kit-title">
+        <section class="journey-shell" id="buildJourney" aria-labelledby="journeyTitle">
+          <div class="journey-hero">
+            <div>
+              <p class="eyebrow" id="journeyEyebrow">ATLAS BUILD JOURNEY / PROTOTYPE 01</p>
+              <h1 id="journeyTitle">Tạo Arc Bow + giáp nhận sát thương</h1>
+              <p id="journeyIntro">Đi tuần tự từ lựa chọn cách làm, mua linh kiện, lắp mạch, đặt từng module cho tới thử bắn và xác nhận sát thương.</p>
+            </div>
+            <div class="journey-start">
+              <span id="journeyStateLabel">CHƯA BẮT ĐẦU</span>
+              <button type="button" class="button primary" id="startProductButton">Bắt đầu sản phẩm</button>
+              <button type="button" class="button ghost" id="resumeProductButton" hidden>Tiếp tục bước đang làm</button>
+            </div>
+          </div>
+
+          <div class="journey-build-mode" id="journeyBuildMode">
+            <div>
+              <strong id="journeyModeTitle">M sẽ chế tạo theo cách nào?</strong>
+              <small id="journeyModeNote">Có thể đổi sau. Tool sẽ điều chỉnh phần việc, hồ sơ giao thợ và bước nghiệm thu.</small>
+            </div>
+            <div class="journey-mode-options" role="group" aria-label="Build mode">
+              <button type="button" data-build-mode="diy"><b id="journeyModeDiy">Tự làm</b><span id="journeyModeDiyNote">Tự chế tạo và lắp điện tử</span></button>
+              <button type="button" data-build-mode="hybrid" class="is-active"><b id="journeyModeHybrid">Thuê một phần</b><span id="journeyModeHybridNote">Thuê vỏ/in 3D, tự test hệ thống</span></button>
+              <button type="button" data-build-mode="turnkey"><b id="journeyModeTurnkey">Thuê trọn bộ</b><span id="journeyModeTurnkeyNote">Giao hồ sơ và tập trung nghiệm thu</span></button>
+            </div>
+          </div>
+
+          <nav class="journey-steps" id="journeySteps" aria-label="Product build journey"></nav>
+          <div class="journey-footer">
+            <div>
+              <span id="journeyCurrentKicker">BƯỚC TIẾP THEO</span>
+              <strong id="journeyCurrentTitle">Khởi tạo hồ sơ sản phẩm</strong>
+              <small id="journeyCurrentNote">Chọn cách chế tạo rồi bắt đầu. Tiến độ được lưu trên thiết bị này.</small>
+            </div>
+            <button type="button" class="button secondary" id="journeyNextButton">Mở bước hiện tại</button>
+          </div>
+        </section>
+
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">ATLAS EVENT KIT V1 / 1 BOSS VS 4 HEROES</p>
+            <h1 id="event-kit-title">Prop build planner</h1>
+          </div>
+          <p class="section-note">The roster contains five hero kits. Load any four heroes plus Titan Warden for a match.</p>
+        </div>
+
+        <div class="kit-status-grid" aria-label="Event kit target">
+          <div><strong>6</strong><span>role build packs</span></div>
+          <div><strong>6×8 m</strong><span>minimum play zone</span></div>
+          <div><strong>5–7 min</strong><span>match target</span></div>
+          <div><strong>6 ESP32</strong><span>MVP: five players + hub</span></div>
+        </div>
+
+        <section class="panel mvp-feedback-panel" aria-labelledby="mvp-feedback-title">
+          <div class="panel-toolbar mvp-feedback-toolbar">
+            <div>
+              <span class="panel-label" id="mvpFeedbackLabel">AFFORDABLE MVP / NO CAMERA</span>
+              <strong id="mvp-feedback-title">Prove the feeling before buying stage equipment</strong>
+            </div>
+            <span class="mono-pill mvp-cost-pill" id="mvpCostPill">LOW-COST FIRST PROOF</span>
+          </div>
+
+          <div class="mvp-feedback-grid">
+            <section class="mvp-demo" aria-label="Bow to armour feedback simulator">
+              <div class="mvp-demo-head">
+                <div>
+                  <p class="eyebrow" id="mvpDemoEyebrow">ONE ACTION → ONE VISIBLE CONSEQUENCE</p>
+                  <h2 id="mvpDemoTitle">Arc Bow feedback loop</h2>
+                </div>
+                <span class="mvp-state-badge" id="mvpStateBadge" data-state="idle">READY</span>
+              </div>
+
+              <div class="mvp-signal-stage" id="mvpSignalStage" data-state="idle" data-zone="chest">
+                <div class="mvp-device mvp-bow-device">
+                  <span class="mvp-device-index">1</span>
+                  <strong id="mvpBowTitle">Bow LEDs</strong>
+                  <small id="mvpBowHint">Hall sensor detects draw and release</small>
+                  <div class="mvp-bow-meter" aria-hidden="true"><i></i><b></b><i></i></div>
+                  <span class="mvp-device-status" id="mvpBowStatus">Waiting for draw</span>
+                </div>
+
+                <div class="mvp-signal-link" aria-hidden="true">
+                  <i class="mvp-packet"></i>
+                  <span>FIRE</span>
+                </div>
+
+                <div class="mvp-device mvp-unity-device">
+                  <span class="mvp-device-index">2</span>
+                  <strong id="mvpUnityTitle">Unity authority</strong>
+                  <small id="mvpUnityHint">Checks cooldown, target zone and damage</small>
+                  <div class="mvp-unity-screen"><span>FIRE</span><i></i><span>HIT</span></div>
+                  <span class="mvp-device-status" id="mvpUnityStatus">Ready to validate</span>
+                </div>
+
+                <div class="mvp-signal-link return-link" aria-hidden="true">
+                  <i class="mvp-packet"></i>
+                  <span>HIT</span>
+                </div>
+
+                <div class="mvp-device mvp-armour-device">
+                  <span class="mvp-device-index">3</span>
+                  <strong id="mvpArmourTitle">Shared impact armour</strong>
+                  <small id="mvpArmourHint">Hero or Boss profile; only the confirmed zone flashes</small>
+                  <div class="mvp-armour-map" aria-hidden="true">
+                    <i class="armour-zone left" data-armour-zone="left"></i>
+                    <i class="armour-zone chest" data-armour-zone="chest"></i>
+                    <i class="armour-zone right" data-armour-zone="right"></i>
+                  </div>
+                  <span class="mvp-device-status" id="mvpArmourStatus">Armour linked</span>
+                </div>
+              </div>
+
+              <div class="mvp-demo-controls">
+                <div class="mvp-target-control">
+                  <span id="mvpTargetLabel">Target zone</span>
+                  <div class="segmented-control" id="mvpTargetButtons" role="group" aria-label="Boss target zone">
+                    <button type="button" data-mvp-zone="left">Left</button>
+                    <button type="button" data-mvp-zone="chest" class="is-active">Chest</button>
+                    <button type="button" data-mvp-zone="right">Right</button>
+                  </div>
+                </div>
+                <button type="button" class="button primary mvp-fire-button" id="mvpFireButton">
+                  <span id="mvpFireMain">Hold to charge</span>
+                  <small id="mvpFireSub">Release to fire</small>
+                </button>
+              </div>
+
+              <ol class="mvp-event-log" id="mvpEventLog" aria-live="polite">
+                <li><time>00.000</time><span id="mvpInitialLog">System ready · no projector or camera required</span></li>
+              </ol>
+            </section>
+
+            <aside class="mvp-boundary">
+              <p class="eyebrow" id="mvpBoundaryEyebrow">SPEND ONLY AFTER THE LOOP FEELS GOOD</p>
+              <h3 id="mvpBoundaryTitle">Three investment levels</h3>
+              <div class="mvp-tier-list">
+                <article class="is-now">
+                  <span>01</span>
+                  <div><strong id="mvpTierOneTitle">Build now</strong><p id="mvpTierOneText">Bow LED + Hall sensor, Unity screen, one three-zone armour receiver and sound.</p></div>
+                  <b id="mvpTierOneBadge">NO CAMERA</b>
+                </article>
+                <article>
+                  <span>02</span>
+                  <div><strong id="mvpTierTwoTitle">Upgrade after playtest</strong><p id="mvpTierTwoText">Add fixed floor zones or rent one overhead projector for a special event.</p></div>
+                  <b id="mvpTierTwoBadge">OPTIONAL</b>
+                </article>
+                <article>
+                  <span>03</span>
+                  <div><strong id="mvpTierThreeTitle">Stage edition</strong><p id="mvpTierThreeText">Camera tracking, projection mapping and haze only after the event model is proven.</p></div>
+                  <b id="mvpTierThreeBadge">DEFER</b>
+                </article>
+              </div>
+              <div class="mvp-proof-gate">
+                <strong id="mvpProofGateTitle">MVP purchase gate</strong>
+                <p id="mvpProofGateText">Do not buy a projector. First prove that release, screen VFX, armour flash and sound feel like one event.</p>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="panel impact-system-panel" id="impactArmourSystem" aria-labelledby="impactArmourTitle">
+          <div class="panel-toolbar impact-system-toolbar">
+            <div>
+              <span class="panel-label" id="impactArmourLabel">SHARED DAMAGE RECEIVER</span>
+              <strong id="impactArmourTitle">Một bộ giáp cho cả Hero và Boss</strong>
+            </div>
+            <span class="mono-pill" id="impactArmourStatus">CONCEPT / CHƯA TEST THẬT</span>
+          </div>
+          <div class="impact-system-grid">
+            <div class="impact-wearable">
+              <div class="impact-vest" aria-label="Three-zone shared impact vest">
+                <i data-impact-zone="left-shoulder"><span>01</span></i>
+                <i data-impact-zone="chest"><span>02</span></i>
+                <i data-impact-zone="right-shoulder"><span>03</span></i>
+                <b id="impactReceiverBadge">ESP32 RECEIVER</b>
+              </div>
+              <p id="impactFitBoundary">Áo nền mở hai bên, dây điều chỉnh và module tháo rời. Phải thử người nhỏ nhất và lớn nhất trước khi chốt kích thước.</p>
+            </div>
+            <div class="impact-profile-area">
+              <p class="eyebrow" id="impactProfileEyebrow">CHỌN NGƯỜI MẶC / KHÔNG ĐỔI PHẦN CỨNG</p>
+              <div class="impact-profile-switch" role="group" aria-label="Impact armour wearer profile">
+                <button type="button" data-impact-profile="hero" class="is-active"><strong id="impactHeroTitle">Hero profile</strong><small id="impactHeroNote">Phản hồi nhanh, máu và màu theo role</small></button>
+                <button type="button" data-impact-profile="boss"><strong id="impactBossTitle">Boss profile</strong><small id="impactBossNote">Nhiều máu, phase và hiệu ứng mạnh hơn</small></button>
+              </div>
+              <div class="impact-contract" id="impactContract"></div>
+              <div class="impact-boundary">
+                <strong id="impactBoundaryTitle">Phần dùng chung</strong>
+                <p id="impactBoundaryText">Ba vùng nhận hit, receiver sau lưng, dây tháo nhanh, LED tán sáng và cùng event HIT_CONFIRM. Profile chỉ đổi luật game.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel linked-parts-panel" id="linkedParts" aria-labelledby="linkedPartsTitle">
+          <div class="panel-toolbar linked-parts-toolbar">
+            <div>
+              <span class="panel-label" id="linkedPartsLabel">ONE PART ID / EVERY VIEW</span>
+              <strong id="linkedPartsTitle">Chọn một linh kiện để biết mua gì và đặt ở đâu</strong>
+            </div>
+            <div class="linked-subsystem-switch" role="group" aria-label="Linked component subsystem">
+              <button type="button" data-linked-subsystem="bow" class="is-active">ARC BOW</button>
+              <button type="button" data-linked-subsystem="armour">IMPACT ARMOUR</button>
+            </div>
+          </div>
+          <div class="linked-parts-grid">
+            <nav class="linked-parts-list" id="linkedPartsList" aria-label="Prototype components"></nav>
+            <article class="linked-part-detail" id="linkedPartDetail" aria-live="polite"></article>
+          </div>
+        </section>
+
+        <section class="panel hit-lab-panel" id="hitLab" aria-labelledby="hitLabTitle">
+          <div class="panel-toolbar hit-lab-toolbar">
+            <div>
+              <span class="panel-label" id="hitLabLabel">BOW → ARMOUR PROOF</span>
+              <strong id="hitLabTitle">Chứng minh giáp xác nhận hit trước khi game trừ máu</strong>
+            </div>
+            <span class="mono-pill" id="hitLabStatus">LOGIC SIMULATOR / CHƯA TEST IR THẬT</span>
+          </div>
+          <div class="hit-lab-grid">
+            <div class="hit-lab-demo">
+              <div class="hit-pipeline" aria-label="Bow to impact armour event pipeline">
+                <article data-hit-node="bow"><b>01</b><strong>ARC BOW</strong><span>Hall release</span></article>
+                <i>FIRE</i>
+                <article data-hit-node="beam"><b>02</b><strong>IR PACKET</strong><span>Mã bắn, không tia nhìn thấy</span></article>
+                <i>SHOT_SEEN</i>
+                <article data-hit-node="armour"><b>03</b><strong>IMPACT ARMOUR</strong><span>Receiver xác nhận vùng</span></article>
+                <i>HIT_CONFIRM</i>
+                <article data-hit-node="game"><b>04</b><strong>GAME</strong><span>Chống lặp + trừ máu</span></article>
+              </div>
+              <div class="hit-lab-controls">
+                <label><span id="hitProfileLabel">Người mặc giáp</span><select id="hitProfile"><option value="hero">Hero · 100 HP</option><option value="boss">Boss · 520 HP</option></select></label>
+                <label><span id="hitScenarioLabel">Tình huống</span><select id="hitScenario"><option value="confirm">Trúng vùng ngực</option><option value="left">Trúng vai trái</option><option value="right">Trúng vai phải</option><option value="miss">Bắn trượt</option><option value="interference">Nhiễu / sai mã</option><option value="duplicate">Gói hit bị lặp</option></select></label>
+                <button type="button" class="button primary" id="runHitTest">Chạy một phát bắn</button>
+                <button type="button" class="button ghost" id="resetHitTest">Đặt lại</button>
+              </div>
+              <div class="hit-result-strip">
+                <div><span id="hitShotLabel">SHOT ID</span><strong id="hitShotId">—</strong></div>
+                <div><span id="hitZoneLabel">VÙNG XÁC NHẬN</span><strong id="hitZoneValue">—</strong></div>
+                <div><span id="hitHealthLabel">MÁU</span><strong id="hitHealthValue">100 / 100</strong></div>
+                <div><span id="hitVerdictLabel">KẾT QUẢ</span><strong id="hitVerdict">READY</strong></div>
+              </div>
+            </div>
+            <aside class="hit-event-area">
+              <div class="hit-event-head"><strong id="hitEventTitle">Event log có thể kiểm tra</strong><button type="button" id="copyHitEvidence">Copy JSON</button></div>
+              <ol class="hit-event-log" id="hitEventLog" aria-live="polite"><li><time>00.000</time><code>SYSTEM_READY</code><span>Chờ chạy test</span></li></ol>
+              <div class="hit-proof-boundary">
+                <strong id="hitBoundaryTitle">PASS ở đây chỉ chứng minh logic</strong>
+                <p id="hitBoundaryText">Chưa chứng minh khoảng cách IR, ánh sáng môi trường, vùng che khuất, pin, độ vừa áo hoặc độ trễ phần cứng ngoài đời.</p>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="panel project-handoff-panel" id="projectHandoff" aria-labelledby="projectHandoffTitle">
+          <div class="panel-toolbar project-handoff-toolbar">
+            <div>
+              <span class="panel-label" id="projectHandoffLabel">PROTOTYPE 01 / HANDOFF</span>
+              <strong id="projectHandoffTitle">Arc Bow + giáp dùng chung đang ở đâu?</strong>
+            </div>
+            <span class="mono-pill warning" id="projectHandoffStatus">4/5 DIGITAL PASS · PHYSICAL BLOCKED</span>
+          </div>
+          <div class="project-handoff-grid">
+            <div class="project-gates" id="projectGates">
+              <article data-gate="journey"><b>01 · PASS</b><strong>Luồng làm sản phẩm</strong><span>Bắt đầu → thiết kế → mua → test → lắp → hit test → nghiệm thu.</span></article>
+              <article data-gate="armour"><b>02 · PASS</b><strong>Giáp Hero/Boss dùng chung</strong><span>Ba vùng nhận, một phần cứng; profile game đổi máu và hiệu ứng.</span></article>
+              <article data-gate="links"><b>03 · PASS</b><strong>Liên kết linh kiện</strong><span>Mỗi part nối được mua gì, đặt ở đâu, dây, bước lắp và test.</span></article>
+              <article data-gate="logic"><b>04 · PASS</b><strong>Logic hit có chống lặp</strong><span>Giáp phải xác nhận trước khi game trừ máu; miss/reject không gây damage.</span></article>
+              <article data-gate="physical" class="is-blocked"><b>05 · BLOCKED</b><strong>Bằng chứng phần cứng thật</strong><span>Cần mua một bộ tối thiểu, đo IR/độ vừa/pin/nhiệt/latency và ghi kết quả.</span></article>
+            </div>
+            <aside class="project-next-actions">
+              <p class="eyebrow" id="projectNextEyebrow">BƯỚC TIẾP THEO ÍT TỐN NHẤT</p>
+              <h3 id="projectNextTitle">Không làm thêm 3D trước khi qua bench proof</h3>
+              <ol>
+                <li id="projectNextOne">Chốt đúng board ESP32-S3, Hall + nam châm và một cặp IR emitter/receiver.</li>
+                <li id="projectNextTwo">Test trên bàn bằng USB; lưu log 100 lần kéo/thả và 100 packet hit.</li>
+                <li id="projectNextThree">Làm một bib carton/EVA ba vùng, thử trên người nhỏ nhất và lớn nhất.</li>
+                <li id="projectNextFour">Chỉ sau PASS mới đo khoang, sửa CAD và đặt in 3D/vỏ hoàn thiện.</li>
+              </ol>
+              <div class="project-handoff-actions">
+                <a class="button primary" href="#physicalGate" id="openHardwareGate">Mở Hardware Gate</a>
+                <button type="button" class="button primary" id="downloadHandoffJson">Tải hồ sơ bàn giao JSON</button>
+                <a class="button secondary" href="downloads/arc-bow-impact-armour-handoff.md" download id="downloadHandoffMd">Tải checklist Markdown</a>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="panel physical-gate-panel" id="physicalGate" aria-labelledby="physicalGateTitle">
+          <div class="panel-toolbar physical-gate-toolbar">
+            <div><span class="panel-label" id="physicalGateLabel">PHYSICAL GATE / BENCH KIT 01</span><strong id="physicalGateTitle">Mua tối thiểu để chứng minh cung bắn và giáp nhận</strong></div>
+            <span class="mono-pill warning" id="physicalGateState">CHƯA MUA · CHƯA ĐO</span>
+          </div>
+          <div class="physical-gate-summary">
+            <div><span id="physicalBudgetLabel">ƯỚC TÍNH</span><strong id="physicalBudget">—</strong><small id="physicalBudgetNote">Không gồm vận chuyển và vỏ hoàn thiện</small></div>
+            <div><span id="physicalNowLabel">MUA TRƯỚC</span><strong id="physicalNowCount">—</strong><small id="physicalNowNote">Chỉ đồ test trên bàn</small></div>
+            <div><span id="physicalLaterLabel">CHƯA MUA</span><strong id="physicalLaterCount">—</strong><small id="physicalLaterNote">Pin, PCB, vỏ in 3D</small></div>
+          </div>
+          <div class="physical-gate-grid">
+            <nav class="physical-kit-list" id="physicalKitList" aria-label="Bench kit parts"></nav>
+            <article class="physical-kit-detail" id="physicalKitDetail" aria-live="polite"></article>
+          </div>
+          <div class="physical-gate-footer"><p id="physicalGateBoundary">Nguồn bán chỉ là đường dẫn tham chiếu. Phải đối chiếu đúng mã linh kiện và đo điện áp trước khi nối ESP32.</p><a class="button secondary" href="#physicalWiring" id="openPhysicalWiring">Tiếp theo: xem sơ đồ dây</a></div>
+        </section>
+
+        <section class="panel physical-wiring-panel" id="physicalWiring" aria-labelledby="physicalWiringTitle">
+          <div class="panel-toolbar physical-wiring-toolbar">
+            <div><span class="panel-label" id="physicalWiringLabel">BENCH WIRING / USB ONLY</span><strong id="physicalWiringTitle">Sơ đồ dây an toàn trước khi cấp nguồn</strong></div>
+            <span class="mono-pill warning" id="physicalWiringStatus">PIN TẠM THỜI · PHẢI ĐỐI CHIẾU BOARD</span>
+          </div>
+          <div class="physical-wiring-grid">
+            <div class="wiring-map" id="wiringMap" aria-label="Arc Bow and impact armour bench wiring"></div>
+            <aside class="wiring-config">
+              <p class="eyebrow" id="wiringConfigEyebrow">PIN MAP CÓ THỂ ĐỔI</p>
+              <div class="wiring-pin-grid" id="wiringPinGrid"></div>
+              <div class="wiring-calculation" id="wiringCalculation"></div>
+              <div class="wiring-verdict" id="wiringVerdict" data-state="blocked"></div>
+            </aside>
+          </div>
+          <div class="wiring-gates" id="wiringGates"></div>
+          <div class="physical-gate-footer"><p id="wiringBoundary">Chỉ cấp nguồn USB sau khi năm kiểm tra đều PASS. Các GPIO chỉ là đề xuất bench, chưa phải pinout sản xuất.</p><a class="button secondary" href="#benchEvidence" id="openBenchEvidence">Tiếp theo: ghi 100 lần test</a></div>
+        </section>
+
+        <section class="panel bench-evidence-panel" id="benchEvidence" aria-labelledby="benchEvidenceTitle">
+          <div class="panel-toolbar bench-evidence-toolbar">
+            <div><span class="panel-label" id="benchEvidenceLabel">REAL HARDWARE EVIDENCE</span><strong id="benchEvidenceTitle">Ghi 100 lần kéo/thả và 100 packet hit</strong></div>
+            <span class="mono-pill warning" id="benchEvidenceStatus">0 / 2 CAMPAIGNS PASS</span>
+          </div>
+          <div class="bench-campaign-tabs" role="group" aria-label="Bench evidence campaign">
+            <button type="button" class="is-active" data-bench-campaign="bow" id="benchBowTab">01 · Bow release</button>
+            <button type="button" data-bench-campaign="hit" id="benchHitTab">02 · Armour hit</button>
+          </div>
+          <div class="bench-evidence-grid">
+            <div class="bench-recorder">
+              <div class="bench-progress-head"><div><span id="benchCampaignKicker">CAMPAIGN 01</span><h3 id="benchCampaignTitle">Hall draw/release reliability</h3></div><strong id="benchProgressText">0 / 100</strong></div>
+              <div class="progress-track bench-progress"><i id="benchProgressBar"></i></div>
+              <div class="bench-input-row">
+                <label><span id="benchLatencyLabel">Latency đo được</span><div><input type="number" id="benchLatency" min="0" max="5000" value="45" step="1"><b>ms</b></div></label>
+                <label><span id="benchNoteLabel">Ghi chú tùy chọn</span><input type="text" id="benchNote" maxlength="80" placeholder="Ánh sáng, góc, khoảng cách…"></label>
+              </div>
+              <div class="bench-outcome-actions" id="benchOutcomeActions"></div>
+              <p class="bench-lock-note" id="benchLockNote">Phải PASS đủ 5 wiring gates trước khi ghi test phần cứng.</p>
+            </div>
+            <aside class="bench-metrics">
+              <div class="bench-metric-grid">
+                <div><span id="benchTotalLabel">TỔNG</span><strong id="benchTotal">0</strong></div>
+                <div><span id="benchSuccessLabel">PASS</span><strong id="benchSuccess">0</strong></div>
+                <div><span id="benchErrorLabel">LỖI</span><strong id="benchError">0</strong></div>
+                <div><span id="benchP95Label">P95 LATENCY</span><strong id="benchP95">—</strong></div>
+              </div>
+              <div class="bench-pass-rule" id="benchPassRule"></div>
+              <ol class="bench-recent-log" id="benchRecentLog" aria-live="polite"></ol>
+              <div class="bench-export-actions"><button type="button" class="button secondary" id="exportBenchCsv">Tải CSV</button><button type="button" class="button ghost" id="clearBenchCampaign">Xóa campaign này</button></div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="panel armour-fit-panel" id="armourFitGate" aria-labelledby="armourFitTitle">
+          <div class="panel-toolbar armour-fit-toolbar">
+            <div><span class="panel-label" id="armourFitLabel">SHARED ARMOUR / FIT + COVERAGE</span><strong id="armourFitTitle">Chứng minh một áo dùng được cho Hero và Boss</strong></div>
+            <span class="mono-pill warning" id="armourFitStatus">0 / 2 GATES PASS</span>
+          </div>
+          <div class="armour-fit-grid">
+            <section class="wearer-fit-area">
+              <div class="armour-fit-visual" id="armourFitVisual">
+                <div class="fit-vest"><i data-fit-zone="left">L</i><i data-fit-zone="chest">C</i><i data-fit-zone="right">R</i><b>QUICK RELEASE</b></div>
+                <div class="fit-dimension"><span id="fitPanelWidth">—</span><small id="fitPanelWidthLabel">front panel start</small></div>
+                <div class="fit-dimension"><span id="fitAdjustRange">—</span><small id="fitAdjustRangeLabel">minimum adjustment</small></div>
+              </div>
+              <div class="wearer-profiles" id="wearerProfiles"></div>
+              <div class="fit-acceptance" id="fitAcceptance"></div>
+            </section>
+            <aside class="coverage-area">
+              <p class="eyebrow" id="coverageEyebrow">15 REAL SHOTS / ACTUAL EVENT LIGHT</p>
+              <h3 id="coverageTitle">Receiver coverage matrix</h3>
+              <div class="coverage-matrix" id="coverageMatrix"></div>
+              <div class="coverage-verdict" id="coverageVerdict"></div>
+              <button type="button" class="button secondary" id="exportFitEvidence">Tải fit + coverage JSON</button>
+            </aside>
+          </div>
+        </section>
+
+        <div class="role-picker" role="list" aria-label="Choose a prop build">
+          <button class="role-card is-active" data-prop="guardian" role="listitem"><span class="role-glyph">⬡</span><strong>Guardian</strong><small>Shield</small></button>
+          <button class="role-card" data-prop="warrior" role="listitem"><span class="role-glyph">†</span><strong>Warrior</strong><small>Sword</small></button>
+          <button class="role-card" data-prop="archer" role="listitem"><span class="role-glyph">⌁</span><strong>Archer</strong><small>Bow</small></button>
+          <button class="role-card" data-prop="assassin" role="listitem"><span class="role-glyph">⟋</span><strong>Assassin</strong><small>Daggers</small></button>
+          <button class="role-card" data-prop="mage" role="listitem"><span class="role-glyph">✦</span><strong>Mage</strong><small>Staff</small></button>
+          <button class="role-card boss-card" data-prop="boss" role="listitem"><span class="role-glyph">♛</span><strong>Titan Warden</strong><small>Boss hammer</small></button>
+        </div>
+
+        <section class="panel twin-panel" aria-labelledby="twin-title">
+          <div class="panel-toolbar twin-toolbar">
+            <div><span class="panel-label">Interactive digital twin</span><strong id="twin-title">Guardian Shield · 3D assembly model</strong></div>
+            <span class="mono-pill" id="twinStatus">DETAIL PASS V0.9</span>
+          </div>
+          <div class="twin-grid">
+            <div class="twin-stage" id="threePropStage">
+              <div class="three-loading" id="threePropLoading">Loading 3D workspace…</div>
+              <div class="twin-axis" aria-hidden="true"><i class="axis-x">X</i><i class="axis-y">Y</i><i class="axis-z">Z</i></div>
+            </div>
+            <aside class="twin-controls">
+              <p class="eyebrow">EXPLORE BEFORE BUILDING</p>
+              <h2 id="twinPropName">Aegis Shield</h2>
+              <p id="twinIntro">Rotate the model, separate its layers, and select a component to inspect where it belongs.</p>
+              <label class="range-label" for="explodeRange"><span id="explodeLabel">Exploded view</span><output id="explodeValue">0%</output></label>
+              <input id="explodeRange" type="range" min="0" max="100" value="0" step="1" />
+              <label class="twin-toggle"><input id="electronicsLayerToggle" type="checkbox" checked /><span id="electronicsLayerLabel">Show electronics layer</span></label>
+              <label class="twin-toggle"><input id="syncTwinToggle" type="checkbox" checked /><span id="syncTwinLabel">Follow the current assembly step</span></label>
+              <div class="panel-label" id="twinPartsLabel">Selectable modules</div>
+              <div id="twinPartButtons" class="twin-part-buttons"></div>
+              <div id="twinPartInfo" class="twin-part-info" aria-live="polite"><strong>Select a module</strong><p>Its placement, job, and build caution will appear here.</p></div>
+              <p class="three-boundary" id="twinBoundary">Concept geometry only. Verify real dimensions with a cardboard or EVA mock-up before cutting final material.</p>
+            </aside>
+          </div>
+        </section>
+
+        <section class="guardian-production" id="guardianProductionPack" aria-labelledby="guardian-production-title">
+          <div class="section-heading production-heading">
+            <div><p class="eyebrow">GUARDIAN / PRODUCTION READINESS</p><h2 id="guardian-production-title">From design to first physical shield</h2></div>
+            <p class="section-note">These values create a full-size cardboard starting point. The mock-up must pass before final EVA or electronics purchases.</p>
+          </div>
+          <div class="production-grid">
+            <section class="panel fit-panel">
+              <div class="panel-toolbar"><span class="panel-label">Fit calculator</span><span class="mono-pill">MOCK-UP VALUES</span></div>
+              <div class="fit-fields">
+                <label for="playerHeight"><span>Player height</span><strong><output id="playerHeightValue">168</output> cm</strong></label>
+                <input id="playerHeight" type="range" min="145" max="195" value="168" step="1" />
+                <label for="forearmLength"><span>Forearm length</span><strong><output id="forearmLengthValue">27</output> cm</strong></label>
+                <input id="forearmLength" type="range" min="20" max="36" value="27" step="1" />
+              </div>
+              <div class="fit-results">
+                <div><span>Starting diameter</span><strong id="shieldDiameterResult">50 cm</strong><small>Clamp: 45–55 cm</small></div>
+                <div><span>Strap centres</span><strong id="strapSpacingResult">15 cm</strong><small>Keep both adjustable</small></div>
+                <div><span>Electronics cavity</span><strong>110 × 85 × 28 mm</strong><small>Rear removable cover</small></div>
+                <div><span>Target mass</span><strong>&lt; 1.2 kg</strong><small>Reject if wrist-heavy</small></div>
+              </div>
+              <div class="production-warning"><strong>Not a final cutting specification</strong><p id="fitWarningText">Print or draw this diameter on cardboard. Test three users and adjust it before transferring the outline to EVA.</p></div>
+            </section>
+
+            <section class="panel layer-panel">
+              <div class="panel-toolbar"><span class="panel-label">Physical layer stack</span><span class="mono-pill">FRONT → BODY</span></div>
+              <ol class="layer-stack" id="guardianLayerStack">
+                <li><b>01</b><div><strong>5 mm cosmetic face</strong><p>Logo, diffuser openings and a soft replaceable front skin.</p></div><span>5 mm EVA</span></li>
+                <li><b>02</b><div><strong>10 mm structural ring</strong><p>Main shape; rounded perimeter with no rigid full-width core.</p></div><span>10 mm EVA</span></li>
+                <li><b>03</b><div><strong>Protected cable channel</strong><p>LED and trigger wiring with quick connectors and strain relief.</p></div><span>5 mm route</span></li>
+                <li><b>04</b><div><strong>Rear service plate</strong><p>Removable ESP32/IMU compartment; isolated from the forearm.</p></div><span>5 mm EVA</span></li>
+                <li><b>05</b><div><strong>Adjustable wearable layer</strong><p>Two padded nylon straps plus a reachable thumb trigger.</p></div><span>25 mm webbing</span></li>
+              </ol>
+            </section>
+          </div>
+
+          <div class="production-grid lower-production-grid">
+            <section class="panel buy-gate-panel">
+              <div class="panel-toolbar"><span class="panel-label">Purchase gates</span><span id="purchaseGateCount" class="mono-pill">0 / 10 READY</span></div>
+              <div class="purchase-decision" id="guardianPurchaseSummary" aria-live="polite"></div>
+              <div class="purchase-columns" id="guardianPurchaseList"></div>
+              <p class="fine-print">“Buy later” protects the budget: do not order electronics until the cardboard fit gate passes.</p>
+            </section>
+            <section class="panel readiness-panel">
+              <div class="panel-toolbar"><span class="panel-label">Release gates</span><button id="clearGuardianGates" class="text-button">Clear checks</button></div>
+              <div class="readiness-score"><div class="progress-track"><i id="guardianGateProgress"></i></div><strong id="guardianGateCount">0 / 5 PASS</strong></div>
+              <ol id="guardianGateList" class="guardian-gate-list"></ol>
+              <button class="button primary" id="downloadGuardianProductionPack">Download Guardian production pack</button>
+              <div class="production-assets" aria-label="Guardian fabrication drawings">
+                <a class="button ghost" href="downloads/guardian-template-500mm.svg" download>500 mm face template</a>
+                <a class="button ghost" href="downloads/guardian-rear-layout.svg" download>Rear layout + section</a>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="panel cad-panel" aria-label="Dimensioned design sheets">
+          <div class="panel-toolbar"><span class="panel-label" id="cadTitle">Bản vẽ kích thước · cm</span><span class="mono-pill">DESIGN / NOT CUT-READY</span></div>
+          <div class="cad-controls"><label id="cadViewLabel" for="cadView">Mặt nhìn</label><select id="cadView"><option value="front">Mặt trước</option><option value="rear">Mặt sau / vị trí module</option><option value="side">Mặt cạnh / độ dày</option></select><label><input id="cadGrid" type="checkbox" checked/> <span id="cadGridLabel">Lưới 1 cm</span></label><button id="cadDownload" class="button secondary">Tải SVG vector</button></div>
+          <p id="cadBoundary" class="cad-note"></p>
+          <div class="cad-scroll"><div id="cadDrawing"></div></div>
+          <div id="cadDimensions" class="table-wrap"></div>
+          <div id="cadInstructions" class="cad-instructions"></div>
+          <figure id="cadRenderFigure" class="cad-render" hidden><img src="assets/guardian-cad-render-v1.webp" alt="Guardian shield concept matching the dimensioned design" width="1400" height="933"/><figcaption id="cadRenderCaption"></figcaption></figure>
+        </section>
+
+        <div class="kit-workspace">
+          <section class="panel blueprint-panel">
+            <div class="panel-toolbar">
+              <span class="panel-label">Numbered assembly drawing</span>
+              <span id="propStatus" class="mono-pill">DESIGN PACK</span>
+            </div>
+            <div class="blueprint-stage">
+              <div id="propBlueprint" class="prop-blueprint" aria-live="polite"></div>
+              <div class="blueprint-scale">
+                <span id="propSize">Ø 500 mm</span>
+                <small>Concept dimensions — verify on the first foam mock-up</small>
+              </div>
+            </div>
+            <div class="callout-grid" id="propCallouts"></div>
+          </section>
+
+          <aside class="panel prop-summary-panel">
+            <p class="eyebrow" id="propRoleLabel">GUARDIAN / DEFENCE</p>
+            <h2 id="propName">Aegis Shield</h2>
+            <p id="propPurpose" class="prop-purpose"></p>
+            <div class="spec-stack">
+              <div><span>Shell</span><strong id="propShell"></strong></div>
+              <div><span>Sensor</span><strong id="propSensor"></strong></div>
+              <div><span>Core location</span><strong id="propCore"></strong></div>
+              <div><span>Game events</span><strong id="propEvents"></strong></div>
+            </div>
+            <div class="safety-note"><strong>Physical rule</strong><p id="propSafety"></p></div>
+            <button class="button primary" id="downloadBuildPack">Download role build pack</button>
+            <div class="role-production-assets" id="roleProductionAssets" aria-label="Role fabrication drawings"></div>
+          </aside>
+        </div>
+
+        <div class="kit-detail-grid">
+          <section class="panel procurement-panel">
+            <div class="panel-toolbar"><span class="panel-label">What to buy</span><span id="propBudget" class="mono-pill">PLANNING RANGE</span></div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Part</th><th>Qty</th><th>Source</th><th>Stage</th></tr></thead>
+                <tbody id="propBomBody"></tbody>
+              </table>
+            </div>
+            <div class="supplier-links">
+              <a href="https://hshop.vn/mach-phat-trien-mke-k01-esp32-s3-dev-kit" target="_blank" rel="noreferrer">ESP32-S3 source</a>
+              <a href="https://hshop.vn/cam-bien-6-dof-bac-tu-do-gy-521-mpu6050" target="_blank" rel="noreferrer">MPU6050 source</a>
+              <a href="https://shopee.vn/scosplay" target="_blank" rel="noreferrer">EVA material source</a>
+              <a href="https://ariescosplay.com/" target="_blank" rel="noreferrer">Hanoi prop shop</a>
+              <a href="https://viecos.com/mua-ban-do-cosplay" target="_blank" rel="noreferrer">Cosplay marketplace</a>
+            </div>
+            <p class="fine-print">Supplier links are references, not locked SKUs. Recheck stock, dimensions, shipping, and seller reliability before purchase.</p>
+          </section>
+
+          <section class="panel role-assembly-panel">
+            <div class="panel-toolbar"><span class="panel-label">Assembly path</span><span class="mono-pill">USB FIRST</span></div>
+            <ol id="propAssembly" class="role-assembly-list"></ol>
+          </section>
+        </div>
+
+        <section class="panel guided-build-panel" aria-labelledby="guided-build-title">
+          <div class="guided-build-header">
+            <div>
+              <p class="eyebrow" id="guidedBuildEyebrow">PARTS READY / GUIDED ASSEMBLY</p>
+              <h2 id="guided-build-title">Build it one verified step at a time</h2>
+              <p id="guidedBuildIntro">The final drawing stays visible above. The numbered callout for the current operation is highlighted.</p>
+            </div>
+            <label class="parts-ready-check">
+              <input id="partsReadyCheck" type="checkbox" />
+              <span id="partsReadyLabel">I have checked all required parts</span>
+            </label>
+          </div>
+
+          <div class="guided-progress-row">
+            <div class="progress-track"><i id="guidedProgress"></i></div>
+            <strong id="guidedProgressText">0 / 8 complete</strong>
+          </div>
+
+          <div class="guided-build-grid">
+            <nav class="guided-step-nav" id="guidedStepNav" aria-label="Assembly steps"></nav>
+            <article class="guided-step-card" aria-live="polite">
+              <div class="step-kicker"><span id="guidedStepIndex">STEP 01 / 08</span><span id="guidedStepLocation">DRAWING 01</span></div>
+              <h3 id="guidedStepTitle"></h3>
+              <section class="guided-visual-shell" aria-labelledby="guidedVisualHeading">
+                <div class="guided-visual-toolbar">
+                  <div>
+                    <span class="guided-visual-heading" id="guidedVisualHeading">Step images</span>
+                    <small id="guidedVisualNote">Technical diagram — use the printed template for final dimensions.</small>
+                  </div>
+                  <div class="guided-visual-tabs" id="guidedVisualTabs" role="group" aria-label="Step image views"></div>
+                </div>
+                <figure class="guided-visual-figure">
+                  <div id="guidedVisualFrame" class="guided-visual-frame" aria-live="polite"></div>
+                  <figcaption id="guidedVisualCaption"></figcaption>
+                </figure>
+              </section>
+              <div class="step-detail-grid">
+                <section>
+                  <h4 id="guidedPartsHeading">Parts for this step</h4>
+                  <ul id="guidedStepParts" class="step-parts"></ul>
+                </section>
+                <section>
+                  <h4 id="guidedActionHeading">Do this</h4>
+                  <p id="guidedStepAction"></p>
+                </section>
+                <section>
+                  <h4 id="guidedResultHeading">Expected result</h4>
+                  <p id="guidedStepResult"></p>
+                </section>
+                <section>
+                  <h4 id="guidedPassHeading">PASS before continuing</h4>
+                  <p id="guidedStepPass"></p>
+                </section>
+              </div>
+              <div class="guided-step-actions">
+                <button class="button ghost" id="guidedPrev">Previous step</button>
+                <button class="button secondary" id="guidedComplete">Mark step complete</button>
+                <button class="button primary" id="guidedNext">Next step</button>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <div class="panel kit-boundary">
+          <div><strong>What this planner proves</strong><p>Role geometry, component placement, purchase categories, event names, and ordered assembly.</p></div>
+          <div><strong>What still needs human proof</strong><p>Real measurements, comfort, impact safety, battery heat, radio range, false gestures, and Unity integration.</p></div>
+        </div>
+      </section>
+
+      <section id="prototype" class="view" aria-labelledby="prototype-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">ROLE ELECTRONICS / USB FIRST</p>
+            <h1 id="prototype-title">ESP32 Electronics Lab</h1>
+          </div>
+          <p class="section-note">Your Page 1 prop follows you here with its own parts, GPIO map, event tests, and downloadable bench circuit.</p>
+        </div>
+
+        <div class="core-overview-grid">
+          <section class="panel core-contract-panel">
+            <div class="panel-toolbar"><span class="panel-label" id="coreContractLabel">Atlas Core v1 · reusable cartridge</span><span class="mono-pill">USB FIRST</span></div>
+            <figure class="core-product-figure">
+              <img src="assets/atlas-esp32-core.webp" alt="Concept product render of a removable ESP32-S3 prop electronics core with controller, sensor, connectors, foam cradle and light window" width="1400" height="788" />
+              <div class="core-visual-badges" aria-hidden="true"><span>ESP32-S3</span><span>IMU</span><span>JST</span><span>LED</span></div>
+              <figcaption id="coreImageCaption">Concept appearance only — use the circuit map and inspected board labels for wiring.</figcaption>
+            </figure>
+            <div class="core-contract-body">
+              <div class="core-contract-intro">
+                <p class="eyebrow" id="coreContractEyebrow">ONE CONTROLLER / SIX ROLE HARNESSES</p>
+                <h2 id="coreContractTitle">Prove one removable core before duplicating it</h2>
+                <p id="coreContractText">The controller, USB power and event envelope stay common. Only the sensor, controls and feedback harness change with the selected prop.</p>
+              </div>
+              <div class="core-contract-cards">
+                <article><span id="coreControllerLabel">Physical reference</span><strong>MKE-K01 ESP32-S3 N4</strong><small id="coreControllerNote">Confirm the delivered USB connector and printed pin labels before wiring.</small></article>
+                <article><span id="coreHarnessLabel">Selected role harness</span><strong id="coreRoleName">Aegis Shield</strong><small id="coreRoleParts">MPU6050 · trigger · LEDs · vibration</small></article>
+                <article><span id="corePowerLabel">First power path</span><strong id="corePowerValue">USB data + 5 V only</strong><small id="corePowerNote">Battery charging and radio stay outside the first proof.</small></article>
+                <article><span id="coreProxyLabel">Simulation boundary</span><strong id="coreProxyValue">Wokwi DevKit V1 proxy</strong><small id="coreProxyNote">It proves event logic, not the exact physical S3 pinout.</small></article>
+              </div>
+            </div>
+          </section>
+
+          <aside class="panel core-proof-panel">
+            <div class="panel-toolbar"><span class="panel-label" id="coreProofLabel">Core proof ladder</span><button id="clearCoreProof" class="text-button">Clear physical checks</button></div>
+            <div class="progress-row"><div class="progress-track"><i id="coreProofProgress"></i></div><strong id="coreProofCount">1 / 7</strong></div>
+            <ol id="coreProofList" class="core-proof-list"></ol>
+            <div class="core-proof-actions">
+              <button class="button primary" id="downloadCoreProofPack">Download Core proof pack</button>
+              <a class="button ghost" href="https://hshop.vn/products/mach-mke-k01-esp32-s3-n4" target="_blank" rel="noreferrer" id="coreBuyLink">Open controller source</a>
+            </div>
+          </aside>
+        </div>
+
+        <div class="workbench-grid">
+          <aside class="panel controls-panel">
+            <div class="panel-label">Device configuration</div>
+
+            <label class="field-label" for="roleSelect">Selected prop</label>
+            <select id="roleSelect">
+              <option value="guardian" selected>Guardian shield</option>
+              <option value="warrior">Warrior sword</option>
+              <option value="archer">Archer bow</option>
+              <option value="assassin">Assassin</option>
+              <option value="mage">Mage staff</option>
+              <option value="boss">Titan Warden</option>
+            </select>
+
+            <label class="field-label" for="transportSelect">Event transport</label>
+            <select id="transportSelect">
+              <option value="usb">USB serial · bench proof</option>
+              <option value="websocket">WiFi WebSocket · next proof</option>
+              <option value="espnow">ESP-NOW · field candidate</option>
+            </select>
+
+            <div class="switch-row">
+              <div><strong>LED feedback</strong><small>Role colour and acknowledgement</small></div>
+              <label class="switch"><input id="ledToggle" type="checkbox" checked /><span></span></label>
+            </div>
+            <div class="switch-row">
+              <div><strong>Secondary feedback</strong><small>Vibration or short local tone</small></div>
+              <label class="switch"><input id="buzzerToggle" type="checkbox" checked /><span></span></label>
+            </div>
+
+            <div id="validationBox" class="validation-box">
+              <span class="validation-icon">✓</span>
+              <div><strong>Bench safe starting point</strong><p>USB power keeps battery and radio variables out of the first proof.</p></div>
+            </div>
+            <div id="electronicsProfileSummary" class="electronics-profile-summary"></div>
+          </aside>
+
+          <section class="panel circuit-panel" aria-label="Interactive circuit preview">
+            <div class="panel-toolbar">
+              <span class="panel-label">Circuit map</span>
+              <span id="partCount" class="mono-pill">5 PARTS · 9 WIRES</span>
+            </div>
+            <div class="circuit-stage" id="circuitStage">
+              <div id="roleCircuitGraphic" class="role-circuit-graphic"></div>
+              <div class="device-card">
+                <span id="roleBadge">GUARDIAN</span>
+                <strong id="deviceId">guardian-shield-01</strong>
+                <small id="transportBadge">USB SERIAL</small>
+              </div>
+            </div>
+          </section>
+
+          <aside class="panel map-panel">
+            <div class="panel-label">Pin contract</div>
+            <div class="pin-list" id="pinList"></div>
+            <div class="panel-label">Event bench test</div>
+            <div id="electronicsEventButtons" class="electronics-event-buttons"></div>
+            <ol id="electronicsTestLog" class="electronics-test-log" aria-live="polite"></ol>
+            <div class="download-stack">
+              <button class="button primary" id="downloadDiagram">Download diagram.json</button>
+              <button class="button secondary" id="downloadConfig">Download device config</button>
+              <a class="button ghost" href="https://wokwi.com/projects/new/esp32" target="_blank" rel="noreferrer">Open Wokwi</a>
+            </div>
+          </aside>
+        </div>
+        <div class="panel electronics-boundary">
+          <div><strong id="electronicsLimitTitle">Browser proof boundary</strong><p id="electronicsLimitText"></p></div>
+          <div><strong id="electronicsNextTitle">Required real-world proof</strong><p id="electronicsNextText"></p></div>
+        </div>
+
+        <div class="section-heading core-build-heading">
+          <div><p class="eyebrow">COMMON ESP32 CORE / ONE UNIT</p><h2 id="core-build-title">32-step bench build</h2></div>
+          <p class="section-note">Complete the reusable electronics core here, then mount it into the selected prop using Page 1.</p>
+        </div>
+        <div class="core-proxy-warning" id="coreProxyWarning"><strong>Wokwi logic proxy:</strong> the 32-step breadboard guide below uses an ESP32 DevKit V1 layout. Do not transfer its pin positions to the MKE-K01 until the delivered board and its labels have been inspected.</div>
+        <div class="build-grid">
+          <section class="panel bom-panel">
+            <div class="panel-toolbar"><span class="panel-label">Bill of materials</span><span class="mono-pill">BENCH: 251K–575K VND</span></div>
+            <div class="table-wrap"><table><thead><tr><th>Part</th><th>Qty</th><th>Stage</th></tr></thead><tbody id="bomBody"></tbody></table></div>
+            <p class="fine-print">Ranges are planning values. Recheck listings before purchase. The first proof uses USB power.</p>
+          </section>
+          <section class="panel guide-panel">
+            <div class="panel-toolbar"><span class="panel-label">32 step assembly</span><button id="clearChecklist" class="text-button">Clear checks</button></div>
+            <div class="progress-row"><div class="progress-track"><i id="guideProgress"></i></div><strong id="guideCount">0 / 32</strong></div>
+            <ol id="guideList" class="guide-list"></ol>
+          </section>
+        </div>
+        <div class="download-row panel">
+          <div><strong>Repository build pack</strong><p>Firmware, Wokwi proxy, event contract, BOM, and full guide.</p></div>
+          <div><a class="button secondary" href="downloads/diagram.json" download>Wokwi circuit</a><a class="button secondary" href="downloads/main.cpp" download>ESP32 firmware</a><a class="button secondary" href="downloads/assembly-32-steps.md" download>Assembly guide</a></div>
+        </div>
+      </section>
+
+      <section id="field" class="view" aria-labelledby="field-title">
+        <div class="section-heading">
+          <div><p class="eyebrow">EVENT PATH / FAILURE TEST</p><h2 id="field-title">Field simulator</h2></div>
+          <p class="section-note">Test how an input feels when delivery is delayed or lost.</p>
+        </div>
+        <div class="sim-grid">
+          <section class="panel arena-panel">
+            <div class="arena-stats">
+              <div><span>Boss HP</span><strong id="bossHpText">520 / 520</strong></div>
+              <div class="hp-track"><i id="bossHpBar"></i></div>
+            </div>
+            <div class="arena-view-toolbar">
+              <div><span class="panel-label" id="arenaViewLabel">Arena view</span><strong id="arenaViewStatus">3D EVENT REPLAY</strong></div>
+              <div class="segmented-control" role="group" aria-label="Arena view mode">
+                <button type="button" class="is-active" data-arena-view="three">3D</button>
+                <button type="button" data-arena-view="logic">Logic map</button>
+              </div>
+            </div>
+            <div class="three-arena-stage" id="threeArenaStage">
+              <div class="three-loading" id="threeArenaLoading">Loading arena…</div>
+              <div class="arena-role-chips" id="arenaRoleChips">
+                <button type="button" data-field-role="guardian">Guardian</button>
+                <button type="button" data-field-role="archer" class="is-active">Archer</button>
+                <button type="button" data-field-role="assassin">Assassin</button>
+                <button type="button" data-field-role="support">Support</button>
+              </div>
+              <div class="arena-legend"><span><i class="hero-dot"></i>Hero</span><span><i class="boss-dot"></i>Boss</span><span><i class="zone-dot"></i>AoE / range</span></div>
+            </div>
+            <div class="arena is-hidden" id="arena">
+              <div class="boss-token"><span>B</span><small>BOSS</small></div>
+              <div class="hero-token guardian" data-role="guardian"><span>G</span><small>GUARDIAN</small></div>
+              <div class="hero-token archer is-selected" data-role="archer"><span>A</span><small>ARCHER</small></div>
+              <div class="hero-token assassin" data-role="assassin"><span>X</span><small>ASSASSIN</small></div>
+              <div class="hero-token support" data-role="support"><span>+</span><small>SUPPORT</small></div>
+              <div id="packet" class="packet" aria-hidden="true"></div>
+            </div>
+            <div class="action-bar">
+              <button class="action-button cast" data-action="CAST"><span>C</span><strong>CAST</strong><small>0.7 s cooldown</small></button>
+              <button class="action-button special" data-action="SPECIAL"><span>S</span><strong>SPECIAL</strong><small>4 s cooldown</small></button>
+              <button class="button ghost compact" id="resetSim">Reset</button>
+            </div>
+          </section>
+
+          <aside class="panel telemetry-panel">
+            <div class="panel-label">Network conditions</div>
+            <label class="range-label" for="latencyRange"><span>Latency</span><output id="latencyValue">60 ms</output></label>
+            <input id="latencyRange" type="range" min="0" max="500" value="60" step="10" />
+            <label class="range-label" for="lossRange"><span>Packet loss</span><output id="lossValue">5%</output></label>
+            <input id="lossRange" type="range" min="0" max="50" value="5" step="1" />
+            <div class="metric-grid">
+              <div><span>Sent</span><strong id="sentMetric">0</strong></div>
+              <div><span>Delivered</span><strong id="deliveredMetric">0</strong></div>
+              <div><span>Lost</span><strong id="lostMetric">0</strong></div>
+              <div><span>Avg latency</span><strong id="avgMetric">—</strong></div>
+            </div>
+            <div class="panel-label log-label">Event stream</div>
+            <ol id="eventLog" class="event-log" aria-live="polite"></ol>
+          </aside>
+        </div>
+      </section>
+
+    </main>
+
+    <footer><span>ATLAS / PROP SYSTEMS</span><span>Planner revision 0.12 · Hardware proof workflow, not field certification</span></footer>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="prop-manifests.js"></script>
+    <script src="build-graph.js"></script>
+    <script src="impact-armour.js"></script>
+    <script src="cad-lab.js"></script>
+    <script src="app.js"></script>
+    <script src="journey.js"></script>
+    <script src="component-links.js"></script>
+    <script src="hit-lab.js"></script>
+    <script src="project-handoff.js"></script>
+    <script src="physical-kit.js"></script>
+    <script src="physical-gate-ui.js"></script>
+    <script src="physical-wiring.js"></script>
+    <script src="bench-evidence.js"></script>
+    <script src="armour-fit.js"></script>
+    <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"}}</script>
+    <script type="module" src="three-lab.js"></script>
+  </body>
+</html>

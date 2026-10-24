@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0",
+  "id": "stem-led-panel",
+  "name": {"vi": "Bảng tín hiệu STEM", "en": "STEM signal panel"},
+  "geometry": "rectangular-panel",
+  "dimensionsMm": {"width": 300, "height": 200, "depth": 30},
+  "dimensionEvidence": "assumed",
+  "parts": [
+    {"id": "cardboard-panel", "name": {"vi": "Tấm carton mẫu", "en": "Cardboard mockup"}, "quantity": 1, "unit": "piece", "evidence": "assumed", "sources": []},
+    {"id": "led-placeholder", "name": {"vi": "Mẫu giấy vị trí LED", "en": "Paper LED placeholder"}, "quantity": 1, "unit": "piece", "evidence": "assumed", "sources": []}
+  ],
+  "assembly": [
+    {"partIds": ["cardboard-panel"], "instruction": {"vi": "Đo và đánh dấu hình chữ nhật 300 × 200 mm trên carton. Chỉ làm mẫu không cấp điện.", "en": "Measure and mark a 300 × 200 mm rectangle on cardboard. Build an unpowered mockup only."}, "passGate": {"vi": "Đối chiếu hai cạnh và kích thước với bản vẽ trước khi cắt.", "en": "Check both edges and dimensions against the drawing before cutting."}},
+    {"partIds": ["cardboard-panel", "led-placeholder"], "instruction": {"vi": "Đặt mẫu giấy LED lên mặt bảng để đánh giá bố cục; chưa mua hoặc nối mạch.", "en": "Place the paper LED placeholder on the panel to review layout; do not buy or wire electronics yet."}, "passGate": {"vi": "Chụp ảnh mẫu, ghi kích thước thực và đánh giá khả năng nhìn từ xa.", "en": "Photograph the mockup, record measured dimensions and review viewing distance."}}
+  ]
+}

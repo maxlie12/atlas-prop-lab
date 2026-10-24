@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="vi">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Atlas · Product engine proof</title><link rel="icon" href="favicon.svg"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="product-lab.css"></head>
+<body>
+  <header class="topbar"><a class="brand-copy" href="index.html">ATLAS PROP LAB</a><div class="language-switch" aria-label="Language"><button type="button" id="vi" class="is-active">VI</button><button type="button" id="en">EN</button></div></header>
+  <main>
+    <p class="eyebrow">PRODUCT ENGINE · PROOF 02</p><h1 id="title">Thêm sản phẩm bằng dữ liệu</h1>
+    <p id="intro">Sửa manifest, kiểm tra và sinh bản kích thước, BOM cùng hướng dẫn. Chưa có AI research, 3D hoặc mô phỏng điện.</p>
+    <div class="engine-actions"><label for="template" id="templateLabel">Chọn mẫu</label><select id="template"><option value="stem">STEM · bảng carton</option><option value="guardian">Guardian · khiên</option><option value="warrior">Warrior · kiếm</option><option value="archer">Archer · cung</option><option value="assassin">Assassin · dao găm</option><option value="mage">Mage · gậy</option><option value="boss">Boss · búa</option></select><a href="product-engine/manifest.schema.json" id="schemaLink" download>Tải schema v1</a></div>
+    <p id="roleBoundary">Mẫu Atlas giữ part ID và 8 bước lắp hiện có. Danh sách module chưa phải BOM mua hàng đầy đủ; không tự đổi kích thước bản vẽ đạo cụ.</p>
+    <div class="engine-grid">
+      <section class="panel engine-input"><label for="manifest" id="inputLabel">Manifest sản phẩm (JSON)</label><textarea id="manifest" spellcheck="false"></textarea><div class="engine-actions"><button type="button" id="sample">Nạp mẫu STEM</button><button type="button" id="compile">Kiểm tra & sinh</button></div><p id="privacy">Xử lý trong trình duyệt; không gửi dữ liệu đến API. Không lưu khi đóng trang.</p></section>
+      <section class="panel engine-output"><h2 id="outputLabel">Kết quả</h2><p id="status" role="status" aria-live="polite"></p><ul id="issues"></ul><div id="drawing"></div><div class="engine-actions"><button type="button" id="json" disabled>JSON</button><button type="button" id="svg" disabled>SVG</button><button type="button" id="md" disabled>BOM + hướng dẫn</button></div><pre id="pack"></pre></section>
+    </div>
+    <p id="boundary">Chỉ là đường bao concept, không phải mẫu cắt 1:1. Thay kích thước không tự sửa số đo trong hướng dẫn. Cần rà soát và thử mẫu thật.</p>
+  </main>
+  <div hidden aria-hidden="true"><select id="cadView"><option value="front">front</option></select><input id="cadGrid" type="checkbox" checked><button id="cadDownload" type="button"></button><div id="cadTitle"></div><div id="cadViewLabel"></div><div id="cadGridLabel"></div><div id="cadBoundary"></div><div id="cadDrawing"></div><div id="cadDimensions"></div><div id="cadInstructions"></div><div id="cadRenderFigure"></div><div id="cadRenderCaption"></div><div id="cadStatus"></div></div>
+  <script src="prop-manifests.js"></script><script src="cad-lab.js"></script><script src="product-engine.js"></script><script src="product-lab.js"></script>
+</body></html>

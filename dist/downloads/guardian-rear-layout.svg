@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="297mm" height="210mm" viewBox="0 0 297 210">
+  <style>
+    *{fill:none;stroke:#111;stroke-width:.55}.cut{stroke-width:1}.guide{stroke:#777;stroke-dasharray:4 3}.label{fill:#111;stroke:none;font:5px sans-serif}.title{font:bold 8px sans-serif}.call{fill:#fff;stroke-width:.8}.num{fill:#111;stroke:none;font:bold 5px sans-serif}
+  </style>
+  <text class="label title" x="12" y="15">GUARDIAN REAR LAYOUT — REFERENCE / FIT MOCK-UP FIRST</text>
+  <ellipse class="guide" cx="92" cy="112" rx="78" ry="78"/>
+  <rect class="cut" x="58" y="84" width="68" height="52" rx="5"/>
+  <text class="label" x="61" y="93">SERVICE PLATE</text><text class="label" x="61" y="100">110 × 85 × 28 mm cavity</text>
+  <rect class="cut" x="55" y="57" width="74" height="12" rx="4"/><rect class="cut" x="55" y="154" width="74" height="12" rx="4"/>
+  <text class="label" x="64" y="65">25 mm ADJUSTABLE STRAP</text><text class="label" x="64" y="162">25 mm ADJUSTABLE STRAP</text>
+  <rect x="84" y="103" width="20" height="12" rx="2"/><text class="label" x="84" y="101">IMU FLAT / Y AXIS UP</text>
+  <circle cx="120" cy="113" r="4"/><text class="label" x="126" y="115">thumb trigger route</text>
+  <path class="guide" d="M51 48V175M133 48V175M45 112H139"/>
+  <text class="label" x="165" y="38">CROSS-SECTION</text>
+  <path class="cut" d="M165 62H276V67H165Z"/><text class="label" x="166" y="59">01 cosmetic face · EVA 5 mm</text>
+  <path class="cut" d="M165 76H276V86H165Z"/><text class="label" x="166" y="73">02 structural layer · EVA 10 mm</text>
+  <path class="guide" d="M165 94H276V99H165Z"/><text class="label" x="166" y="92">03 protected cable route · 5 mm</text>
+  <path class="cut" d="M165 108H276V113H165Z"/><text class="label" x="166" y="106">04 removable rear plate · EVA 5 mm</text>
+  <path class="cut" d="M165 126H276V132H165Z"/><text class="label" x="166" y="123">05 padded body-facing layer</text>
+  <path d="M165 154H265M165 150V158M265 150V158"/><text class="label" x="198" y="148">100 mm CHECK BAR</text>
+  <text class="label" x="165" y="176">PASS: no exposed hard edge; cavity does not touch forearm;</text>
+  <text class="label" x="165" y="184">two users can remove shield quickly; straps remain adjustable.</text>
+</svg>

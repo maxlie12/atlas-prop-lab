@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500mm" height="500mm" viewBox="0 0 500 500">
+  <style>
+    *{fill:none;stroke:#000;stroke-width:.7} .cut{stroke-width:1.2}.guide{stroke:#777;stroke-dasharray:5 4}.label{fill:#000;stroke:none;font:7px sans-serif}.small{font-size:5px}
+  </style>
+  <circle class="cut" cx="250" cy="250" r="247"/>
+  <circle class="guide" cx="250" cy="250" r="195"/>
+  <circle class="guide" cx="250" cy="250" r="58"/>
+  <path class="guide" d="M0 250H500M250 0V500"/>
+  <path d="M245 10h10M250 5v10M245 490h10M250 485v10M10 245v10M5 250h10M490 245v10M485 250h10"/>
+  <text class="label" x="14" y="20">ATLAS GUARDIAN — 500 mm FULL-SCALE STARTING TEMPLATE</text>
+  <text class="label small" x="14" y="30">CUT: outer circle · GUIDE: LED diffuser ring Ø390 mm · centre boss Ø116 mm</text>
+  <text class="label small" x="14" y="39">Print at 100% / Actual size. Disable “Fit to page”. Verify the 100 mm scale bar before cutting.</text>
+  <path d="M20 470H120M20 465V475M120 465V475"/>
+  <text class="label small" x="52" y="463">100 mm</text>
+</svg>

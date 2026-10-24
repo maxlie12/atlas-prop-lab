@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "author": "Atlas Prop Lab",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-s3-devkitc-1", "id": "esp", "top": 20, "left": 10, "attrs": {} },
+    { "type": "wokwi-mpu6050", "id": "imu", "top": 30, "left": 250, "attrs": {} },
+    { "type": "wokwi-pushbutton", "id": "trigger", "top": 130, "left": 260, "attrs": { "color": "#f0b44d", "label": "BLOCK", "key": "B" } },
+    { "type": "wokwi-led-ring", "id": "rim", "top": 210, "left": 230, "attrs": { "pixels": "30" } },
+    { "type": "wokwi-led", "id": "vibrationProxy", "top": 230, "left": 40, "attrs": { "color": "green", "label": "VIBRATION DRIVER PROXY" } }
+  ],
+  "connections": [
+    [ "esp:20", "imu:SDA", "#16a6c9", [] ],
+    [ "esp:21", "imu:SCL", "#39cc93", [] ],
+    [ "esp:3V3", "imu:VCC", "#e05858", [] ],
+    [ "esp:GND.1", "imu:GND", "#5d6672", [] ],
+    [ "esp:25", "trigger:1.l", "#f0b44d", [] ],
+    [ "trigger:2.l", "esp:GND.1", "#5d6672", [] ],
+    [ "esp:18", "rim:DIN", "#f2c94c", [] ],
+    [ "esp:5V", "rim:VCC", "#e05858", [] ],
+    [ "esp:GND.1", "rim:GND", "#5d6672", [] ],
+    [ "esp:27", "vibrationProxy:A", "#39cc93", [] ],
+    [ "vibrationProxy:C", "esp:GND.1", "#5d6672", [] ]
+  ],
+  "dependencies": {}
+}
+

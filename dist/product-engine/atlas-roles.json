@@ -1,0 +1,1206 @@
+{
+  "guardian": {
+    "schemaVersion": "1.0",
+    "id": "atlas-guardian",
+    "name": {
+      "vi": "Khiên Aegis",
+      "en": "Aegis Shield"
+    },
+    "geometry": "atlas-reference",
+    "role": "guardian",
+    "dimensionsMm": {
+      "width": 500,
+      "height": 500,
+      "depth": 55
+    },
+    "dimensionEvidence": "assumed",
+    "parts": [
+      {
+        "id": "shield-face",
+        "name": {
+          "vi": "Mặt khiên EVA 10 mm",
+          "en": "10 mm EVA face"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "esp32-service-box",
+        "name": {
+          "vi": "Hộp bảo trì ESP32",
+          "en": "ESP32 service box"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "imu-centre",
+        "name": {
+          "vi": "MPU6050 tại tâm",
+          "en": "MPU6050 at centre"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "thumb-trigger",
+        "name": {
+          "vi": "Cò ngón cái",
+          "en": "Thumb trigger"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "led-rim",
+        "name": {
+          "vi": "LED WS2812B quanh viền",
+          "en": "WS2812B rim"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "arm-straps",
+        "name": {
+          "vi": "Quai đeo tay điều chỉnh",
+          "en": "Adjustable arm straps"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      }
+    ],
+    "assembly": [
+      {
+        "partIds": [
+          "shield-face"
+        ],
+        "instruction": {
+          "vi": "In mẫu khiên 500 mm và làm bản thử bằng bìa để kiểm tra độ vừa tay.",
+          "en": "Print the 500 mm shield template and make a cardboard fit mock-up."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "esp32-service-box",
+          "imu-centre",
+          "thumb-trigger",
+          "led-rim"
+        ],
+        "instruction": {
+          "vi": "Lắp thử ESP32, IMU, cò và một đoạn LED qua USB.",
+          "en": "Build and test ESP32, IMU, trigger, and one LED segment over USB."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "shield-face"
+        ],
+        "instruction": {
+          "vi": "Cắt rồi ép các lớp EVA; để mở khoang hộp bảo trì.",
+          "en": "Cut and laminate the EVA layers; keep the service-box cavity open."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "imu-centre"
+        ],
+        "instruction": {
+          "vi": "Gắn IMU nằm phẳng tại tâm hình học, mũi tên trục hướng lên.",
+          "en": "Mount the IMU flat at the geometric centre with its axis arrow facing up."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "thumb-trigger"
+        ],
+        "instruction": {
+          "vi": "Lắp cò ngón cái dưới tay cầm thuận.",
+          "en": "Install the thumb trigger under the dominant-hand grip."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "led-rim"
+        ],
+        "instruction": {
+          "vi": "Đi dây LED trong rãnh bảo vệ và thêm đầu nối tháo nhanh.",
+          "en": "Route the LED rim through a protected channel and add a quick connector."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "esp32-service-box",
+          "arm-straps"
+        ],
+        "instruction": {
+          "vi": "Gắn quai điều chỉnh, đóng nắp sau tháo rời và cân chỉnh góc trung tính.",
+          "en": "Attach adjustable straps, close the removable rear cover, and calibrate neutral angle."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "shield-face",
+          "esp32-service-box",
+          "imu-centre",
+          "thumb-trigger",
+          "led-rim",
+          "arm-straps"
+        ],
+        "instruction": {
+          "vi": "Thử 100 lần nâng khiên và ghi lại kích hoạt sai trước khi sơn.",
+          "en": "Run 100 block raises and record false triggers before paint."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      }
+    ]
+  },
+  "warrior": {
+    "schemaVersion": "1.0",
+    "id": "atlas-warrior",
+    "name": {
+      "vi": "Kiếm Pulse",
+      "en": "Pulse Sword"
+    },
+    "geometry": "atlas-reference",
+    "role": "warrior",
+    "dimensionsMm": {
+      "width": 110,
+      "height": 650,
+      "depth": 45
+    },
+    "dimensionEvidence": "assumed",
+    "parts": [
+      {
+        "id": "eva-blade",
+        "name": {
+          "vi": "Lưỡi EVA mềm",
+          "en": "Soft EVA blade"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "led-spine",
+        "name": {
+          "vi": "Dải LED tán sáng",
+          "en": "Diffused LED spine"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "guard-imu",
+        "name": {
+          "vi": "IMU trong chắn tay",
+          "en": "IMU in guard"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "index-trigger",
+        "name": {
+          "vi": "Cò ngón trỏ",
+          "en": "Index trigger"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "esp32-hilt",
+        "name": {
+          "vi": "Hộp ESP32 trong chuôi",
+          "en": "ESP32 hilt cartridge"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "wrist-loop",
+        "name": {
+          "vi": "Dây giữ cổ tay",
+          "en": "Wrist retention loop"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      }
+    ],
+    "assembly": [
+      {
+        "partIds": [
+          "eva-blade",
+          "wrist-loop"
+        ],
+        "instruction": {
+          "vi": "Làm mẫu bìa đúng kích thước và xác nhận chiều dài 650 mm.",
+          "en": "Make a full-size cardboard silhouette and confirm the 650 mm length."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "guard-imu",
+          "index-trigger",
+          "esp32-hilt"
+        ],
+        "instruction": {
+          "vi": "Thử nhận động tác có giữ cò qua USB.",
+          "en": "Bench-test trigger-gated gesture detection over USB."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "eva-blade"
+        ],
+        "instruction": {
+          "vi": "Ép các lớp lưỡi EVA, không dùng lõi kim loại hoặc gỗ.",
+          "en": "Laminate the EVA blade without a metal or wooden core."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "led-spine"
+        ],
+        "instruction": {
+          "vi": "Cắt rãnh LED có bảo vệ dọc sống kiếm.",
+          "en": "Cut a protected LED channel along the spine."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "guard-imu"
+        ],
+        "instruction": {
+          "vi": "Gắn IMU trong chắn tay, thẳng theo hướng lưỡi kiếm.",
+          "en": "Mount the IMU in the guard, aligned with the blade direction."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "index-trigger",
+          "esp32-hilt"
+        ],
+        "instruction": {
+          "vi": "Lắp hộp ESP32 và đầu nối tháo rời trong chuôi.",
+          "en": "Build the removable hilt cartridge with ESP32 and connectors."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "wrist-loop"
+        ],
+        "instruction": {
+          "vi": "Thêm dây giữ cổ tay và phủ foam lên mọi cạnh cứng.",
+          "en": "Fit a wrist retention loop and close all hard edges under foam."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "eva-blade",
+          "led-spine",
+          "guard-imu",
+          "index-trigger",
+          "esp32-hilt",
+          "wrist-loop"
+        ],
+        "instruction": {
+          "vi": "Thử 100 động tác chủ ý và 100 chuyển động ngẫu nhiên để chỉnh ngưỡng.",
+          "en": "Run 100 deliberate and 100 accidental motions; tune the gesture threshold."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      }
+    ]
+  },
+  "archer": {
+    "schemaVersion": "1.0",
+    "id": "atlas-archer",
+    "name": {
+      "vi": "Cung Arc",
+      "en": "Arc Bow"
+    },
+    "geometry": "atlas-reference",
+    "role": "archer",
+    "dimensionsMm": {
+      "width": 430,
+      "height": 900,
+      "depth": 60
+    },
+    "dimensionEvidence": "assumed",
+    "parts": [
+      {
+        "id": "recurve-limbs",
+        "name": {
+          "vi": "Cánh cung bọc foam",
+          "en": "Foam-wrapped limb"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "cosmetic-cord",
+        "name": {
+          "vi": "Dây kéo lực thấp",
+          "en": "Low-tension draw cord"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "draw-magnet",
+        "name": {
+          "vi": "Nam châm theo dây kéo",
+          "en": "Draw magnet"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "hall-sensor",
+        "name": {
+          "vi": "Khe cảm biến Hall",
+          "en": "Hall sensor slot"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "esp32-riser",
+        "name": {
+          "vi": "ESP32 trong tay cầm",
+          "en": "ESP32 grip"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "limb-led",
+        "name": {
+          "vi": "LED trạng thái trên cánh",
+          "en": "Limb status LEDs"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      }
+    ],
+    "assembly": [
+      {
+        "partIds": [
+          "recurve-limbs",
+          "cosmetic-cord"
+        ],
+        "instruction": {
+          "vi": "Làm khung cung foam/PVC không điện và kiểm tra tầm với thoải mái.",
+          "en": "Build a powerless foam/PVC bow mock-up and confirm comfortable reach."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "draw-magnet",
+          "hall-sensor",
+          "esp32-riser"
+        ],
+        "instruction": {
+          "vi": "Thử hành trình Hall sensor và nam châm qua USB.",
+          "en": "Bench-test the Hall sensor and magnet travel over USB."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "cosmetic-cord"
+        ],
+        "instruction": {
+          "vi": "Đặt dây kéo lực thấp; xác nhận không thể phóng bất kỳ vật thể nào.",
+          "en": "Set the draw cord to low tension; confirm it cannot launch any object."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "draw-magnet",
+          "hall-sensor"
+        ],
+        "instruction": {
+          "vi": "Gắn Hall sensor trong tay cầm và nam châm trên con trượt dây.",
+          "en": "Install the Hall sensor inside the grip and the magnet on the draw slider."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "esp32-riser"
+        ],
+        "instruction": {
+          "vi": "Gắn ESP32 trong tay cầm giữa với nắp tháo rời.",
+          "en": "Mount the ESP32 in the central grip with a removable cover."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "recurve-limbs",
+          "limb-led"
+        ],
+        "instruction": {
+          "vi": "Thêm LED tán sáng vào cánh cung mà không làm yếu khung.",
+          "en": "Add diffused LEDs to the limbs without weakening the frame."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "draw-magnet",
+          "hall-sensor"
+        ],
+        "instruction": {
+          "vi": "Cân chỉnh vị trí nghỉ, sẵn sàng và thả cho ba người dùng.",
+          "en": "Calibrate rest, ready, and release thresholds for three different users."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "recurve-limbs",
+          "cosmetic-cord",
+          "draw-magnet",
+          "hall-sensor",
+          "esp32-riser",
+          "limb-led"
+        ],
+        "instruction": {
+          "vi": "Thử 100 lần kéo, gồm cả thả nửa chừng, rồi ghi nhận sự kiện FIRE thiếu hoặc lặp.",
+          "en": "Run 100 draws, including partial releases, and record missed or duplicate FIRE events."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      }
+    ]
+  },
+  "assassin": {
+    "schemaVersion": "1.0",
+    "id": "atlas-assassin",
+    "name": {
+      "vi": "Dao Shade",
+      "en": "Shade Daggers"
+    },
+    "geometry": "atlas-reference",
+    "role": "assassin",
+    "dimensionsMm": {
+      "width": 75,
+      "height": 320,
+      "depth": 40
+    },
+    "dimensionEvidence": "assumed",
+    "parts": [
+      {
+        "id": "active-dagger",
+        "name": {
+          "vi": "Dao EVA chủ động",
+          "en": "Active EVA dagger"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "passive-dagger",
+        "name": {
+          "vi": "Dao tay phụ thụ động",
+          "en": "Passive off-hand dagger"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "active-imu",
+        "name": {
+          "vi": "IMU trong chắn dao",
+          "en": "IMU in active guard"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "grip-trigger",
+        "name": {
+          "vi": "Cò tay cầm",
+          "en": "Grip trigger"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "esp32-active-hilt",
+        "name": {
+          "vi": "ESP32 trong chuôi",
+          "en": "ESP32 active hilt"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "wrist-trap-pad",
+        "name": {
+          "vi": "Nút bẫy đeo cổ tay",
+          "en": "Trap button / wrist pad"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      }
+    ],
+    "assembly": [
+      {
+        "partIds": [
+          "active-dagger",
+          "passive-dagger"
+        ],
+        "instruction": {
+          "vi": "Làm hai mẫu bìa dài 320 mm với đầu được bo tròn hoàn toàn.",
+          "en": "Make two 320 mm cardboard templates with fully rounded tips."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "active-imu",
+          "grip-trigger",
+          "esp32-active-hilt",
+          "wrist-trap-pad"
+        ],
+        "instruction": {
+          "vi": "Thử dao chủ động và nút bẫy riêng qua USB.",
+          "en": "Bench-test the active dagger and separate trap button over USB."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "active-dagger",
+          "passive-dagger"
+        ],
+        "instruction": {
+          "vi": "Ép hai thân EVA; chỉ để chuôi tay thuận có thể bảo trì.",
+          "en": "Laminate both EVA bodies; keep only the dominant hilt serviceable."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "active-imu"
+        ],
+        "instruction": {
+          "vi": "Căn IMU thẳng theo hướng lưỡi dao chủ động.",
+          "en": "Align the IMU with the active blade direction."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "grip-trigger",
+          "esp32-active-hilt"
+        ],
+        "instruction": {
+          "vi": "Lắp cò tay cầm, hộp ESP32 và dây giữ cổ tay.",
+          "en": "Install grip trigger, ESP32 cartridge, and wrist retention loop."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "passive-dagger"
+        ],
+        "instruction": {
+          "vi": "Làm dao tay phụ thành prop thụ động nhẹ.",
+          "en": "Build the off-hand dagger as a passive lightweight prop."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "wrist-trap-pad"
+        ],
+        "instruction": {
+          "vi": "Ánh xạ đặt bẫy vào ô đấu; chưa đặt điện tử xuống sàn.",
+          "en": "Map trap placement to an arena zone; do not place electronics on the floor yet."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "active-dagger",
+          "passive-dagger",
+          "active-imu",
+          "grip-trigger",
+          "esp32-active-hilt",
+          "wrist-trap-pad"
+        ],
+        "instruction": {
+          "vi": "Thử combo nhanh và xác nhận một chuyển động chỉ tạo tối đa một sự kiện.",
+          "en": "Test rapid combinations and verify one physical motion creates at most one event."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      }
+    ]
+  },
+  "mage": {
+    "schemaVersion": "1.0",
+    "id": "atlas-mage",
+    "name": {
+      "vi": "Gậy Lumen",
+      "en": "Lumen Staff"
+    },
+    "geometry": "atlas-reference",
+    "role": "mage",
+    "dimensionsMm": {
+      "width": 140,
+      "height": 1100,
+      "depth": 140
+    },
+    "dimensionEvidence": "assumed",
+    "parts": [
+      {
+        "id": "diffused-orb",
+        "name": {
+          "vi": "Quả cầu LED tán sáng",
+          "en": "Diffused LED orb"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "padded-head",
+        "name": {
+          "vi": "Đầu trên bọc đệm",
+          "en": "Padded upper head"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "cast-button",
+        "name": {
+          "vi": "Nút CAST ngón cái",
+          "en": "CAST thumb button"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "grip-imu",
+        "name": {
+          "vi": "IMU dưới tay cầm",
+          "en": "IMU below grip"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "esp32-lower-grip",
+        "name": {
+          "vi": "ESP32 trong tay cầm dưới",
+          "en": "ESP32 lower grip"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "padded-end",
+        "name": {
+          "vi": "Đầu dưới bọc đệm",
+          "en": "Padded lower end"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      }
+    ],
+    "assembly": [
+      {
+        "partIds": [
+          "diffused-orb",
+          "padded-head",
+          "padded-end"
+        ],
+        "instruction": {
+          "vi": "Xác nhận chiều dài 1,0–1,2 m với người chơi thấp nhất dự kiến.",
+          "en": "Confirm 1.0–1.2 m length with the shortest expected player."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "diffused-orb",
+          "cast-button",
+          "grip-imu",
+          "esp32-lower-grip"
+        ],
+        "instruction": {
+          "vi": "Thử CAST, SPECIAL, IMU, LED quả cầu và rung qua USB.",
+          "en": "Bench-test CAST, SPECIAL, IMU, orb LED, and haptic over USB."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "padded-head",
+          "padded-end"
+        ],
+        "instruction": {
+          "vi": "Bọc toàn bộ thân gậy và đệm mềm hai đầu.",
+          "en": "Wrap the shaft completely and pad both ends."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "diffused-orb"
+        ],
+        "instruction": {
+          "vi": "Gắn quả cầu bằng vỏ tán sáng tháo rời, không để điểm cứng lộ ra.",
+          "en": "Mount the orb with a removable diffuser and no exposed hard point."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "grip-imu"
+        ],
+        "instruction": {
+          "vi": "Đặt IMU dưới tay cầm trên và căn trục trước.",
+          "en": "Place the IMU below the upper grip and align its forward axis."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "esp32-lower-grip"
+        ],
+        "instruction": {
+          "vi": "Lắp ESP32 cùng đầu nối ở tay cầm dưới để cân bằng quả cầu.",
+          "en": "Install ESP32 and connectors in the lower grip to balance the orb."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "cast-button",
+          "grip-imu"
+        ],
+        "instruction": {
+          "vi": "Cân chỉnh hướng chỉ và tư thế niệm phép cho ba người.",
+          "en": "Calibrate pointing and channel posture for three users."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "diffused-orb",
+          "padded-head",
+          "cast-button",
+          "grip-imu",
+          "esp32-lower-grip",
+          "padded-end"
+        ],
+        "instruction": {
+          "vi": "Chạy các tình huống hồi máu, tạo khiên và hủy niệm trước khi sơn.",
+          "en": "Run heal, shield, and cancelled-channel scenarios before paint."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      }
+    ]
+  },
+  "boss": {
+    "schemaVersion": "1.0",
+    "id": "atlas-boss",
+    "name": {
+      "vi": "Búa Titan Warden",
+      "en": "Titan Warden Hammer"
+    },
+    "geometry": "atlas-reference",
+    "role": "boss",
+    "dimensionsMm": {
+      "width": 360,
+      "height": 1150,
+      "depth": 180
+    },
+    "dimensionEvidence": "assumed",
+    "parts": [
+      {
+        "id": "hollow-hammer-head",
+        "name": {
+          "vi": "Đầu búa EVA rỗng",
+          "en": "Hollow EVA hammer head"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "head-led",
+        "name": {
+          "vi": "LED hiệu ứng đầu búa",
+          "en": "Head effect LEDs"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "primary-trigger",
+        "name": {
+          "vi": "Cò chính",
+          "en": "Primary trigger"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "balance-imu",
+        "name": {
+          "vi": "IMU tại điểm cân bằng",
+          "en": "IMU at balance point"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "esp32-lower-grip",
+        "name": {
+          "vi": "ESP32 tay cầm dưới",
+          "en": "ESP32 lower grip"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      },
+      {
+        "id": "three-zone-armour",
+        "name": {
+          "vi": "Áo giáp LED ba vùng",
+          "en": "3-zone LED armour"
+        },
+        "quantity": 1,
+        "unit": "module-group / NOT purchase quantity",
+        "evidence": "assumed",
+        "sources": []
+      }
+    ],
+    "assembly": [
+      {
+        "partIds": [
+          "hollow-hammer-head"
+        ],
+        "instruction": {
+          "vi": "Làm đầu búa rỗng đúng kích thước và cân khối lượng trước khi gắn điện tử.",
+          "en": "Build the hollow hammer head at full size and weigh it before electronics."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "head-led",
+          "primary-trigger",
+          "balance-imu",
+          "esp32-lower-grip"
+        ],
+        "instruction": {
+          "vi": "Thử hai cò, IMU và LED đầu búa qua USB.",
+          "en": "Bench-test two triggers, IMU, and head LEDs over USB."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "hollow-hammer-head"
+        ],
+        "instruction": {
+          "vi": "Bọc foam quanh cán và đệm mềm hai đầu.",
+          "en": "Wrap the shaft in foam and pad both ends."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "balance-imu",
+          "esp32-lower-grip"
+        ],
+        "instruction": {
+          "vi": "Gắn IMU tại điểm cân bằng và ESP32 ở tay cầm dưới.",
+          "en": "Install the IMU at the balance point and the ESP32 in the lower grip."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "three-zone-armour"
+        ],
+        "instruction": {
+          "vi": "Tạo áo bib mở hai bên với các tấm LED tháo rời.",
+          "en": "Create an open-side adjustable armour bib with removable LED panels."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "head-led",
+          "esp32-lower-grip",
+          "three-zone-armour"
+        ],
+        "instruction": {
+          "vi": "Ghép input búa và phản hồi áo vào cùng một định danh phiên Boss.",
+          "en": "Pair hammer input and armour feedback under one boss session identity."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "primary-trigger",
+          "balance-imu"
+        ],
+        "instruction": {
+          "vi": "Cân chỉnh SWEEP, SLAM và MARK mà không có tiếp xúc cơ thể.",
+          "en": "Calibrate SWEEP, SLAM, and MARK without physical contact."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      },
+      {
+        "partIds": [
+          "hollow-hammer-head",
+          "head-led",
+          "primary-trigger",
+          "balance-imu",
+          "esp32-lower-grip",
+          "three-zone-armour"
+        ],
+        "instruction": {
+          "vi": "Chạy thử phase trong năm phút; loại bản dựng nếu nóng, khó chịu hoặc kích hoạt sai.",
+          "en": "Run a five-minute phase test and reject the build if heat, discomfort, or false attacks appear."
+        },
+        "passGate": {
+          "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
+          "en": "Generic unverified gate: compare this step with the Atlas drawing and record physical test evidence before proceeding."
+        }
+      }
+    ]
+  }
+}

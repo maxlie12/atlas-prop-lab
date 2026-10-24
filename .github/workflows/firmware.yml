@@ -1,0 +1,32 @@
+name: Build ESP32 firmware
+
+on:
+  push:
+    paths:
+      - "firmware/**"
+      - ".github/workflows/firmware.yml"
+  pull_request:
+    paths:
+      - "firmware/**"
+      - ".github/workflows/firmware.yml"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install PlatformIO
+        run: pip install platformio
+      - name: Build firmware
+        run: pio run --project-dir firmware/spell-orb
+      - uses: actions/upload-artifact@v4
+        with:
+          name: spell-orb-firmware
+          path: |
+            firmware/spell-orb/.pio/build/esp32dev/firmware.bin
+            firmware/spell-orb/.pio/build/esp32dev/firmware.elf
+

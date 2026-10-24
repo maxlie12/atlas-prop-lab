@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "author": "Atlas Prop Lab",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-esp32-devkit-v1",
+      "id": "esp",
+      "top": 38.4,
+      "left": 8.2,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "castButton",
+      "top": 28.6,
+      "left": 258.1,
+      "attrs": { "color": "#16a6c9", "label": "CAST", "key": "C" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "specialButton",
+      "top": 106.8,
+      "left": 258.1,
+      "attrs": { "color": "#7057d9", "label": "SPECIAL", "key": "S" }
+    },
+    {
+      "type": "wokwi-led-ring",
+      "id": "ring",
+      "top": 190.1,
+      "left": 234.4,
+      "attrs": { "pixels": "16" }
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "buzzer",
+      "top": 221.4,
+      "left": 34.7,
+      "attrs": { "volume": "0.2" }
+    }
+  ],
+  "connections": [
+    [ "esp:25", "castButton:1.l", "#16a6c9", [] ],
+    [ "castButton:2.l", "esp:GND.1", "#5d6672", [] ],
+    [ "esp:26", "specialButton:1.l", "#7057d9", [] ],
+    [ "specialButton:2.l", "esp:GND.1", "#5d6672", [] ],
+    [ "esp:18", "ring:DIN", "#f2c94c", [] ],
+    [ "esp:VIN", "ring:VCC", "#e05858", [] ],
+    [ "esp:GND.1", "ring:GND", "#5d6672", [] ],
+    [ "esp:27", "buzzer:2", "#f29f4b", [] ],
+    [ "esp:GND.1", "buzzer:1", "#5d6672", [] ]
+  ],
+  "dependencies": {}
+}
+

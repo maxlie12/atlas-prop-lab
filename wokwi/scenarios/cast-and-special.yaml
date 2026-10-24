@@ -1,0 +1,26 @@
+name: 'Spell Orb cast and special'
+version: 1
+author: 'Atlas Prop Lab'
+steps:
+  - wait-serial: 'ATLAS_PROP_READY'
+  - set-control:
+      part-id: castButton
+      control: pressed
+      value: 1
+  - delay: 100ms
+  - set-control:
+      part-id: castButton
+      control: pressed
+      value: 0
+  - wait-serial: '"action":"CAST"'
+  - set-control:
+      part-id: specialButton
+      control: pressed
+      value: 1
+  - delay: 100ms
+  - set-control:
+      part-id: specialButton
+      control: pressed
+      value: 0
+  - wait-serial: '"action":"SPECIAL"'
+
