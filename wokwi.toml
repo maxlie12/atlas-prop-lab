@@ -1,6 +1,6 @@
 [wokwi]
 version = 1
-firmware = 'firmware/spell-orb/.pio/build/esp32dev/firmware.bin'
-elf = 'firmware/spell-orb/.pio/build/esp32dev/firmware.elf'
+firmware = 'firmware/spell-orb/.pio/build/esp32-s3-devkitc-1/firmware.bin'
+elf = 'firmware/spell-orb/.pio/build/esp32-s3-devkitc-1/firmware.elf'
 diagram = 'wokwi/diagram.json'
 

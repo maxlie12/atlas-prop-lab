@@ -4,11 +4,11 @@
 
 | ESP32-S3 pin | Device | Rule |
 | --- | --- | --- |
-| GPIO20 | MPU6050 SDA | 3.3 V I2C |
-| GPIO21 | MPU6050 SCL | 3.3 V I2C |
-| GPIO25 | Thumb trigger | `INPUT_PULLUP`; switch to GND |
-| GPIO18 | WS2812B data | Real build uses level shifter and 330 Ω resistor |
-| GPIO27 | Vibration driver input | Use transistor/MOSFET driver; never connect motor directly |
+| GPIO1 | MPU6050 SDA | 3.3 V I2C |
+| GPIO2 | MPU6050 SCL | 3.3 V I2C |
+| GPIO10 | Thumb trigger | `INPUT_PULLUP`; switch to GND |
+| GPIO12 | WS2812B data | Real build uses level shifter and 330 Ω resistor |
+| GPIO13 | Vibration driver input | Use transistor/MOSFET driver; never connect motor directly |
 
 ## Event behavior
 
@@ -19,7 +19,7 @@
 
 ## Simulation boundary
 
-The Wokwi LED on GPIO27 is only a vibration-driver proxy. The simulator does not prove motor current, transistor selection, heat, cable strain, IMU mounting, false positives or player comfort. The GY-521 and MKE-K01 physical dimensions must be measured after purchase before the service cavity is finalized.
+The Wokwi LED on GPIO13 is only a vibration-driver proxy. The simulator does not prove motor current, transistor selection, heat, cable strain, IMU mounting, false positives or player comfort. The GY-521 and MKE-K01 physical dimensions must be measured after purchase before the service cavity is finalized.
 
 ## USB-first PASS
 

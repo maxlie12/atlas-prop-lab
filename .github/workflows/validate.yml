@@ -14,6 +14,6 @@ jobs:
           node-version: 22
       - name: Check browser JavaScript
         run: node --check dist/app.js
-      - name: Check project consistency
-        run: node scripts/validate-project.mjs
+      - name: Run every validator
+        run: node scripts/validate-all.mjs
 
