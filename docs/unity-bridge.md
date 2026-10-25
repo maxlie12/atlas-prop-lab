@@ -4,7 +4,7 @@ Copy `unity/Runtime` into the Unity project under an assembly that can reference
 
 ## Boundary
 
-The transport reads newline-delimited UTF-8 strings. Pass each complete line to `AtlasPropIntentRouter.PushLine`. The router validates protocol v1 and rejects duplicate or stale sequence numbers. It does **not** apply damage, block success, healing, score or cooldown; gameplay remains authoritative.
+The transport reads newline-delimited UTF-8 strings. Pass each complete line to `AtlasPropIntentRouter.PushLine`. The router validates protocol v1, resets a device on its `ATLAS_PROP_READY` banner or when its uptime goes backwards (reboot), rejects duplicate or stale sequence numbers, and raises `IntentAccepted` for `PLAYER_INTENT` and `ShotSeen` for armour `SHOT_SEEN`. It does **not** apply damage, block success, healing, score or cooldown; gameplay remains authoritative.
 
 ## Guardian mapping
 
@@ -31,6 +31,16 @@ void OnSerialLine(string line)
 ```
 
 The serial/WebSocket/ESP-NOW adapter belongs outside these classes. This keeps the same gameplay input boundary when transport changes.
+
+## Project Atlas integration (Hardware Gate 01)
+
+Project Atlas carries a copy of these three files in `Assets/_Project/Scripts/Props/`, plus:
+
+- `AtlasPropCombatBridge`: maps `archer-bow-01` to the Archer seat (game Hero2; the old Gunner) and `impact-armour-01` to the Boss, confirms one hit per matching `FIRE` + `SHOT_SEEN` inside 1.5 s, and applies damage through `CombatActor.ApplyDamage`. It disables the mapped seat's scripted AI.
+- `AtlasPropSerialTransport`: one background reader per COM port. Needs Api Compatibility Level **.NET Framework** (set for Standalone) because of `System.IO.Ports`. Close the browser bench page first; a COM port opens in one program at a time.
+- `AtlasPropBridgeVerification.CliVerify`: edit-mode check of confirm, repeat, unknown, late, stale, silent-reboot and diagnostic lines.
+
+Keep `unity/Runtime` here as the source and copy it over when it changes.
 
 ## Required tests in the Unity repository
 
