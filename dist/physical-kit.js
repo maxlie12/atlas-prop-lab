@@ -12,9 +12,9 @@
     },
     parts: [
       {
-        id: "bench-esp32-s3", group: "controller", buyNow: true, qty: 1, priceVnd: [230000, 230000], evidence: "exact-local-reference",
+        id: "bench-esp32-s3", group: "controller", buyNow: true, qty: 2, priceVnd: [460000, 460000], evidence: "exact-local-reference",
         name: { vi: "MKE-K01 ESP32-S3 Dev Kit · bản N4 USB-C", en: "MKE-K01 ESP32-S3 Dev Kit · N4 USB-C" },
-        why: { vi: "Một board cho bench; tái dùng làm lõi cung sau khi test đạt.", en: "One bench controller; reuse it as the bow core after proof." },
+        why: { vi: "Hai board: một làm lõi cung (phát IR), một làm lõi giáp (3 receiver) để thử bắn ở 1–5 m như ma trận phủ yêu cầu; cả hai tái dùng sau khi test đạt.", en: "Two boards: one bow core (IR out) and one armour core (three receivers), so shots can be tested at the 1–5 m the coverage matrix needs; both are reused after proof." },
         verify: { vi: "Chọn N4, kiểm tra đúng USB-C và ảnh nhãn chân trước khi cấp nguồn.", en: "Choose N4; verify USB-C and photograph the pin labels before power-up." },
         sources: [{ kind: "local", label: "Hshop · exact reference", url: "https://hshop.vn/mach-phat-trien-mke-k01-esp32-s3-dev-kit" }]
       },

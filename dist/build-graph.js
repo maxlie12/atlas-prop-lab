@@ -27,7 +27,7 @@
       {
         id: "bow-controller", subsystem: "bow", label: { vi: "Lõi ESP32 trên cung", en: "Bow ESP32 core" },
         manifest: { prop: "archer", moduleId: "esp32-riser", modelKey: "core", callout: 5 },
-        purchase: { vi: "1 MKE-K01 ESP32-S3 N4 tham chiếu; chỉ mua một board cho proof.", en: "One reference MKE-K01 ESP32-S3 N4; buy only one board for the proof." },
+        purchase: { vi: "2 MKE-K01 ESP32-S3 N4 tham chiếu: lõi cung + lõi giáp; chưa mua thêm cho tới khi proof đạt.", en: "Two reference MKE-K01 ESP32-S3 N4 boards: bow core + armour core; buy no more until the proof passes." },
         placement: { vi: "Trong khoang riser có nắp mở, cổng USB tiếp cận được và dây có chống kéo.", en: "Inside the serviceable riser, with accessible USB and strain-relieved wires." },
         wiring: "USB 5 V first · exact GPIO pending delivered-board inspection",
         assemblyStep: 4,

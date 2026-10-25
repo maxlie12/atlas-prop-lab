@@ -20,7 +20,7 @@ function startThreeLab(THREE, OrbitControls) {
   const palette = { guardian: 0xf0b44d, warrior: 0x16a6c9, archer: 0x16a6c9, assassin: 0x7057d9, mage: 0x39cc93, boss: 0xef6b68 };
   const names = {
     guardian: ["Aegis Shield", "Khiên Aegis"], warrior: ["Pulse Sword", "Kiếm Pulse"], archer: ["Arc Bow", "Cung Arc"],
-    assassin: ["Shade Daggers", "Dao găm Shade"], mage: ["Lumen Staff", "Gậy Lumen"], boss: ["Titan Warden", "Titan Warden"]
+    assassin: ["Shade Daggers", "Dao găm Shade"], mage: ["Lumen Staff", "Gậy Lumen"], boss: ["Dark Knight Greatsword", "Đại kiếm Hiệp sĩ Hắc giáp"]
   };
   const copy = {
     shell: ["Safe outer shell", "Lớp vỏ an toàn", "Main EVA structure and protected contact surface.", "Kết cấu EVA chính và bề mặt tiếp xúc được bảo vệ.", "Verify size and all rounded edges on a full-scale foam mock-up.", "Kiểm tra kích thước và bo tròn mọi cạnh trên mẫu foam đúng tỉ lệ."],
@@ -244,24 +244,23 @@ function startThreeLab(THREE, OrbitControls) {
   function buildBoss(accent) {
     const group = new THREE.Group();
     const scale=175,x=-.90,y=mm=>(575-mm)/scale;
-    const width=360/scale,height=180/scale,depth=180/scale,headY=y(90);
-    // Six foam panels surround an empty volume; no solid hammer-head block.
-    const face=roundedPanelGeometry(width,height,.045,.13);
-    for(const side of [-1,1])addPart(group,face,0x473641,"shell",[x,headY,side*(depth/2-.025)],[0,0,0],[1,1,1],{roughness:.9,metalness:.03,explode:[0,.25,side*.65]});
-    for(const side of [-1,1]){
-      addPart(group,roundedPanelGeometry(width,depth,.045,.13),0x624950,"shell",[x,headY+side*(height/2-.025),0],[Math.PI/2,0,0],[1,1,1],{roughness:.9,explode:[0,side*.6,0]});
-      addPart(group,roundedPanelGeometry(depth,height,.045,.13),0x624950,"shell",[x+side*(width/2-.025),headY,0],[0,Math.PI/2,0],[1,1,1],{roughness:.9,explode:[side*.65,.25,0]});
-    }
-    addPart(group,new THREE.CylinderGeometry(20/scale,20/scale,970/scale,24),0x293640,"shell",[x,y(665),0],[0,0,0],[1,1,1],{roughness:.95,explode:[0,0,-.5]});
-    addPart(group,new THREE.SphereGeometry(.125,18,10),0x5c626d,"shell",[x,y(1128),0],[0,0,0],[1,1,1],{roughness:.95,explode:[0,-.35,-.5]});
-    for(const mm of [540,560,580,600,870,890,910,930,950])addPart(group,new THREE.TorusGeometry(.119,.015,6,20),0x897a84,"shell",[x,y(mm),0],[Math.PI/2,0,0],[1,1,1],{roughness:.95,explode:[0,0,-.5]});
-    addPart(group,new THREE.BoxGeometry(.20,.58,.035),0x68515e,"shell",[x,y(920),.13],[0,0,0],[1,1,1],{roughness:.8,explode:[0,0,.55]});
-    for(const side of [-1,1])addPart(group,new THREE.BoxGeometry(width*.72,.065,.025),accent,"light",[x,headY,side*(depth/2+.016)],[0,0,0],[1,1,1],{electronic:true,emissive:true,emissiveIntensity:1.2,explode:[0,.25,side*.9]});
-    addPart(group,new THREE.BoxGeometry(.15,.14,.025),0x368c7d,"sensor",[x,y(670),.035],[0,0,0],[1,1,1],{electronic:true,explode:[-.6,.10,.6]});
-    addPart(group,new THREE.BoxGeometry(.18,.50,.025),0x13634f,"core",[x,y(920),0],[0,0,0],[1,1,1],{electronic:true,explode:[-.65,-.2,.6]});
-    addPart(group,new THREE.BoxGeometry(.12,.17,.035),0x99a6ab,"core",[x,y(900),.035],[0,0,0],[1,1,1],{electronic:true,metalness:.4,explode:[-.65,-.2,.6]});
-    for(const mm of [560,890])addPart(group,new THREE.CylinderGeometry(.045,.045,.065,14),accent,"control",[x+.095,y(mm),.06],[Math.PI/2,0,0],[1,1,1],{electronic:true,explode:[.60,0,.60]});
-    // Armour is an independent adjustable bib illustration, not hammer geometry.
+    // Dark Knight greatsword (game Boss phase 2): 1150 mm overall, 820 mm blade, 360 mm guard.
+    // Six hollow foam panels — two blade faces, two blade edges, two guard faces — over a light
+    // spine; no solid blade block.
+    const bladeW=90/scale,bladeL=760/scale,bladeT=40/scale,bladeY=y(450),guardW=360/scale,guardH=40/scale,guardY=y(840);
+    for(const side of [-1,1])addPart(group,roundedPanelGeometry(bladeW,bladeL,.045,.05),0x2b2f3a,"shell",[x,bladeY,side*(bladeT/2)],[0,0,0],[1,1,1],{roughness:.85,metalness:.08,explode:[0,.2,side*.65]});
+    for(const side of [-1,1])addPart(group,roundedPanelGeometry(bladeT,bladeL,.045,.02),0x3a3f4c,"shell",[x+side*(bladeW/2),bladeY,0],[0,Math.PI/2,0],[1,1,1],{roughness:.85,explode:[side*.6,.2,0]});
+    for(const side of [-1,1])addPart(group,roundedPanelGeometry(guardW,guardH,.045,.08),0xa07a3a,"shell",[x,guardY,side*(bladeT/2+.01)],[0,0,0],[1,1,1],{roughness:.6,metalness:.35,explode:[0,-.1,side*.7]});
+    addPart(group,new THREE.CylinderGeometry(bladeW*.32,.01,70/scale,4),0x2b2f3a,"shell",[x,y(35),0],[0,0,Math.PI],[1,1,1],{roughness:.85,explode:[0,.45,0]});
+    addPart(group,new THREE.CylinderGeometry(20/scale,20/scale,250/scale,24),0x24262c,"shell",[x,y(985),0],[0,0,0],[1,1,1],{roughness:.95,explode:[0,-.3,-.5]});
+    addPart(group,new THREE.SphereGeometry(30/scale,18,10),0xa07a3a,"shell",[x,y(1120),0],[0,0,0],[1,1,1],{roughness:.6,metalness:.35,explode:[0,-.5,-.5]});
+    for(const mm of [890,930,970,1010,1050,1090])addPart(group,new THREE.TorusGeometry(21/scale,.012,6,20),0x5b4a3a,"shell",[x,y(mm),0],[Math.PI/2,0,0],[1,1,1],{roughness:.95,explode:[0,-.3,-.5]});
+    for(const side of [-1,1])addPart(group,new THREE.BoxGeometry(bladeW*.28,680/scale,.02),accent,"light",[x,y(460),side*(bladeT/2+.035)],[0,0,0],[1,1,1],{electronic:true,emissive:true,emissiveIntensity:1.2,explode:[0,.2,side*.9]});
+    addPart(group,new THREE.BoxGeometry(.11,.12,.025),0x368c7d,"sensor",[x,y(880),.05],[0,0,0],[1,1,1],{electronic:true,explode:[-.6,.10,.6]});
+    addPart(group,new THREE.BoxGeometry(.13,.38,.025),0x13634f,"core",[x,y(1000),0],[0,0,0],[1,1,1],{electronic:true,explode:[-.65,-.2,.6]});
+    addPart(group,new THREE.BoxGeometry(.10,.14,.03),0x99a6ab,"core",[x,y(1030),.035],[0,0,0],[1,1,1],{electronic:true,metalness:.4,explode:[-.65,-.2,.6]});
+    for(const mm of [905,1065])addPart(group,new THREE.CylinderGeometry(.04,.04,.06,14),accent,"control",[x+.08,y(mm),.06],[Math.PI/2,0,0],[1,1,1],{electronic:true,explode:[.60,0,.60]});
+    // Armour is an independent adjustable bib illustration, not greatsword geometry.
     const armourX=1.55;
     addPart(group,plateGeometry([[-.80,.65],[-.25,.80],[-.18,.46],[.18,.46],[.25,.80],[.80,.65],[.65,-.90],[-.65,-.90]],.06,.025),0x283441,"wearable",[armourX,.05,0],[0,0,0],[1,1,1],{roughness:.98,explode:[.6,0,-.3]});
     for(const side of [-1,1])linePart(group,[[armourX+side*.72,.48,0],[armourX+side*.88,.0,-.08],[armourX+side*.68,-.55,0]],0x7a6c76,"wearable",{radius:.035,segments:16,radialSegments:6,roughness:.95,explode:[.6,0,-.3]});
@@ -273,9 +272,9 @@ function startThreeLab(THREE, OrbitControls) {
     }
     const receiver=addPart(group,new THREE.BoxGeometry(.26,.34,.05),0x146258,"wearable",[armourX,-.48,-.08],[0,0,0],[1,1,1],{electronic:true,explode:[.6,-.15,-.6]});
     receiver.userData.deviceRole="armour-receiver";
-    group.userData.designEnvelopeMm={width:360,height:1150,depth:180};
+    group.userData.designEnvelopeMm={width:360,height:1150,depth:60};
     group.userData.armourSizing="illustrative / fit not verified";
-    group.userData.modelRevision="titan-warden-cad-02";
+    group.userData.modelRevision="dark-knight-greatsword-cad-03";
     return finishModel(group,"boss");
   }
   const builders = { guardian: buildGuardian, warrior: buildSword, archer: buildBow, assassin: buildDaggers, mage: buildStaff, boss: buildBoss };
@@ -329,7 +328,7 @@ function startThreeLab(THREE, OrbitControls) {
     const module = propManifests[currentProp]?.modules.find(part => part.modelKey === key);
     const bowLabels = {shell:["Recurve foam frame","Khung foam recurve"],wearable:["Cosmetic cord","Dây trang trí"],control:["Magnet / slider","Nam châm / con trượt"],sensor:["Hall sensor","Cảm biến Hall"],core:["ESP32 riser core","Lõi ESP32 tay cầm"],light:["Limb LED channels","Rãnh LED cánh cung"]};
     const bladeLabels={warrior:{shell:["Foam blade / grip","Lưỡi foam / chuôi"],light:["LED spine","LED sống kiếm"],sensor:["Guard IMU","IMU chắn tay"],control:["Grip trigger","Cò tay cầm"],core:["ESP32 hilt","ESP32 trong chuôi"],wearable:["Wrist loop","Dây giữ cổ tay"]},assassin:{shell:["Active dagger shell","Vỏ dao chủ động"],passive:["Passive dagger","Dao phụ thụ động"],sensor:["Active IMU","IMU dao chủ động"],control:["Grip trigger","Cò tay cầm"],core:["Active ESP32 hilt","ESP32 chuôi chủ động"],wearable:["Wrist trap pad","Nút bẫy cổ tay"]}};
-    const longLabels={mage:{light:["Diffused orb / LED","Quả cầu / LED tán sáng"],shell:["Padded head / shaft","Đầu đệm / thân gậy"],control:["Cast button","Nút niệm phép"],sensor:["Grip IMU","IMU tay cầm"],core:["Lower-grip ESP32","ESP32 tay cầm dưới"],wearable:["Padded end","Đầu dưới bọc đệm"]},boss:{shell:["Hollow head / shaft","Đầu rỗng / cán búa"],light:["Head LEDs","LED đầu búa"],control:["Two grip triggers","Hai cò tay cầm"],sensor:["Balance IMU","IMU vùng cân bằng"],core:["Hammer ESP32","ESP32 trong cán"],wearable:["Shared impact armour","Giáp nhận hit dùng chung"]}};
+    const longLabels={mage:{light:["Diffused orb / LED","Quả cầu / LED tán sáng"],shell:["Padded head / shaft","Đầu đệm / thân gậy"],control:["Cast button","Nút niệm phép"],sensor:["Grip IMU","IMU tay cầm"],core:["Lower-grip ESP32","ESP32 tay cầm dưới"],wearable:["Padded end","Đầu dưới bọc đệm"]},boss:{shell:["Hollow blade / guard / grip","Lưỡi rỗng / chắn tay / chuôi"],light:["Blade fuller LEDs","LED rãnh lưỡi kiếm"],control:["Two grip triggers","Hai cò tay cầm"],sensor:["Balance IMU","IMU vùng cân bằng"],core:["Grip ESP32","ESP32 trong tay cầm"],wearable:["Shared impact armour","Giáp nhận hit dùng chung"]}};
     const label = currentProp === "archer" ? bowLabels[key]?.[isVi()?1:0] : (bladeLabels[currentProp]?.[key] || longLabels[currentProp]?.[key] || copy[key])?.[isVi()?1:0];
     return `${module ? module.callout + '. ' : ''}${label || key}`;
   }
@@ -378,7 +377,7 @@ function startThreeLab(THREE, OrbitControls) {
       core:["ESP32 service core","Lõi bảo trì ESP32","Controller and USB connector under the removable riser cover; symbolic components.","Bộ điều khiển và cổng USB dưới nắp tay cầm; linh kiện mang tính biểu tượng.","Board dimensions, connectors and cable clearance require physical measurement. Battery not included.","Cần đo board, đầu nối và khoảng trống dây thật. Chưa có pin."],
       light:["Limb LED channels","Rãnh LED cánh cung","Two protected LED strips follow the upper and lower recurve.","Hai dải LED được bảo vệ chạy theo cánh recurve trên và dưới.","Verify diffusion, strain relief, current and heat before closing the channels.","Kiểm tra tán sáng, chống kéo dây, dòng điện và nhiệt trước khi đóng rãnh."]
     };
-    const longChecks={mage:{light:["The diffuser is a shell; its LED sits inside. Orb diameter follows the 140 mm reference.","Vỏ cầu tán sáng bao LED bên trong. Đường kính theo mẫu 140 mm.","Verify diffuser retention, glare, current and heat; not a tested light assembly.","Cần kiểm tra giữ vỏ, độ chói, dòng và nhiệt; chưa thử cụm đèn thật."],sensor:["IMU below the upper grip, independent of decorative head parts.","IMU dưới vùng cầm trên, tách khỏi phần trang trí đầu gậy.","Measure and calibrate the real IMU axes before fixing it.","Đo và cân chỉnh trục IMU thật trước khi cố định."],wearable:["Rounded padded lower end; no pointed cap.","Đầu dưới bọc đệm bo tròn, không có chóp nhọn.","Check foam softness and cap retention on a physical mockup.","Thử độ mềm foam và cách giữ đầu đệm trên mẫu thật."]},boss:{shell:["Six separate foam panels show the hollow head; shaft and grip remain visible with electronics off.","Sáu tấm foam biểu diễn đầu rỗng; cán và tay cầm vẫn hiện khi tắt điện tử.","Verify weight, panel bonds, softness and balance. This is not a load-bearing proof.","Kiểm tra khối lượng, mối dán, độ mềm và cân bằng; mô hình chưa chứng minh chịu lực."],wearable:["Separate adjustable bib with left shoulder, chest and right shoulder LED zones, plus a receiver.","Áo bib riêng có LED vai trái, ngực, vai phải và bộ nhận.","Bib sizing and connectors are illustrative. Fit users, remove panels for washing and test heat; hit detection stays game-authoritative.","Cỡ áo và đầu nối là minh họa. Thử vừa người, tháo panel để giặt và kiểm tra nhiệt; game quyết định trúng đòn."],sensor:["IMU in the shaft near a provisional balance region, not a decoration on the hammer face.","IMU trong cán gần vùng cân bằng dự kiến, không phải trang trí mặt búa.","The actual balance point must be weighed and measured after assembly.","Phải cân và đo điểm cân bằng thật sau khi lắp." ]}};
+    const longChecks={mage:{light:["The diffuser is a shell; its LED sits inside. Orb diameter follows the 140 mm reference.","Vỏ cầu tán sáng bao LED bên trong. Đường kính theo mẫu 140 mm.","Verify diffuser retention, glare, current and heat; not a tested light assembly.","Cần kiểm tra giữ vỏ, độ chói, dòng và nhiệt; chưa thử cụm đèn thật."],sensor:["IMU below the upper grip, independent of decorative head parts.","IMU dưới vùng cầm trên, tách khỏi phần trang trí đầu gậy.","Measure and calibrate the real IMU axes before fixing it.","Đo và cân chỉnh trục IMU thật trước khi cố định."],wearable:["Rounded padded lower end; no pointed cap.","Đầu dưới bọc đệm bo tròn, không có chóp nhọn.","Check foam softness and cap retention on a physical mockup.","Thử độ mềm foam và cách giữ đầu đệm trên mẫu thật."]},boss:{shell:["Six separate foam panels form the hollow blade and guard; grip and pommel remain visible with electronics off.","Sáu tấm foam tạo lưỡi kiếm rỗng và chắn tay; chuôi và tay cầm vẫn hiện khi tắt điện tử.","Verify weight, panel bonds, softness and balance. This is not a load-bearing proof.","Kiểm tra khối lượng, mối dán, độ mềm và cân bằng; mô hình chưa chứng minh chịu lực."],wearable:["Separate adjustable bib with left shoulder, chest and right shoulder LED zones, plus a receiver.","Áo bib riêng có LED vai trái, ngực, vai phải và bộ nhận.","Bib sizing and connectors are illustrative. Fit users, remove panels for washing and test heat; hit detection stays game-authoritative.","Cỡ áo và đầu nối là minh họa. Thử vừa người, tháo panel để giặt và kiểm tra nhiệt; game quyết định trúng đòn."],sensor:["IMU in the shaft near a provisional balance region, not a decoration on the blade face.","IMU trong cán gần vùng cân bằng dự kiến, không phải trang trí mặt lưỡi kiếm.","The actual balance point must be weighed and measured after assembly.","Phải cân và đo điểm cân bằng thật sau khi lắp." ]}};
     const entry = [...(currentProp === "archer" ? bowCopy[key] : copy[key])];
     const detail=longChecks[currentProp]?.[key];
     if(detail){entry[2]=detail[0];entry[3]=detail[1];entry[4]=detail[2];entry[5]=detail[3];}

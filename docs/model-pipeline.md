@@ -24,7 +24,7 @@ Recommended authoring contract:
 3. Use rounded, convention-safe silhouettes; no sharp contact geometry or working projectile mechanism.
 4. Use one 1K texture set per prop for the mobile target.
 5. Apply transforms and export Y-up glTF Binary.
-6. Keep each hero prop below roughly 60k triangles for the web viewer; the Boss hammer and armour may share a 100k budget.
+6. Keep each hero prop below roughly 60k triangles for the web viewer; the Boss greatsword and armour may share a 100k budget.
 7. Verify the `.glb` in a standalone glTF viewer before replacing the procedural fallback.
 
 ## Upgrade order
@@ -36,6 +36,6 @@ Recommended authoring contract:
 | 3 | Pulse Sword | foam blade thickness, protected LED channel, hand guard |
 | 4 | Shade Daggers | paired holster fit, rounded tips, mirrored maintenance access |
 | 5 | Lumen Staff | removable illuminated crystal and stable lower grip |
-| 6 | Titan Warden | two-hand hammer balance and separate three-zone armour light rig |
+| 6 | Dark Knight | two-hand greatsword balance and separate three-zone armour light rig |
 
 Procedural models remain the fallback until a replacement passes silhouette, scale, mobile frame-rate, exploded-part selection, and physical-safety checks.

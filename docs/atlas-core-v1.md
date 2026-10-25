@@ -2,12 +2,12 @@
 
 ## Purpose
 
-Atlas Core v1 is one removable, USB-first ESP32 electronics cartridge that can be reused across the Guardian shield, Warrior sword, Arc Bow, Assassin daggers, Mage staff, and Titan Warden controller. The controller and event envelope stay common; each prop gets a role-specific sensor, control, and feedback harness.
+Atlas Core v1 is one removable, USB-first ESP32 electronics cartridge that can be reused across the Guardian shield, Warrior sword, Arc Bow, Assassin daggers, Mage staff, and Dark Knight greatsword controller. The controller and event envelope stay common; each prop gets a role-specific sensor, control, and feedback harness.
 
 ## Hardware and simulation boundary
 
 - Physical reference: MKE-K01 ESP32-S3 N4. Confirm the exact module, USB connector, printed pin labels, dimensions, and vendor documentation on the delivered unit before wiring.
-- Simulation proxy: Wokwi ESP32 DevKit V1. It proves firmware flow and event logic only. Its board shape and physical pin positions are not the MKE-K01 pinout.
+- Simulation proxy: Wokwi ESP32-S3 DevKitC-1, using the same GPIO numbers as the MKE-K01. It proves firmware flow and event logic only. Its board shape and physical pin positions are not the MKE-K01 pinout.
 - First power path: USB data and 5 V. Battery charging and wireless transport are deliberately deferred until the USB proof passes.
 - GPIO values shown in the planner are candidate contracts. They become locked only after the delivered board is inspected and the relevant pins pass a minimal hardware test.
 
