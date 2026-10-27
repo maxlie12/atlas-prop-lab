@@ -83,7 +83,37 @@
     vi: { you: "BẠN LÀM", vendor: "THUÊ THỢ", review: "THỢ LÀM · BẠN NGHIỆM THU", shared: "BẠN + THỢ" },
     en: { you: "YOU", vendor: "HIRED", review: "HIRED · YOU ACCEPT", shared: "YOU + MAKER" }
   };
-  window.ATLAS_JOURNEY_MODES = { modes, roleCopy, stepCount: targets.length };
+  // Hanoi sourcing (checked 2026-10-27, unverified listings — always ask before ordering).
+  // DIY shows where to buy materials; routes that hire a maker show who to hire and what to send.
+  const sourcing = {
+    materials: [
+      { kind: { vi: "Điện tử bench kit", en: "Electronics bench kit" }, who: "Hshop (MKE-K01, MPU6050, nút nhấn)", url: "https://hshop.vn/mach-phat-trien-mke-k01-esp32-s3-dev-kit" },
+      { kind: { vi: "Tấm EVA 5 / 10 mm", en: "EVA sheet 5 / 10 mm" }, who: "Quang Minh (Thanh Trì) · cắt theo khổ, gọi hỏi giá", url: "https://quangminhbox.com/mut-xop-eva-39-sub" },
+      { kind: { vi: "EVA + phụ kiện cosplay", en: "EVA + cosplay supplies" }, who: "Aries Cosplay (Cầu Giấy / Nam Từ Liêm)", url: "https://ariescosplay.com/" }
+    ],
+    makers: [
+      { kind: { vi: "Cắt laser tấm EVA", en: "Laser-cut EVA sheets" }, who: "Xưởng cắt laser mút xốp, vd. Phan Long Laser (Hoàng Mai)", send: { vi: "SVG/DXF tỉ lệ 1:1 (phần Bản vẽ kỹ thuật)", en: "1:1 SVG/DXF (Technical drawing section)" }, url: "https://phanlonglaser.vn/cat-khac-mut-xop-mop-xop-bang-laser-theo-yeu-cau.aspx" },
+      { kind: { vi: "In 3D hộp board, tay cầm, riser", en: "3D print board box, grip, riser" }, who: "In3DS, Anbinh3D, 3DMaker (giao HN 2–4 ngày)", send: { vi: "STL/STEP — repo CHƯA có, phải dựng trước", en: "STL/STEP — NOT in the repo yet, model it first" }, url: "https://in3ds.com/dich-vu-in-3d-tai-ha-noi/" },
+      { kind: { vi: "Dán, tạo hình, sơn đạo cụ", en: "Glue, shape, paint the prop" }, who: "Aries Cosplay (mục đặt làm đạo cụ) hoặc thợ trong group cosplay Facebook", send: { vi: "Bản vẽ + ảnh tham khảo + bảng kích thước", en: "Drawing + reference images + size table" }, url: "https://ariescosplay.com/" }
+    ],
+    questions: {
+      vi: ["Có cắt/làm được EVA 5 mm và 10 mm không?", "Nhận file gì: SVG, DXF hay STL?", "Có làm một mẫu thử nhỏ trước không, giá bao nhiêu?", "Bao lâu xong?", "Có giữ đúng kích thước khoang điện tử trên bản vẽ không?"],
+      en: ["Can you cut/build 5 mm and 10 mm EVA?", "Which files: SVG, DXF or STL?", "Will you make a small test piece first, and at what price?", "How long will it take?", "Will you keep the electronics cavity exactly to the drawing?"]
+    }
+  };
+
+  window.ATLAS_JOURNEY_MODES = { modes, roleCopy, sourcing, stepCount: targets.length };
+
+  function sourcingHtml(modeId, language) {
+    const vi = language === "vi";
+    const esc = value => String(value).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+    const hire = modeId !== "diy";
+    const rows = (hire ? sourcing.makers : sourcing.materials).map(item =>
+      `<li><b>${esc(item.kind[language])}</b><span>${esc(item.who)}</span>${item.send ? `<small>${vi ? "Gửi" : "Send"}: ${esc(item.send[language])}</small>` : ""}<a href="${item.url}" target="_blank" rel="noopener">${vi ? "Xem" : "Open"} ↗</a></li>`).join("");
+    const questions = hire ? `<p>${vi ? "Hỏi thợ trước khi đặt" : "Ask before ordering"}:</p><ol>${sourcing.questions[language].map(q => `<li>${esc(q)}</li>`).join("")}</ol>` : "";
+    const title = hire ? (vi ? "Thuê ai, ở đâu (Hà Nội)" : "Who to hire, where (Hanoi)") : (vi ? "Mua vật liệu ở đâu (Hà Nội)" : "Where to buy materials (Hanoi)");
+    return `<summary>${title}</summary><ul>${rows}</ul>${questions}<small class="journey-sourcing-note">${vi ? "Danh sách tham khảo kiểm tra ngày 27/10/2026, chưa xác minh chất lượng — nhắn hỏi trước khi đặt." : "Reference list checked 2026-10-27, quality unverified — message them before ordering."}</small>`;
+  }
 
   function modeSummary(t, mode, language) {
     const counts = { you: 0, vendor: 0, review: 0, shared: 0 };
@@ -98,7 +128,8 @@
     return `${parts.join(" · ")}${handoff.length ? ` — ${vi ? "Gửi thợ" : "Send the maker"}: ${handoff.join(", ")}` : ""}`;
   }
 
-  let state = { started: false, current: 0, complete: [], mode: "hybrid" };
+  // First builds are DIY; a route chosen earlier stays saved.
+  let state = { started: false, current: 0, complete: [], mode: "diy" };
   try { state = { ...state, ...JSON.parse(localStorage.getItem(key) || "{}") }; } catch {}
   const $ = selector => document.querySelector(selector);
   const lang = () => localStorage.getItem("atlas-language") === "en" ? "en" : "vi";
@@ -117,7 +148,7 @@
     const t = copy[language];
     const shell = $("#buildJourney");
     if (!shell) return;
-    if (!modes[state.mode]) state.mode = "hybrid";
+    if (!modes[state.mode]) state.mode = "diy";
     const mode = modes[state.mode];
     const noteFor = index => mode.notes[language][index] || t.notes[index];
     $("#journeyModeTitle").textContent = language === "vi" ? "Bạn sẽ chế tạo theo cách nào?" : "How will you build it?";
@@ -128,6 +159,12 @@
       $(`#journeyMode${key}Note`).textContent = data.label[language][1];
     }
     $("#journeyModeSummary").textContent = modeSummary(t, mode, language);
+    const sourcingBox = $("#journeySourcing");
+    if (sourcingBox) {
+      const open = sourcingBox.open;
+      sourcingBox.innerHTML = sourcingHtml(state.mode, language);
+      sourcingBox.open = open;
+    }
     shell.dataset.started = String(state.started);
     $("#journeyStateLabel").textContent = state.started ? t.states[1] : t.states[0];
     $("#startProductButton").textContent = t.start;

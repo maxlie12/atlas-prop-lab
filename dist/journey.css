@@ -220,3 +220,15 @@
 .journey-step.role-vendor .journey-role { color: var(--amber); border-color: rgba(240,180,77,.55); }
 .journey-step.role-review .journey-role { color: var(--amber); border-color: rgba(240,180,77,.55); background: rgba(240,180,77,.08); }
 .journey-step.role-shared .journey-role { color: var(--green); border-color: rgba(57,204,147,.5); }
+.journey-sourcing { grid-column: 1 / -1; border: 1px solid var(--line); border-radius: 10px; background: #08161d; padding: 0 12px; }
+.journey-sourcing summary { padding: 10px 0; color: var(--cyan-soft); font-size: .72rem; font-weight: 800; cursor: pointer; }
+.journey-sourcing ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0 0 10px; padding: 0; list-style: none; }
+.journey-sourcing ul li { display: grid; gap: 4px; align-content: start; padding: 10px; border: 1px solid var(--line); border-radius: 8px; background: rgba(4, 15, 21, .6); }
+.journey-sourcing ul li b { color: var(--text); font-size: .7rem; }
+.journey-sourcing ul li span { color: var(--muted); font-size: .66rem; line-height: 1.4; }
+.journey-sourcing ul li small { color: var(--amber); font-size: .62rem; line-height: 1.4; }
+.journey-sourcing ul li a { justify-self: start; color: var(--cyan-soft); font-size: .64rem; }
+.journey-sourcing p { margin: 0 0 4px; color: var(--text); font-size: .68rem; font-weight: 700; }
+.journey-sourcing ol { margin: 0 0 10px; padding-left: 18px; color: var(--muted); font-size: .66rem; line-height: 1.6; }
+.journey-sourcing-note { display: block; padding-bottom: 10px; color: var(--muted); font-size: .6rem; }
+@media (max-width: 760px) { .journey-sourcing ul { grid-template-columns: 1fr; } }

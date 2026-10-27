@@ -30,8 +30,21 @@ for (const id of ["diy", "hybrid", "turnkey"]) {
 const signatures = Object.values(modes).map(mode => mode.roles.join());
 if (new Set(signatures).size !== signatures.length) failures.push("two build routes assign identical roles — the choice would change nothing");
 
+const { sourcing } = context.window.ATLAS_JOURNEY_MODES;
+for (const [list, items] of [["materials", sourcing.materials], ["makers", sourcing.makers]]) {
+  if (!items.length) failures.push(`sourcing.${list} is empty`);
+  for (const item of items) {
+    if (!/^https:\/\//.test(item.url)) failures.push(`sourcing.${list} "${item.who}" needs an https link`);
+    if (!item.kind.vi || !item.kind.en) failures.push(`sourcing.${list} "${item.who}" needs vi/en labels`);
+    if (list === "makers" && (!item.send?.vi || !item.send?.en)) failures.push(`maker "${item.who}" must say which file to send`);
+  }
+}
+if (!sourcing.makers.some(item => /STL/.test(item.send.en) && /NOT/.test(item.send.en))) failures.push("3D-print maker must warn that the repo has no STL yet");
+if (sourcing.questions.vi.length !== sourcing.questions.en.length) failures.push("vi/en maker questions differ");
+
 const html = read("dist/index.html");
-for (const id of ["journeyBuildMode", "journeyModeSummary", "journeyModeDiy", "journeyModeHybrid", "journeyModeTurnkey"]) if (!html.includes(`id="${id}"`)) failures.push(`journey UI missing #${id}`);
+for (const id of ["journeyBuildMode", "journeyModeSummary", "journeySourcing", "journeyModeDiy", "journeyModeHybrid", "journeyModeTurnkey"]) if (!html.includes(`id="${id}"`)) failures.push(`journey UI missing #${id}`);
+if (!/data-build-mode="diy" class="is-active"/.test(html) || !read("dist/journey.js").includes('mode: "diy" }')) failures.push("first builds must default to the DIY route");
 
 if (failures.length) {
   console.error(failures.join("\n"));
