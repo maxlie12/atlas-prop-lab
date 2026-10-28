@@ -10,4 +10,4 @@
 
 Validation: `node scripts/validate-bow-model.mjs`, repository consistency and CAD checks. Geometry contract uses stubs, so triangulation, rendered appearance and occlusion still need real Three.js/browser inspection. Browser binaries were unavailable in the execution environment.
 
-Remaining props retain their prior models. Next visual pass: Warrior sword, then Assassin daggers, Mage staff and Boss hammer/armour.
+Remaining props retain their prior models. Next visual pass: Warrior sword, then Assassin daggers, Mage staff and Boss greatsword/armour.

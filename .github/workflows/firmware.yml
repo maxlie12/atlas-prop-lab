@@ -22,11 +22,15 @@ jobs:
       - name: Install PlatformIO
         run: pip install platformio
       - name: Build firmware
-        run: pio run --project-dir firmware/spell-orb
+        run: |
+          pio run --project-dir firmware/spell-orb
+          pio run --project-dir firmware/guardian-shield
+          pio run --project-dir firmware/arc-bow
+          pio run --project-dir firmware/impact-armour
       - uses: actions/upload-artifact@v4
         with:
           name: spell-orb-firmware
           path: |
-            firmware/spell-orb/.pio/build/esp32dev/firmware.bin
-            firmware/spell-orb/.pio/build/esp32dev/firmware.elf
+            firmware/spell-orb/.pio/build/esp32-s3-devkitc-1/firmware.bin
+            firmware/spell-orb/.pio/build/esp32-s3-devkitc-1/firmware.elf
 

@@ -6,7 +6,7 @@ Turn the digital hit contract into a low-cost, measurable USB bench proof before
 
 ## Reference stack
 
-- MKE-K01 ESP32-S3 Dev Kit, N4 USB-C reference.
+- Two MKE-K01 ESP32-S3 Dev Kit, N4 USB-C reference boards: one bow core (`firmware/arc-bow`) and one armour core (`firmware/impact-armour`), so receivers can sit 1–5 m from the emitter.
 - KY-024/49E Hall module as a replaceable bench proxy. Its outputs must be metered before GPIO connection.
 - Vishay TSAL6200 940 nm IR emitter through a transistor driver and current-limiting resistor.
 - Vishay TSOP38238 38 kHz receiver with local supply filtering. A local HS0038B-class part is only a proxy.
@@ -19,8 +19,8 @@ The official Vishay and Espressif documentation is the electrical source of trut
 1. Buy the USB bench items only.
 2. Photograph exact markings and board pin labels.
 3. Wire with power disconnected and clear all five wiring gates.
-4. Run 100 Hall draw/release trials and export CSV.
-5. Run 100 hit packets and export CSV.
+4. Flash `firmware/arc-bow` and `firmware/impact-armour`, connect both boards in desktop Chrome/Edge (**Connect bow** / **Connect armour**) so every trial is scored and hit latency is timed automatically.
+5. Run 100 Hall draw/release trials and 100 hit packets, then export CSV. Mark an undetected release as MISS by hand.
 6. Fit a cardboard/EVA bib to the smallest and largest expected wearer.
 7. Run the 15-cell receiver matrix under expected event lighting.
 8. Measure received parts and only then revise CAD cavities and enclosures.

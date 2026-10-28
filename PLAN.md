@@ -13,7 +13,7 @@ Prove the complete path from a physical action on an ESP32 prop to a game event 
 5. **Hardware proof:** receive one MKE-K01 reference unit and record its exact variant, pin labels, power, input, feedback, heat, and disconnect results.
 6. **Unity bridge:** translate the serial or network event envelope into the existing Atlas command layer.
 7. **Wireless proof:** test WiFi/WebSocket first, then test ESP-NOW if direct prop to hub communication is valuable.
-8. **Role design packs:** Guardian shield, Warrior sword, Archer bow, Assassin daggers, Mage staff, and Titan Warden boss hammer/armour. Completed at concept and wiring-contract level; physical proof remains.
+8. **Role design packs:** Guardian shield, Warrior sword, Archer bow, Assassin daggers, Mage staff, and Dark Knight Boss greatsword/armour. Completed at concept and wiring-contract level; physical proof remains.
 9. **Role hardware proofs:** build and verify each prop from the shared USB-first electronics contract.
 10. **Event kit:** enclosures, charging, spare parts, pairing workflow, operator dashboard, and recovery procedures.
 
@@ -51,7 +51,7 @@ Prove the complete path from a physical action on an ESP32 prop to a game event 
 
 ## Visual pass CAD-02
 
-- Arc Bow, Pulse Sword, Shade Daggers, Lumen Staff and Titan Warden now have source-level visual upgrades following Guardian's shell/electronics separation.
+- Arc Bow, Pulse Sword, Shade Daggers, Lumen Staff and the Boss (Dark Knight greatsword since CAD-03) now have source-level visual upgrades following Guardian's shell/electronics separation.
 - Boss includes a separate illustrative three-zone bib and receiver; its wearable fit is not measured.
 - Geometry and workflow contract tests pass. Rendered appearance and real hardware remain unverified.
 - Next implementation: full purchase BOM and detailed guided PASS-gate adapters. Do not mark manufacturing-ready from these visual changes.

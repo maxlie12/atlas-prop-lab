@@ -3,4 +3,8 @@
 .vscode/.browse.c_cpp.db*
 .sites-runtime/
 *.log
+# Third-party img2threejs skill checkout (own git repo, pinned in docs/model-pipeline.md)
+.claude/skills/img2threejs/
+# img2threejs run state and renders
+.img2threejs/
 
