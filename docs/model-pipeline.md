@@ -39,3 +39,16 @@ Recommended authoring contract:
 | 6 | Dark Knight | two-hand greatsword balance and separate three-zone armour light rig |
 
 Procedural models remain the fallback until a replacement passes silhouette, scale, mobile frame-rate, exploded-part selection, and physical-safety checks.
+
+## img2threejs trial (prop-lab only)
+
+[img2threejs](https://github.com/img2threejs/img2threejs) is an agent skill that rebuilds one reference image as a procedural Three.js `Group` factory, pass by pass, with a render-vs-reference comparison gate. It fits this lab because the digital twins in `dist/three-lab.js` (`buildGuardian`, `buildBow`, …) are already procedural Three.js; it does not touch Project Atlas (Unity).
+
+- Installed as a project skill at `.claude/skills/img2threejs` (git-ignored; its own checkout).
+- Pinned: commit `3e7099e` (2026-10-27), Apache-2.0. Reviewed before install: core `forge/` is Python standard library only; network access only in the optional `integrations/vision` model download and CI scripts.
+- Requirements: Python 3.10+ (here 3.14, invoked as `python`, not `python3`) and a browser for screenshots (Chrome/Edge headless).
+- Run state and renders go to `.img2threejs/` (git-ignored).
+- First target: Guardian Shield from `dist/assets/guardian-cad-render-v1.webp` (upgrade priority 1). Output replaces nothing until it passes the same checks as an authored `.glb`.
+- Limits: shape only — it cannot verify electronics, strength, fit or comfort. A single image cannot show hidden sides.
+
+Update: `git -C .claude/skills/img2threejs fetch && git -C .claude/skills/img2threejs checkout <reviewed-commit>`, then update the pin above.
