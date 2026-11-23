@@ -63,6 +63,14 @@ Prove the complete path from a physical action on an ESP32 prop to a game event 
 - Final enclosure, switches, connectors, and physical safety.
 - Reliable radio range around people, costumes, props, and nearby WiFi networks.
 
+## Six-role sync — revision 0.13
+
+- Gameplay roster READY: one roster for the field simulator, logic map, 3D arena and ESP32 lab; Hero seats 1–4 + reserve Warrior + Dark Knight, matching docs/unity-bridge.md and docs/event-kit-v1.md.
+- Field simulator READY: real contract actions per role with press/release holds, the bridge's dedupe/stale/role/seat checks, the documented block/taunt/heal/team-shield values, the Arc Bow FIRE + SHOT_SEEN window, and unplug → seat AI.
+- Role firmware WRITTEN: assassin-daggers, mage-staff, boss-greatsword, warrior-sword on the shared S3 pin map; host scenario tests PASS; ESP32 build runs in CI.
+- Finding: a lost `BLOCK_END` over a lossy link leaves the block on; decide repeat-while-held or acknowledged release before the wireless proof (docs/field-simulator.md).
+- Physical evidence remains EMPTY: IMU thresholds are starting values until measured on a real prop.
+
 ## Hardware Gate workflow — revision 0.12
 
 - Purchase plan READY: one USB-only bench set with exact/datasheet-backed references and low-cost local proxy choices.

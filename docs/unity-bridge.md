@@ -41,9 +41,12 @@ MVP control split (decided 2026-10-27): the seat's scripted AI keeps **moving an
 | Arc Bow | `archer-bow-01` | `ARCHER` | `firmware/arc-bow` |
 | Impact armour | `impact-armour-01` | `ARMOUR` | `firmware/impact-armour` |
 | Aegis Shield | `guardian-shield-01` | `GUARDIAN` | `firmware/guardian-shield` |
-| Twin daggers | `assassin-daggers-01` | `ASSASSIN` | not written yet |
-| Lumen Staff | `mage-staff-01` | `MAGE` | not written yet |
-| Boss greatsword | `boss-greatsword-01` | `BOSS` | not written yet |
+| Twin daggers | `assassin-daggers-01` | `ASSASSIN` | `firmware/assassin-daggers` |
+| Lumen Staff | `mage-staff-01` | `MAGE` | `firmware/mage-staff` |
+| Boss greatsword | `boss-greatsword-01` | `BOSS` | `firmware/boss-greatsword` |
+| Pulse Sword (reserve) | `warrior-sword-01` | `WARRIOR` | `firmware/warrior-sword` (game side planned) |
+
+Input → action mapping, thresholds and bench steps for the four newer props: [role-firmware.md](role-firmware.md).
 
 The Unity bridge refuses any line whose `role` differs from the one its deviceId is mapped to (`role_mismatch`), before that device can take a seat. A refused ability (cooldown, windup, not charged, engagement not started) is reported as `ability_not_ready`; an action outside the role's set as `unknown_action`.
 

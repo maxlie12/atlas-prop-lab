@@ -22,7 +22,7 @@
         <button type="button" data-language="vi">VI</button>
         <button type="button" data-language="en" class="is-active">EN</button>
       </div>
-      <div class="header-status"><i></i><span id="headerStatusText">V0.12 HARDWARE GATE</span></div>
+      <div class="header-status"><i></i><span id="headerStatusText">V0.13 SIX-ROLE SYNC</span></div>
     </header>
 
     <nav class="mode-tabs" aria-label="Lab views">
@@ -795,8 +795,12 @@
         <div class="sim-grid">
           <section class="panel arena-panel">
             <div class="arena-stats">
-              <div><span>Boss HP</span><strong id="bossHpText">520 / 520</strong></div>
+              <div><span id="bossHpLabel">Boss HP</span><strong id="bossHpText">520 / 520</strong></div>
               <div class="hp-track"><i id="bossHpBar"></i></div>
+              <div><span id="bossChargeLabel">Phase charge</span><strong id="bossChargeText">0 %</strong></div>
+              <div class="hp-track charge-track"><i id="bossChargeBar"></i></div>
+              <p class="boss-focus" id="bossFocusText">Boss focus: Archer</p>
+              <div class="party-strip" id="partyHp"></div>
             </div>
             <div class="arena-view-toolbar">
               <div><span class="panel-label" id="arenaViewLabel">Arena view</span><strong id="arenaViewStatus">3D EVENT REPLAY</strong></div>
@@ -807,25 +811,16 @@
             </div>
             <div class="three-arena-stage" id="threeArenaStage">
               <div class="three-loading" id="threeArenaLoading">Loading arena…</div>
-              <div class="arena-role-chips" id="arenaRoleChips">
-                <button type="button" data-field-role="guardian">Guardian</button>
-                <button type="button" data-field-role="archer" class="is-active">Archer</button>
-                <button type="button" data-field-role="assassin">Assassin</button>
-                <button type="button" data-field-role="support">Support</button>
-              </div>
-              <div class="arena-legend"><span><i class="hero-dot"></i>Hero</span><span><i class="boss-dot"></i>Boss</span><span><i class="zone-dot"></i>AoE / range</span></div>
+              <div class="arena-role-chips" id="arenaRoleChips"></div>
+              <div class="arena-legend" id="arenaLegend"></div>
             </div>
             <div class="arena is-hidden" id="arena">
-              <div class="boss-token"><span>B</span><small>BOSS</small></div>
-              <div class="hero-token guardian" data-role="guardian"><span>G</span><small>GUARDIAN</small></div>
-              <div class="hero-token archer is-selected" data-role="archer"><span>A</span><small>ARCHER</small></div>
-              <div class="hero-token assassin" data-role="assassin"><span>X</span><small>ASSASSIN</small></div>
-              <div class="hero-token support" data-role="support"><span>+</span><small>SUPPORT</small></div>
-              <div id="packet" class="packet" aria-hidden="true"></div>
+              <div id="arenaTokens"></div>
+              <div id="packetLayer" aria-hidden="true"></div>
             </div>
-            <div class="action-bar">
-              <button class="action-button cast" data-action="CAST"><span>C</span><strong>CAST</strong><small>0.7 s cooldown</small></button>
-              <button class="action-button special" data-action="SPECIAL"><span>S</span><strong>SPECIAL</strong><small>4 s cooldown</small></button>
+            <div class="seat-bar" id="seatBar"></div>
+            <div class="action-row">
+              <div class="action-bar" id="actionBar"></div>
               <button class="button ghost compact" id="resetSim">Reset</button>
             </div>
           </section>
@@ -850,13 +845,16 @@
 
     </main>
 
-    <footer><span>ATLAS / PROP SYSTEMS</span><span>Planner revision 0.12 · Hardware proof workflow, not field certification</span></footer>
+    <footer><span>ATLAS / PROP SYSTEMS</span><span>Planner revision 0.13 · Hardware proof workflow, not field certification</span></footer>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <script src="prop-manifests.js"></script>
+    <script src="gameplay-roster.js"></script>
+    <script src="field-sim.js"></script>
     <script src="build-graph.js"></script>
     <script src="impact-armour.js"></script>
     <script src="cad-lab.js"></script>
     <script src="app.js"></script>
+    <script src="field-ui.js"></script>
     <script src="journey.js"></script>
     <script src="component-links.js"></script>
     <script src="hit-lab.js"></script>

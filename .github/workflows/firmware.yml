@@ -27,6 +27,10 @@ jobs:
           pio run --project-dir firmware/guardian-shield
           pio run --project-dir firmware/arc-bow
           pio run --project-dir firmware/impact-armour
+          pio run --project-dir firmware/assassin-daggers
+          pio run --project-dir firmware/mage-staff
+          pio run --project-dir firmware/boss-greatsword
+          pio run --project-dir firmware/warrior-sword
       - uses: actions/upload-artifact@v4
         with:
           name: spell-orb-firmware

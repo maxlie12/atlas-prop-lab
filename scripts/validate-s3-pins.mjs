@@ -10,7 +10,8 @@ const read = path => fs.readFileSync(new URL(`../${path}`, import.meta.url), "ut
 const failures = [];
 const check = (where, pin) => { if (!usable.has(pin)) failures.push(`${where}: GPIO${pin} is not usable on the ESP32-S3 core`); };
 
-for (const firmware of ["firmware/spell-orb/src/main.cpp", "firmware/guardian-shield/src/main.cpp", "firmware/arc-bow/src/main.cpp", "firmware/impact-armour/src/main.cpp"]) {
+const roleFirmware = ["assassin-daggers", "mage-staff", "boss-greatsword", "warrior-sword"].map(name => `firmware/${name}/src/main.cpp`);
+for (const firmware of ["firmware/spell-orb/src/main.cpp", "firmware/guardian-shield/src/main.cpp", "firmware/arc-bow/src/main.cpp", "firmware/impact-armour/src/main.cpp", ...roleFirmware]) {
   if (!fs.existsSync(new URL(`../${firmware}`, import.meta.url))) continue;
   const pins = read(firmware).match(/namespace Pins \{([\s\S]*?)\n\}/)?.[1] ?? "";
   for (const [, name, pin] of pins.matchAll(/constexpr uint8_t (\w+) = (\d+);/g)) check(`${firmware} Pins::${name}`, Number(pin));
@@ -32,6 +33,19 @@ else {
     }
   }
   for (const entry of vm.runInNewContext(`(${pinMap})`)) if (/^GPIO\d+$/.test(entry.pin)) check(`pinMap "${entry.name}"`, Number(entry.pin.slice(4)));
+}
+
+// Each role firmware uses exactly the GPIOs its electronics profile documents.
+if (profiles) {
+  const roles = vm.runInNewContext(`(${profiles})`);
+  const firmwareByRole = { assassin: "assassin-daggers", mage: "mage-staff", boss: "boss-greatsword", warrior: "warrior-sword", guardian: "guardian-shield" };
+  for (const [role, name] of Object.entries(firmwareByRole)) {
+    const source = read(`firmware/${name}/src/main.cpp`);
+    const used = [...(source.match(/namespace Pins \{([\s\S]*?)\n\}/)?.[1] ?? "").matchAll(/= (\d+);/g)].map(match => Number(match[1]));
+    const documented = new Set(roles[role].pins.flatMap(([label]) => /^GPIO/.test(label) ? label.match(/\d+/g).map(Number) : []));
+    for (const pin of used) if (!documented.has(pin)) failures.push(`firmware/${name}: GPIO${pin} is not in the ${role} electronics profile`);
+    if (!source.includes(`"deviceId\\":\\"${roles[role].deviceId}\\"`)) failures.push(`firmware/${name}: deviceId must be ${roles[role].deviceId}`);
+  }
 }
 
 const wiring = read("dist/physical-wiring.js").match(/pins: \{([^}]*)\}/)?.[1] ?? "";

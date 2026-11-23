@@ -52,4 +52,4 @@ One table both repos follow (decided 2026-10-24). Game asset ids stay as they ar
 
 ## Current evidence boundary
 
-The browser contains role concept drawings, planning BOMs, supplier references, sensor placement, downloadable role packs, and assembly order. The existing Spell Orb firmware compiles and its web files validate. No role prop, Boss armour, battery architecture, wireless path, Unity bridge, or full event kit is yet physically field verified.
+The browser contains role concept drawings, planning BOMs, supplier references, sensor placement, downloadable role packs, assembly order, and a field simulator synced to this roster. Firmware exists for every role prop and the impact armour; it compiles in CI and its logic passes host scenario tests. No role prop, Boss armour, battery architecture, wireless path, Unity bridge, or full event kit is yet physically field verified.
