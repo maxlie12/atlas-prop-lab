@@ -2,10 +2,10 @@
 #include <Adafruit_NeoPixel.h>
 
 namespace Pins {
-constexpr uint8_t CastButton = 25;
-constexpr uint8_t SpecialButton = 26;
-constexpr uint8_t LedRing = 18;
-constexpr uint8_t Buzzer = 27;
+constexpr uint8_t CastButton = 10;
+constexpr uint8_t SpecialButton = 11;
+constexpr uint8_t LedRing = 12;
+constexpr uint8_t Buzzer = 13;
 }
 
 namespace Timing {

@@ -4,7 +4,7 @@
   "editor": "wokwi",
   "parts": [
     {
-      "type": "wokwi-esp32-devkit-v1",
+      "type": "board-esp32-s3-devkitc-1",
       "id": "esp",
       "top": 38.4,
       "left": 8.2,
@@ -40,14 +40,14 @@
     }
   ],
   "connections": [
-    [ "esp:25", "castButton:1.l", "#16a6c9", [] ],
+    [ "esp:10", "castButton:1.l", "#16a6c9", [] ],
     [ "castButton:2.l", "esp:GND.1", "#5d6672", [] ],
-    [ "esp:26", "specialButton:1.l", "#7057d9", [] ],
+    [ "esp:11", "specialButton:1.l", "#7057d9", [] ],
     [ "specialButton:2.l", "esp:GND.1", "#5d6672", [] ],
-    [ "esp:18", "ring:DIN", "#f2c94c", [] ],
-    [ "esp:VIN", "ring:VCC", "#e05858", [] ],
+    [ "esp:12", "ring:DIN", "#f2c94c", [] ],
+    [ "esp:5V", "ring:VCC", "#e05858", [] ],
     [ "esp:GND.1", "ring:GND", "#5d6672", [] ],
-    [ "esp:27", "buzzer:2", "#f29f4b", [] ],
+    [ "esp:13", "buzzer:2", "#f29f4b", [] ],
     [ "esp:GND.1", "buzzer:1", "#5d6672", [] ]
   ],
   "dependencies": {}

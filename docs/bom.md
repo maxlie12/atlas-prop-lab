@@ -4,7 +4,7 @@ Prices are planning ranges in VND and should be checked again when ordering.
 
 | Item | Qty | Required | Planning range | Reason |
 | --- | ---: | :---: | ---: | --- |
-| ESP32 DevKit V1, 30 pin | 1 | Yes | 90k–160k | Controller and future WiFi/ESP-NOW |
+| MKE-K01 ESP32-S3 Dev Kit, N4 USB-C | 1 | Yes | 230k | Controller and future WiFi/ESP-NOW (same board as every role core) |
 | WS2812B 16 LED ring, 5V | 1 | Yes | 45k–90k | Cooldown and player feedback |
 | 12 mm momentary buttons | 2 | Yes | 10k–30k | CAST and SPECIAL inputs |
 | Passive piezo buzzer | 1 | Yes | 5k–20k | Audio feedback |

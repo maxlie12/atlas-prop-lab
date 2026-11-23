@@ -9,7 +9,7 @@ window.AtlasCad = (() => {
     archer: { grip: [215, 450], cavity: [45, 90], notes: ['Cánh recurve đối xứng; dây trang trí ở x = 39 cm, không có mũi tên.', 'Bộ Hall / slider cần test riêng; không kéo dây để tích năng lượng.'], en: ['Symmetric recurve limbs; cosmetic string at x = 39 cm, no arrow.', 'Hall/slider requires separate proof; never draw to store launch energy.'] },
     assassin: { grip: [37.5, 265], cavity: [28, 60], notes: ['Lưỡi 21 cm; cán + chắn tay 11 cm; chỉ một dao có điện tử.', 'Khoang nhỏ có thể không vừa DevKit: thử bao board trước, chuyển core sang cổ tay nếu không vừa.'], en: ['21 cm blade; 11 cm guard and grip; one active dagger only.', 'A DevKit may not fit: check its envelope first; move the core to a wrist unit if needed.'] },
     mage: { grip: [70, 850], cavity: [35, 90], notes: ['Quả cầu Ø14 cm, thân tới đầu dưới tổng 110 cm.', 'Core dưới tay cầm; đầu trên/dưới mềm và tháo bảo trì được.'], en: ['14 cm orb diameter; overall length to lower tip 110 cm.', 'Core below grip; padded ends and serviceable cover.'] },
-    boss: { grip: [180, 920], cavity: [45, 100], notes: ['Đầu búa bao 36 × 18 × 18 cm; rỗng, không dùng khối cứng.', 'Giáp Boss là bộ riêng, chưa nằm trong bản vẽ cán búa này.'], en: ['Hollow hammer head envelope 36 × 18 × 18 cm; no solid rigid block.', 'Boss armour is a separate assembly, not included in this hammer sheet.'] }
+    boss: { grip: [180, 980], cavity: [34, 110], notes: ['Lưỡi đại kiếm 9 × 82 cm, EVA rỗng quanh lõi PVC nhẹ; mũi bo tròn, không dùng khối cứng.', 'Chắn tay 36 cm; ESP32 nằm trong tay cầm 4 × 25 cm — đo board thật trước khi khoét. Giáp Boss là bộ riêng.'], en: ['Greatsword blade 9 × 82 cm: hollow EVA over a light PVC spine; rounded tip, no solid rigid block.', '36 cm guard; ESP32 sits in the 4 × 25 cm grip — measure the real board before cutting. Boss armour is a separate assembly.'] }
   };
   const cm = mm => Number((mm / 10).toFixed(2));
   function geometry(r, w, h) {
@@ -17,7 +17,7 @@ window.AtlasCad = (() => {
     if (r === 'warrior' || r === 'assassin') { const end = r === 'warrior' ? 450 : 210; return `<path d="M${w/2-8} 8 Q${w/2-8} 0 ${w/2} 0 Q${w/2+8} 0 ${w/2+8} 8 L${w*.7} 25 L${w*.78} ${end} L${w} ${end+12} L${w} ${end+32} L${w*.7} ${end+32} L${w*.7} ${h-15} Q${w/2} ${h+10} ${w*.3} ${h-15} L${w*.3} ${end+32} L0 ${end+32} L0 ${end+12} L${w*.22} ${end} L${w*.3} 25 Z"/>`; }
     if (r === 'archer') return `<path d="M390 0 C340 25 145 60 100 210 C50 330 205 365 205 410 L205 490 C205 535 50 570 100 690 C145 840 340 875 390 900 L405 880 C345 855 185 790 135 680 C95 575 240 535 240 490 L240 410 C240 365 95 325 135 220 C185 110 345 45 405 20 Z"/><path class="string" d="M390 0 L390 900"/><rect class="detail" x="190" y="390" width="65" height="120" rx="16"/>`;
     if (r === 'mage') return `<circle cx="70" cy="70" r="70"/><rect x="50" y="130" width="40" height="970" rx="20"/>`;
-    return `<rect x="0" y="0" width="360" height="180" rx="30"/><rect x="160" y="180" width="40" height="970" rx="20"/>`;
+    return `<path d="M180 0 Q210 18 225 60 L225 820 L135 820 L135 60 Q150 18 180 0 Z"/><path class="detail" d="M180 70 V800"/><rect x="0" y="820" width="360" height="40" rx="14"/><rect x="160" y="860" width="40" height="250" rx="20"/><circle cx="180" cy="1120" r="30"/>`;
   }
   function svg() {
     const d = window.ATLAS_PROP_MANIFESTS[role].dimensionsMm, s = specs[role], vi = language === 'vi';

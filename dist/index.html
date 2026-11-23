@@ -50,14 +50,16 @@
 
           <div class="journey-build-mode" id="journeyBuildMode">
             <div>
-              <strong id="journeyModeTitle">M sẽ chế tạo theo cách nào?</strong>
+              <strong id="journeyModeTitle">Bạn sẽ chế tạo theo cách nào?</strong>
               <small id="journeyModeNote">Có thể đổi sau. Tool sẽ điều chỉnh phần việc, hồ sơ giao thợ và bước nghiệm thu.</small>
             </div>
             <div class="journey-mode-options" role="group" aria-label="Build mode">
-              <button type="button" data-build-mode="diy"><b id="journeyModeDiy">Tự làm</b><span id="journeyModeDiyNote">Tự chế tạo và lắp điện tử</span></button>
-              <button type="button" data-build-mode="hybrid" class="is-active"><b id="journeyModeHybrid">Thuê một phần</b><span id="journeyModeHybridNote">Thuê vỏ/in 3D, tự test hệ thống</span></button>
+              <button type="button" data-build-mode="diy" class="is-active"><b id="journeyModeDiy">Tự làm</b><span id="journeyModeDiyNote">Tự chế tạo và lắp điện tử</span></button>
+              <button type="button" data-build-mode="hybrid"><b id="journeyModeHybrid">Thuê một phần</b><span id="journeyModeHybridNote">Thuê vỏ/in 3D, tự test hệ thống</span></button>
               <button type="button" data-build-mode="turnkey"><b id="journeyModeTurnkey">Thuê trọn bộ</b><span id="journeyModeTurnkeyNote">Giao hồ sơ và tập trung nghiệm thu</span></button>
             </div>
+            <p class="journey-mode-summary" id="journeyModeSummary"></p>
+            <details class="journey-sourcing" id="journeySourcing"></details>
           </div>
 
           <nav class="journey-steps" id="journeySteps" aria-label="Product build journey"></nav>
@@ -76,7 +78,7 @@
             <p class="eyebrow">ATLAS EVENT KIT V1 / 1 BOSS VS 4 HEROES</p>
             <h1 id="event-kit-title">Prop build planner</h1>
           </div>
-          <p class="section-note">The roster contains five hero kits. Load any four heroes plus Titan Warden for a match.</p>
+          <p class="section-note">The roster contains five hero kits. Load any four heroes plus the Dark Knight Boss for a match.</p>
         </div>
 
         <div class="kit-status-grid" aria-label="Event kit target">
@@ -364,6 +366,15 @@
             <button type="button" class="is-active" data-bench-campaign="bow" id="benchBowTab">01 · Bow release</button>
             <button type="button" data-bench-campaign="hit" id="benchHitTab">02 · Armour hit</button>
           </div>
+          <div class="bench-serial" id="benchSerial">
+            <div class="bench-serial-head"><strong id="benchSerialTitle">Tự ghi từ board qua USB</strong><small id="benchSerialHint">Chrome/Edge trên máy tính: nối cung và giáp bằng cáp USB data, web tự chấm từng lần thử và tự đo latency.</small></div>
+            <div class="bench-serial-actions">
+              <button type="button" class="secondary-button" id="benchConnectBow">Kết nối cung</button>
+              <button type="button" class="secondary-button" id="benchConnectArmour">Kết nối giáp</button>
+              <span class="mono-pill" id="benchSerialStatus">CHƯA KẾT NỐI</span>
+            </div>
+            <ol class="bench-serial-log" id="benchSerialLog"></ol>
+          </div>
           <div class="bench-evidence-grid">
             <div class="bench-recorder">
               <div class="bench-progress-head"><div><span id="benchCampaignKicker">CAMPAIGN 01</span><h3 id="benchCampaignTitle">Hall draw/release reliability</h3></div><strong id="benchProgressText">0 / 100</strong></div>
@@ -420,7 +431,7 @@
           <button class="role-card" data-prop="archer" role="listitem"><span class="role-glyph">⌁</span><strong>Archer</strong><small>Bow</small></button>
           <button class="role-card" data-prop="assassin" role="listitem"><span class="role-glyph">⟋</span><strong>Assassin</strong><small>Daggers</small></button>
           <button class="role-card" data-prop="mage" role="listitem"><span class="role-glyph">✦</span><strong>Mage</strong><small>Staff</small></button>
-          <button class="role-card boss-card" data-prop="boss" role="listitem"><span class="role-glyph">♛</span><strong>Titan Warden</strong><small>Boss hammer</small></button>
+          <button class="role-card boss-card" data-prop="boss" role="listitem"><span class="role-glyph">♛</span><strong>Dark Knight</strong><small>Boss greatsword</small></button>
         </div>
 
         <section class="panel twin-panel" aria-labelledby="twin-title">
@@ -667,7 +678,7 @@
                 <article><span id="coreControllerLabel">Physical reference</span><strong>MKE-K01 ESP32-S3 N4</strong><small id="coreControllerNote">Confirm the delivered USB connector and printed pin labels before wiring.</small></article>
                 <article><span id="coreHarnessLabel">Selected role harness</span><strong id="coreRoleName">Aegis Shield</strong><small id="coreRoleParts">MPU6050 · trigger · LEDs · vibration</small></article>
                 <article><span id="corePowerLabel">First power path</span><strong id="corePowerValue">USB data + 5 V only</strong><small id="corePowerNote">Battery charging and radio stay outside the first proof.</small></article>
-                <article><span id="coreProxyLabel">Simulation boundary</span><strong id="coreProxyValue">Wokwi DevKit V1 proxy</strong><small id="coreProxyNote">It proves event logic, not the exact physical S3 pinout.</small></article>
+                <article><span id="coreProxyLabel">Simulation boundary</span><strong id="coreProxyValue">Wokwi ESP32-S3 DevKitC-1 proxy</strong><small id="coreProxyNote">It proves event logic, not the exact physical S3 pinout.</small></article>
               </div>
             </div>
           </section>
@@ -694,7 +705,7 @@
               <option value="archer">Archer bow</option>
               <option value="assassin">Assassin</option>
               <option value="mage">Mage staff</option>
-              <option value="boss">Titan Warden</option>
+              <option value="boss">Dark Knight</option>
             </select>
 
             <label class="field-label" for="transportSelect">Event transport</label>
@@ -757,7 +768,7 @@
           <div><p class="eyebrow">COMMON ESP32 CORE / ONE UNIT</p><h2 id="core-build-title">32-step bench build</h2></div>
           <p class="section-note">Complete the reusable electronics core here, then mount it into the selected prop using Page 1.</p>
         </div>
-        <div class="core-proxy-warning" id="coreProxyWarning"><strong>Wokwi logic proxy:</strong> the 32-step breadboard guide below uses an ESP32 DevKit V1 layout. Do not transfer its pin positions to the MKE-K01 until the delivered board and its labels have been inspected.</div>
+        <div class="core-proxy-warning" id="coreProxyWarning"><strong>Same ESP32-S3 GPIO contract:</strong> the 32-step guide below uses the MKE-K01 GPIO numbers (GPIO10/11/12/13). Still match the printed labels on the delivered board before wiring.</div>
         <div class="build-grid">
           <section class="panel bom-panel">
             <div class="panel-toolbar"><span class="panel-label">Bill of materials</span><span class="mono-pill">BENCH: 251K–575K VND</span></div>
@@ -854,6 +865,7 @@
     <script src="physical-gate-ui.js"></script>
     <script src="physical-wiring.js"></script>
     <script src="bench-evidence.js"></script>
+<script src="bench-serial.js"></script>
     <script src="armour-fit.js"></script>
     <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"}}</script>
     <script type="module" src="three-lab.js"></script>

@@ -10,16 +10,16 @@
     { "type": "wokwi-led", "id": "vibrationProxy", "top": 230, "left": 40, "attrs": { "color": "green", "label": "VIBRATION DRIVER PROXY" } }
   ],
   "connections": [
-    [ "esp:20", "imu:SDA", "#16a6c9", [] ],
-    [ "esp:21", "imu:SCL", "#39cc93", [] ],
+    [ "esp:1", "imu:SDA", "#16a6c9", [] ],
+    [ "esp:2", "imu:SCL", "#39cc93", [] ],
     [ "esp:3V3", "imu:VCC", "#e05858", [] ],
     [ "esp:GND.1", "imu:GND", "#5d6672", [] ],
-    [ "esp:25", "trigger:1.l", "#f0b44d", [] ],
+    [ "esp:10", "trigger:1.l", "#f0b44d", [] ],
     [ "trigger:2.l", "esp:GND.1", "#5d6672", [] ],
-    [ "esp:18", "rim:DIN", "#f2c94c", [] ],
+    [ "esp:12", "rim:DIN", "#f2c94c", [] ],
     [ "esp:5V", "rim:VCC", "#e05858", [] ],
     [ "esp:GND.1", "rim:GND", "#5d6672", [] ],
-    [ "esp:27", "vibrationProxy:A", "#39cc93", [] ],
+    [ "esp:13", "vibrationProxy:A", "#39cc93", [] ],
     [ "vibrationProxy:C", "esp:GND.1", "#5d6672", [] ]
   ],
   "dependencies": {}

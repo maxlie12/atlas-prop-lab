@@ -4,11 +4,11 @@
 #include <Wire.h>
 
 namespace Pins {
-constexpr uint8_t Sda = 20;
-constexpr uint8_t Scl = 21;
-constexpr uint8_t Trigger = 25;
-constexpr uint8_t LedRim = 18;
-constexpr uint8_t VibrationDriver = 27; // transistor/MOSFET input, never a bare motor
+constexpr uint8_t Sda = 1;
+constexpr uint8_t Scl = 2;
+constexpr uint8_t Trigger = 10;
+constexpr uint8_t LedRim = 12;
+constexpr uint8_t VibrationDriver = 13; // transistor/MOSFET input, never a bare motor
 }
 
 namespace Timing {

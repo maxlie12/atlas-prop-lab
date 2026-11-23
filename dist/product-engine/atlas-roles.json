@@ -1005,23 +1005,23 @@
     "schemaVersion": "1.0",
     "id": "atlas-boss",
     "name": {
-      "vi": "Búa Titan Warden",
-      "en": "Titan Warden Hammer"
+      "vi": "Đại kiếm Hiệp sĩ Hắc giáp",
+      "en": "Dark Knight Greatsword"
     },
     "geometry": "atlas-reference",
     "role": "boss",
     "dimensionsMm": {
       "width": 360,
       "height": 1150,
-      "depth": 180
+      "depth": 60
     },
     "dimensionEvidence": "assumed",
     "parts": [
       {
-        "id": "hollow-hammer-head",
+        "id": "hollow-greatsword-blade",
         "name": {
-          "vi": "Đầu búa EVA rỗng",
-          "en": "Hollow EVA hammer head"
+          "vi": "Lưỡi đại kiếm EVA rỗng",
+          "en": "Hollow EVA greatsword blade"
         },
         "quantity": 1,
         "unit": "module-group / NOT purchase quantity",
@@ -1029,10 +1029,10 @@
         "sources": []
       },
       {
-        "id": "head-led",
+        "id": "blade-led",
         "name": {
-          "vi": "LED hiệu ứng đầu búa",
-          "en": "Head effect LEDs"
+          "vi": "LED rãnh lưỡi kiếm",
+          "en": "Blade fuller LEDs"
         },
         "quantity": 1,
         "unit": "module-group / NOT purchase quantity",
@@ -1064,8 +1064,8 @@
       {
         "id": "esp32-lower-grip",
         "name": {
-          "vi": "ESP32 tay cầm dưới",
-          "en": "ESP32 lower grip"
+          "vi": "ESP32 trong tay cầm",
+          "en": "ESP32 in grip"
         },
         "quantity": 1,
         "unit": "module-group / NOT purchase quantity",
@@ -1075,8 +1075,8 @@
       {
         "id": "three-zone-armour",
         "name": {
-          "vi": "Áo giáp LED ba vùng",
-          "en": "3-zone LED armour"
+          "vi": "Giáp nhận sát thương ba vùng dùng chung",
+          "en": "Shared 3-zone impact armour"
         },
         "quantity": 1,
         "unit": "module-group / NOT purchase quantity",
@@ -1087,11 +1087,11 @@
     "assembly": [
       {
         "partIds": [
-          "hollow-hammer-head"
+          "hollow-greatsword-blade"
         ],
         "instruction": {
-          "vi": "Làm đầu búa rỗng đúng kích thước và cân khối lượng trước khi gắn điện tử.",
-          "en": "Build the hollow hammer head at full size and weigh it before electronics."
+          "vi": "Làm lưỡi đại kiếm rỗng đúng kích thước quanh lõi nhẹ và cân khối lượng trước khi gắn điện tử.",
+          "en": "Build the hollow greatsword blade at full size around its light spine and weigh it before electronics."
         },
         "passGate": {
           "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
@@ -1100,14 +1100,14 @@
       },
       {
         "partIds": [
-          "head-led",
+          "blade-led",
           "primary-trigger",
           "balance-imu",
           "esp32-lower-grip"
         ],
         "instruction": {
-          "vi": "Thử hai cò, IMU và LED đầu búa qua USB.",
-          "en": "Bench-test two triggers, IMU, and head LEDs over USB."
+          "vi": "Thử hai cò, IMU và LED lưỡi kiếm qua USB.",
+          "en": "Bench-test two triggers, IMU, and blade LEDs over USB."
         },
         "passGate": {
           "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
@@ -1116,11 +1116,11 @@
       },
       {
         "partIds": [
-          "hollow-hammer-head"
+          "hollow-greatsword-blade"
         ],
         "instruction": {
-          "vi": "Bọc foam quanh cán và đệm mềm hai đầu.",
-          "en": "Wrap the shaft in foam and pad both ends."
+          "vi": "Bọc đệm chắn tay, chuôi và bo tròn mũi kiếm.",
+          "en": "Pad the guard and pommel and round the blade tip."
         },
         "passGate": {
           "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
@@ -1133,8 +1133,8 @@
           "esp32-lower-grip"
         ],
         "instruction": {
-          "vi": "Gắn IMU tại điểm cân bằng và ESP32 ở tay cầm dưới.",
-          "en": "Install the IMU at the balance point and the ESP32 in the lower grip."
+          "vi": "Gắn IMU tại điểm cân bằng và ESP32 trong tay cầm.",
+          "en": "Install the IMU at the balance point and the ESP32 in the grip."
         },
         "passGate": {
           "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
@@ -1156,13 +1156,13 @@
       },
       {
         "partIds": [
-          "head-led",
+          "blade-led",
           "esp32-lower-grip",
           "three-zone-armour"
         ],
         "instruction": {
-          "vi": "Ghép input búa và phản hồi áo vào cùng một định danh phiên Boss.",
-          "en": "Pair hammer input and armour feedback under one boss session identity."
+          "vi": "Ghép input kiếm và phản hồi áo vào cùng một định danh phiên Boss.",
+          "en": "Pair greatsword input and armour feedback under one boss session identity."
         },
         "passGate": {
           "vi": "Cổng kiểm tra chung, chưa xác minh: đối chiếu bước này với bản vẽ Atlas và ghi bằng chứng kiểm tra thực tế trước khi tiếp tục.",
@@ -1185,8 +1185,8 @@
       },
       {
         "partIds": [
-          "hollow-hammer-head",
-          "head-led",
+          "hollow-greatsword-blade",
+          "blade-led",
           "primary-trigger",
           "balance-imu",
           "esp32-lower-grip",

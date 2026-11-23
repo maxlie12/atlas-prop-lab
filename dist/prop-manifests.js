@@ -103,6 +103,22 @@
           sources: [{ labelEn: "Search exact variant", labelVi: "Tìm đúng biến thể", kind: "market", url: "https://shopee.vn/search?keyword=WS2812B%205V%2060LED%201m%20IP30" }]
         },
         {
+          id: "ws2812-level-shifter", gate: "after-fit", state: "reference", priceVnd: [25000, 60000], checkedAt: "2026-10-24",
+          specEn: "74AHCT125 level shifter, 330 Ω data resistor and 1000 µF ≥6.3 V capacitor for the 5 V WS2812B rim.",
+          specVi: "IC chuyển mức 74AHCT125, điện trở data 330 Ω và tụ 1000 µF ≥6,3 V cho viền WS2812B 5 V.",
+          checkEn: "The ESP32-S3 drives 3.3 V data; a 5 V strip needs the AHCT (not HC) part. Observe capacitor polarity.",
+          checkVi: "ESP32-S3 xuất data 3,3 V; dải 5 V cần đúng mã AHCT (không phải HC). Lắp tụ đúng cực.",
+          sources: [{ labelEn: "74AHCT125 search", labelVi: "Tìm 74AHCT125", kind: "market", url: "https://shopee.vn/search?keyword=74AHCT125" }]
+        },
+        {
+          id: "vibration-driver", gate: "after-fit", state: "reference", priceVnd: [15000, 40000], checkedAt: "2026-10-24",
+          specEn: "3 V coin vibration motor, 2N2222 transistor, 1 kΩ base resistor and 1N4148 flyback diode.",
+          specVi: "Motor rung dạng đồng xu 3 V, transistor 2N2222, điện trở base 1 kΩ và diode chống ngược 1N4148.",
+          checkEn: "GPIO13 only drives the transistor base; the diode sits across the motor, cathode to +.",
+          checkVi: "GPIO13 chỉ điều khiển base transistor; diode mắc song song motor, cathode về cực +.",
+          sources: [{ labelEn: "Coin motor + 2N2222 search", labelVi: "Tìm motor đồng xu + 2N2222", kind: "market", url: "https://shopee.vn/search?keyword=motor%20rung%20%C4%91%E1%BB%93ng%20xu%203V" }]
+        },
+        {
           id: "wire-connectors", gate: "after-fit", state: "reference", priceVnd: [50000, 150000], checkedAt: "2026-10-04",
           specEn: "Flexible 22–24 AWG stranded wire plus locking 3-pin JST-SM pigtails; red/black/data colours.",
           specVi: "Dây đồng mềm nhiều lõi 22–24 AWG cùng cặp giắc khóa JST-SM 3 pin có dây; đủ màu đỏ/đen/data.",
@@ -166,10 +182,10 @@
       assemblyCallouts: [[1, 2, 6], [1, 3, 4, 5], [2, 6], [1], [4], [5], [3, 4], [1, 2, 3, 4, 5, 6]]
     },
     boss: {
-      revision: "0.1", status: "reference", dimensionsMm: { width: 360, height: 1150, depth: 180 },
+      revision: "0.2", status: "reference", dimensionsMm: { width: 360, height: 1150, depth: 60 },
       modules: [
-        { callout: 1, id: "hollow-hammer-head", modelKey: "shell" },
-        { callout: 2, id: "head-led", modelKey: "light" },
+        { callout: 1, id: "hollow-greatsword-blade", modelKey: "shell" },
+        { callout: 2, id: "blade-led", modelKey: "light" },
         { callout: 3, id: "primary-trigger", modelKey: "control" },
         { callout: 4, id: "balance-imu", modelKey: "sensor" },
         { callout: 5, id: "esp32-lower-grip", modelKey: "core" },

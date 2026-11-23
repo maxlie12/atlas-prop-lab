@@ -1,8 +1,9 @@
 const commonPropBom = [
-  ["ESP32-S3 DevKit", "1", "Hshop / maker shop", "Bench"],
+  ["MKE-K01 ESP32-S3 N4", "1", "Hshop / maker shop", "Bench"],
   ["MPU6050 IMU", "1", "Hshop / maker shop", "Bench"],
   ["Momentary button", "2", "Maker shop", "Bench"],
   ["WS2812B LED", "1 set", "Maker shop / marketplace", "Bench"],
+  ["74AHCT125 level shifter + 330 Ω + 1000 µF", "1 set", "Maker shop", "Bench"],
   ["USB data cable", "1", "Computer shop", "Bench"],
   ["EVA foam sheets", "As cut plan", "Cosplay material shop", "Shell"]
 ];
@@ -16,7 +17,7 @@ const propKits = {
     core: "Removable rear-center module", events: "BLOCK_START · BLOCK_END · TAUNT",
     safety: "Rounded foam perimeter. No shield charge and no physical body contact.",
     callouts: ["10 mm EVA face", "ESP32 service box", "MPU6050 at centre", "Thumb trigger", "WS2812B rim", "Adjustable arm straps"],
-    bom: [["10 mm EVA sheet", "2", "Cosplay material shop", "Shell"], ["Nylon strap + buckle", "2", "Sewing shop", "Shell"], ["Vibration motor", "1", "Maker shop", "Feedback"]],
+    bom: [["10 mm EVA sheet", "2", "Cosplay material shop", "Shell"], ["Nylon strap + buckle", "2", "Sewing shop", "Shell"], ["Vibration motor", "1", "Maker shop", "Feedback"], ["Motor driver 2N2222 + 1N4148 diode", "1 set", "Maker shop", "Feedback"]],
     assembly: ["Print the 500 mm shield template and make a cardboard fit mock-up.", "Build and test ESP32, IMU, trigger, and one LED segment over USB.", "Cut and laminate the EVA layers; keep the service-box cavity open.", "Mount the IMU flat at the geometric centre with its axis arrow facing up.", "Install the thumb trigger under the dominant-hand grip.", "Route the LED rim through a protected channel and add a quick connector.", "Attach adjustable straps, close the removable rear cover, and calibrate neutral angle.", "Run 100 block raises and record false triggers before paint."]
   },
   warrior: {
@@ -60,19 +61,19 @@ const propKits = {
     core: "Lower grip for balance", events: "CAST_HEAL · CHANNEL · TEAM_SHIELD",
     safety: "Both ends padded. No spinning near other players and no ground impact.",
     callouts: ["Diffused LED orb", "Padded upper head", "CAST thumb button", "IMU below grip", "ESP32 lower grip", "Padded lower end"],
-    bom: [["Light PVC tube", "1", "Hardware shop", "Shell"], ["EVA wrap + padding", "1 set", "Cosplay material shop", "Shell"], ["Diffused orb shell", "1", "Prop maker / 3D print", "Shell"], ["Vibration motor", "1", "Maker shop", "Feedback"]],
+    bom: [["Light PVC tube", "1", "Hardware shop", "Shell"], ["EVA wrap + padding", "1 set", "Cosplay material shop", "Shell"], ["Diffused orb shell", "1", "Prop maker / 3D print", "Shell"], ["Vibration motor", "1", "Maker shop", "Feedback"], ["Motor driver 2N2222 + 1N4148 diode", "1 set", "Maker shop", "Feedback"]],
     assembly: ["Confirm 1.0–1.2 m length with the shortest expected player.", "Bench-test CAST, SPECIAL, IMU, orb LED, and haptic over USB.", "Wrap the shaft completely and pad both ends.", "Mount the orb with a removable diffuser and no exposed hard point.", "Place the IMU below the upper grip and align its forward axis.", "Install ESP32 and connectors in the lower grip to balance the orb.", "Calibrate pointing and channel posture for three users.", "Run heal, shield, and cancelled-channel scenarios before paint."]
   },
   boss: {
-    roleLabel: "BOSS / RAID CONTROL", name: "Titan Warden Hammer", kind: "hammer", size: "1,150 × 360 mm",
+    roleLabel: "BOSS / RAID CONTROL", name: "Dark Knight Greatsword", kind: "greatsword", size: "1,150 × 360 mm",
     budget: "EST. 1.3M–3.0M VND",
-    purpose: "A high-visibility two-handed boss controller paired with the shared three-zone Atlas Impact Armour using the Boss gameplay profile.",
-    shell: "Hollow EVA hammer head, foam-wrapped shaft, shared adjustable impact armour", sensor: "MPU6050 + two grip triggers",
-    core: "Lower hammer grip + shared armour receiver", events: "SWEEP · SLAM · MARK · PHASE_SKILL",
-    safety: "A hollow lightweight head, padded shaft, and zero-contact attacks. AoE exists only in Unity and arena cues.",
-    callouts: ["Hollow EVA hammer head", "Head effect LEDs", "Primary trigger", "IMU at balance point", "ESP32 lower grip", "Shared 3-zone impact armour"],
-    bom: [["10 mm EVA sheets", "3–4", "Cosplay material shop", "Shell"], ["Light PVC shaft", "1", "Hardware shop", "Shell"], ["Armour training bib", "1", "Sports shop", "Wearable"], ["LED armour panels", "3", "Maker + sewing shop", "Feedback"], ["Second receiver core", "1", "Maker shop", "Field"]],
-    assembly: ["Build the hollow hammer head at full size and weigh it before electronics.", "Bench-test two triggers, IMU, and head LEDs over USB.", "Wrap the shaft in foam and pad both ends.", "Install the IMU at the balance point and the ESP32 in the lower grip.", "Create an open-side adjustable armour bib with removable LED panels.", "Pair hammer input and armour feedback under one boss session identity.", "Calibrate SWEEP, SLAM, and MARK without physical contact.", "Run a five-minute phase test and reject the build if heat, discomfort, or false attacks appear."]
+    purpose: "The game Boss's phase-2 dark knight blade: a two-handed controller paired with the shared three-zone Atlas Impact Armour using the Boss gameplay profile.",
+    shell: "Hollow EVA greatsword blade over a light spine, padded guard and pommel, shared adjustable impact armour", sensor: "MPU6050 + two grip triggers",
+    core: "Two-handed grip + shared armour receiver", events: "SWEEP · SLAM · MARK · PHASE_SKILL",
+    safety: "A hollow lightweight blade with a rounded tip, padded guard and pommel, and zero-contact attacks. AoE exists only in Unity and arena cues.",
+    callouts: ["Hollow EVA greatsword blade", "Blade fuller LEDs", "Primary trigger", "IMU at balance point", "ESP32 in grip", "Shared 3-zone impact armour"],
+    bom: [["10 mm EVA sheets", "3–4", "Cosplay material shop", "Shell"], ["Light PVC blade spine", "1", "Hardware shop", "Shell"], ["Armour training bib", "1", "Sports shop", "Wearable"], ["LED armour panels", "3", "Maker + sewing shop", "Feedback"], ["Second receiver core", "1", "Maker shop", "Field"]],
+    assembly: ["Build the hollow greatsword blade at full size around its light spine and weigh it before electronics.", "Bench-test two triggers, IMU, and blade LEDs over USB.", "Pad the guard and pommel and round the blade tip.", "Install the IMU at the balance point and the ESP32 in the grip.", "Create an open-side adjustable armour bib with removable LED panels.", "Pair greatsword input and armour feedback under one boss session identity.", "Calibrate SWEEP, SLAM, and MARK without physical contact.", "Run a five-minute phase test and reject the build if heat, discomfort, or false attacks appear."]
   }
 };
 
@@ -123,13 +124,13 @@ const propKitVi = {
     assembly: ["Xác nhận chiều dài 1,0–1,2 m với người chơi thấp nhất dự kiến.", "Thử CAST, SPECIAL, IMU, LED quả cầu và rung qua USB.", "Bọc toàn bộ thân gậy và đệm mềm hai đầu.", "Gắn quả cầu bằng vỏ tán sáng tháo rời, không để điểm cứng lộ ra.", "Đặt IMU dưới tay cầm trên và căn trục trước.", "Lắp ESP32 cùng đầu nối ở tay cầm dưới để cân bằng quả cầu.", "Cân chỉnh hướng chỉ và tư thế niệm phép cho ba người.", "Chạy các tình huống hồi máu, tạo khiên và hủy niệm trước khi sơn."]
   },
   boss: {
-    roleLabel: "BOSS / KIỂM SOÁT TRẬN", name: "Búa Titan Warden",
-    purpose: "Bộ điều khiển Boss hai tay dễ nhận diện, kết hợp Giáp nhận sát thương Atlas ba vùng dùng chung ở profile Boss.",
-    shell: "Đầu búa EVA rỗng, cán bọc foam, giáp nhận hit dùng chung có thể điều chỉnh", sensor: "MPU6050 + hai cò tay cầm",
-    core: "Tay cầm dưới + bộ nhận giáp dùng chung", events: "QUÉT · ĐẬP VÙNG · ĐÁNH DẤU · KỸ NĂNG PHASE",
-    safety: "Đầu rỗng nhẹ, cán bọc đệm và mọi đòn đánh đều không tiếp xúc. AoE chỉ tồn tại trong Unity và tín hiệu sân.",
-    callouts: ["Đầu búa EVA rỗng", "LED hiệu ứng đầu búa", "Cò chính", "IMU tại điểm cân bằng", "ESP32 tay cầm dưới", "Giáp nhận sát thương ba vùng dùng chung"],
-    assembly: ["Làm đầu búa rỗng đúng kích thước và cân khối lượng trước khi gắn điện tử.", "Thử hai cò, IMU và LED đầu búa qua USB.", "Bọc foam quanh cán và đệm mềm hai đầu.", "Gắn IMU tại điểm cân bằng và ESP32 ở tay cầm dưới.", "Tạo áo bib mở hai bên với các tấm LED tháo rời.", "Ghép input búa và phản hồi áo vào cùng một định danh phiên Boss.", "Cân chỉnh SWEEP, SLAM và MARK mà không có tiếp xúc cơ thể.", "Chạy thử phase trong năm phút; loại bản dựng nếu nóng, khó chịu hoặc kích hoạt sai."]
+    roleLabel: "BOSS / KIỂM SOÁT TRẬN", name: "Đại kiếm Hiệp sĩ Hắc giáp",
+    purpose: "Thanh kiếm của Boss ở phase 2 (hiệp sĩ giáp đen trong game): bộ điều khiển hai tay, kết hợp Giáp nhận sát thương Atlas ba vùng dùng chung ở profile Boss.",
+    shell: "Lưỡi đại kiếm EVA rỗng quanh lõi nhẹ, chắn tay và chuôi bọc đệm, giáp nhận hit dùng chung có thể điều chỉnh", sensor: "MPU6050 + hai cò tay cầm",
+    core: "Tay cầm hai tay + bộ nhận giáp dùng chung", events: "QUÉT · ĐẬP VÙNG · ĐÁNH DẤU · KỸ NĂNG PHASE",
+    safety: "Lưỡi rỗng nhẹ, mũi bo tròn, chắn tay và chuôi bọc đệm; mọi đòn đánh đều không tiếp xúc. AoE chỉ tồn tại trong Unity và tín hiệu sân.",
+    callouts: ["Lưỡi đại kiếm EVA rỗng", "LED rãnh lưỡi kiếm", "Cò chính", "IMU tại điểm cân bằng", "ESP32 trong tay cầm", "Giáp nhận sát thương ba vùng dùng chung"],
+    assembly: ["Làm lưỡi đại kiếm rỗng đúng kích thước quanh lõi nhẹ và cân khối lượng trước khi gắn điện tử.", "Thử hai cò, IMU và LED lưỡi kiếm qua USB.", "Bọc đệm chắn tay, chuôi và bo tròn mũi kiếm.", "Gắn IMU tại điểm cân bằng và ESP32 trong tay cầm.", "Tạo áo bib mở hai bên với các tấm LED tháo rời.", "Ghép input kiếm và phản hồi áo vào cùng một định danh phiên Boss.", "Cân chỉnh SWEEP, SLAM và MARK mà không có tiếp xúc cơ thể.", "Chạy thử phase trong năm phút; loại bản dựng nếu nóng, khó chịu hoặc kích hoạt sai."]
   }
 };
 
@@ -141,7 +142,7 @@ const staticTranslations = {
   ".mode-tabs [data-view='field']": ["03 Field simulator", "03 Mô phỏng trận"],
   "#event-kit .section-heading .eyebrow": ["ATLAS EVENT KIT V1 / 1 BOSS VS 4 HEROES", "ATLAS EVENT KIT V1 / 1 BOSS ĐẤU 4 HERO"],
   "#event-kit-title": ["Prop build planner", "Trình lập kế hoạch đạo cụ"],
-  "#event-kit .section-note": ["The roster contains five hero kits. Load any four heroes plus Titan Warden for a match.", "Danh sách có năm bộ Hero. Mỗi trận chọn bốn Hero cùng Titan Warden."],
+  "#event-kit .section-note": ["The roster contains five hero kits. Load any four heroes plus the Dark Knight Boss for a match.", "Danh sách có năm bộ Hero. Mỗi trận chọn bốn Hero cùng Boss Hiệp sĩ Hắc giáp."],
   ".kit-status-grid div:nth-child(1) span": ["role build packs", "bộ thiết kế theo role"],
   ".kit-status-grid div:nth-child(2) span": ["minimum play zone", "khu chơi tối thiểu"],
   ".kit-status-grid div:nth-child(3) span": ["match target", "thời lượng trận"],
@@ -259,7 +260,7 @@ const staticTranslations = {
   "#corePowerValue": ["USB data + 5 V only", "Chỉ USB data + 5 V"],
   "#corePowerNote": ["Battery charging and radio stay outside the first proof.", "Pin sạc và sóng chưa tham gia lần chứng minh đầu."],
   "#coreProxyLabel": ["Simulation boundary", "Ranh giới mô phỏng"],
-  "#coreProxyValue": ["Wokwi DevKit V1 proxy", "Wokwi DevKit V1 làm proxy"],
+  "#coreProxyValue": ["Wokwi ESP32-S3 DevKitC-1 proxy", "Wokwi ESP32-S3 DevKitC-1 làm proxy"],
   "#coreProxyNote": ["It proves event logic, not the exact physical S3 pinout.", "Nó chứng minh logic event, không chứng minh pinout S3 vật lý chính xác."],
   "#coreProofLabel": ["Core proof ladder", "Thang chứng minh Core"],
   "#clearCoreProof": ["Clear physical checks", "Xóa các kiểm tra vật lý"],
@@ -317,7 +318,7 @@ const roleCardTranslations = {
   archer: ["Archer", "Bow", "Cung thủ", "Cung"],
   assassin: ["Assassin", "Daggers", "Sát thủ", "Dao găm"],
   mage: ["Mage", "Staff", "Pháp sư", "Gậy phép"],
-  boss: ["Titan Warden", "Boss hammer", "Titan Warden", "Búa Boss"]
+  boss: ["Dark Knight", "Boss greatsword", "Hiệp sĩ Hắc giáp", "Đại kiếm Boss"]
 };
 
 let activeProp = "guardian";
@@ -333,17 +334,17 @@ const roles = {
 };
 
 const electronicsProfiles = {
-  guardian: { label: "GUARDIAN", name: "Aegis Shield", color: "#f0b44d", deviceId: "guardian-shield-01", parts: ["ESP32-S3", "MPU6050", "Thumb trigger", "WS2812B rim", "Vibration motor"], pins: [["GPIO21/20", "MPU6050 SDA / SCL", "MPU6050 SDA / SCL"], ["GPIO25", "Thumb trigger", "Cò ngón cái"], ["GPIO18", "LED rim data", "Dữ liệu LED viền"], ["GPIO27", "Vibration driver", "Driver motor rung"], ["5V / GND", "Shared power / ground", "Nguồn / GND chung"]], events: ["BLOCK_START", "BLOCK_END", "TAUNT"] },
-  warrior: { label: "WARRIOR", name: "Pulse Sword", color: "#16a6c9", deviceId: "warrior-sword-01", parts: ["ESP32-S3", "MPU6050", "Index trigger", "WS2812B spine", "Vibration motor"], pins: [["GPIO21/20", "MPU6050 SDA / SCL", "MPU6050 SDA / SCL"], ["GPIO25", "Index trigger", "Cò ngón trỏ"], ["GPIO18", "LED spine data", "Dữ liệu LED sống kiếm"], ["GPIO27", "Vibration driver", "Driver motor rung"], ["5V / GND", "Shared power / ground", "Nguồn / GND chung"]], events: ["STRIKE", "HEAVY_STRIKE", "PARRY"] },
-  archer: { label: "ARCHER", name: "Arc Bow", color: "#16a6c9", deviceId: "archer-bow-01", parts: ["ESP32-S3", "Linear Hall sensor", "Draw magnet", "Release trigger", "Status LEDs"], pins: [["GPIO34", "Hall sensor analog", "Hall analog"], ["GPIO21/20", "MPU6050 SDA / SCL", "MPU6050 SDA / SCL"], ["GPIO25", "Release trigger", "Cò nhả dây"], ["GPIO18", "Limb LED data", "Dữ liệu LED cánh cung"], ["5V / GND", "Shared power / ground", "Nguồn / GND chung"]], events: ["DRAW_START", "DRAW_READY", "FIRE"] },
-  assassin: { label: "ASSASSIN", name: "Shade Daggers", color: "#7057d9", deviceId: "assassin-daggers-01", parts: ["ESP32-S3", "MPU6050", "Grip trigger", "Trap button", "Status LED"], pins: [["GPIO21/20", "MPU6050 SDA / SCL", "MPU6050 SDA / SCL"], ["GPIO25", "Grip trigger", "Cò tay cầm"], ["GPIO26", "Trap button", "Nút đặt bẫy"], ["GPIO18", "Status LED data", "Dữ liệu LED trạng thái"], ["5V / GND", "Shared power / ground", "Nguồn / GND chung"]], events: ["QUICK_STRIKE", "HEAVY_STRIKE", "PLACE_TRAP"] },
-  mage: { label: "MAGE", name: "Lumen Staff", color: "#39cc93", deviceId: "mage-staff-01", parts: ["ESP32-S3", "MPU6050", "CAST button", "SPECIAL button", "Orb LEDs"], pins: [["GPIO21/20", "MPU6050 SDA / SCL", "MPU6050 SDA / SCL"], ["GPIO25", "CAST button", "Nút CAST"], ["GPIO26", "SPECIAL button", "Nút SPECIAL"], ["GPIO18", "Orb LED data", "Dữ liệu LED quả cầu"], ["GPIO27", "Vibration driver", "Driver motor rung"]], events: ["CAST_HEAL", "CHANNEL", "TEAM_SHIELD"] },
-  boss: { label: "BOSS", name: "Titan Warden", color: "#ef6b68", deviceId: "boss-hammer-01", parts: ["ESP32-S3", "MPU6050", "Primary trigger", "Secondary trigger", "Hammer + armour LEDs"], pins: [["GPIO21/20", "MPU6050 SDA / SCL", "MPU6050 SDA / SCL"], ["GPIO25", "Primary trigger", "Cò chính"], ["GPIO26", "Secondary trigger", "Cò phụ"], ["GPIO18", "Hammer LED data", "Dữ liệu LED đầu búa"], ["GPIO16/17", "Armour receiver UART2", "Bộ nhận áo giáp UART2"]], events: ["SWEEP", "SLAM", "MARK", "PHASE_SKILL"] }
+  guardian: { label: "GUARDIAN", name: "Aegis Shield", color: "#f0b44d", deviceId: "guardian-shield-01", parts: ["ESP32-S3", "MPU6050", "Thumb trigger", "WS2812B rim", "Vibration motor"], pins: [["GPIO1/2", "MPU6050 SDA / SCL", "MPU6050 SDA / SCL"], ["GPIO10", "Thumb trigger", "Cò ngón cái"], ["GPIO12", "LED rim data", "Dữ liệu LED viền"], ["GPIO13", "Vibration driver", "Driver motor rung"], ["5V / GND", "Shared power / ground", "Nguồn / GND chung"]], events: ["BLOCK_START", "BLOCK_END", "TAUNT"] },
+  warrior: { label: "WARRIOR", name: "Pulse Sword", color: "#16a6c9", deviceId: "warrior-sword-01", parts: ["ESP32-S3", "MPU6050", "Index trigger", "WS2812B spine", "Vibration motor"], pins: [["GPIO1/2", "MPU6050 SDA / SCL", "MPU6050 SDA / SCL"], ["GPIO10", "Index trigger", "Cò ngón trỏ"], ["GPIO12", "LED spine data", "Dữ liệu LED sống kiếm"], ["GPIO13", "Vibration driver", "Driver motor rung"], ["5V / GND", "Shared power / ground", "Nguồn / GND chung"]], events: ["STRIKE", "HEAVY_STRIKE", "PARRY"] },
+  archer: { label: "ARCHER", name: "Arc Bow", color: "#16a6c9", deviceId: "archer-bow-01", parts: ["ESP32-S3", "Linear Hall sensor", "Draw magnet", "Release trigger", "Status LEDs"], pins: [["GPIO4", "Hall sensor analog (ADC1)", "Hall analog (ADC1)"], ["GPIO1/2", "MPU6050 SDA / SCL", "MPU6050 SDA / SCL"], ["GPIO10", "Release trigger", "Cò nhả dây"], ["GPIO12", "Limb LED data", "Dữ liệu LED cánh cung"], ["5V / GND", "Shared power / ground", "Nguồn / GND chung"]], events: ["DRAW_START", "DRAW_READY", "FIRE"] },
+  assassin: { label: "ASSASSIN", name: "Shade Daggers", color: "#7057d9", deviceId: "assassin-daggers-01", parts: ["ESP32-S3", "MPU6050", "Grip trigger", "Trap button", "Status LED"], pins: [["GPIO1/2", "MPU6050 SDA / SCL", "MPU6050 SDA / SCL"], ["GPIO10", "Grip trigger", "Cò tay cầm"], ["GPIO11", "Trap button", "Nút đặt bẫy"], ["GPIO12", "Status LED data", "Dữ liệu LED trạng thái"], ["5V / GND", "Shared power / ground", "Nguồn / GND chung"]], events: ["QUICK_STRIKE", "HEAVY_STRIKE", "PLACE_TRAP"] },
+  mage: { label: "MAGE", name: "Lumen Staff", color: "#39cc93", deviceId: "mage-staff-01", parts: ["ESP32-S3", "MPU6050", "CAST button", "SPECIAL button", "Orb LEDs"], pins: [["GPIO1/2", "MPU6050 SDA / SCL", "MPU6050 SDA / SCL"], ["GPIO10", "CAST button", "Nút CAST"], ["GPIO11", "SPECIAL button", "Nút SPECIAL"], ["GPIO12", "Orb LED data", "Dữ liệu LED quả cầu"], ["GPIO13", "Vibration driver", "Driver motor rung"]], events: ["CAST_HEAL", "CHANNEL", "TEAM_SHIELD"] },
+  boss: { label: "BOSS", name: "Dark Knight", color: "#ef6b68", deviceId: "boss-greatsword-01", parts: ["ESP32-S3", "MPU6050", "Primary trigger", "Secondary trigger", "Blade + armour LEDs"], pins: [["GPIO1/2", "MPU6050 SDA / SCL", "MPU6050 SDA / SCL"], ["GPIO10", "Primary trigger", "Cò chính"], ["GPIO11", "Secondary trigger", "Cò phụ"], ["GPIO12", "Blade LED data", "Dữ liệu LED lưỡi kiếm"], ["GPIO16/17", "Armour receiver UART2", "Bộ nhận áo giáp UART2"]], events: ["SWEEP", "SLAM", "MARK", "PHASE_SKILL"] }
 };
 
 const coreProofSteps = {
   en: [
-    ["Controller reference locked", "MKE-K01 ESP32-S3 N4 is the physical reference; Wokwi DevKit V1 remains a logic proxy."],
+    ["Controller reference locked", "MKE-K01 ESP32-S3 N4 is the physical reference; Wokwi ESP32-S3 DevKitC-1 runs the same GPIO contract as a logic proxy."],
     ["Board received and inspected", "Photograph both sides; confirm USB connector, printed labels, dimensions, and the exact module variant."],
     ["USB boot and serial ready", "Upload a minimal build and capture a stable 115200-baud ready message with no reset loop."],
     ["Role input passes 100 cycles", "The selected role emits each intended event once, with misses and duplicates recorded."],
@@ -352,7 +353,7 @@ const coreProofSteps = {
     ["Core passes enclosure fit gate", "Connectors remain accessible, cables have strain relief, and no rigid edge reaches the player."]
   ],
   vi: [
-    ["Đã khóa board tham chiếu", "MKE-K01 ESP32-S3 N4 là board vật lý tham chiếu; Wokwi DevKit V1 chỉ là proxy logic."],
+    ["Đã khóa board tham chiếu", "MKE-K01 ESP32-S3 N4 là board vật lý tham chiếu; Wokwi ESP32-S3 DevKitC-1 chạy cùng hợp đồng GPIO, chỉ là proxy logic."],
     ["Đã nhận và kiểm tra board", "Chụp hai mặt; xác nhận cổng USB, nhãn chân, kích thước và đúng biến thể module."],
     ["USB boot và serial ổn định", "Nạp bản tối thiểu và lưu log sẵn sàng ở 115200 baud, không lặp reset."],
     ["Input role đạt 100 chu kỳ", "Role đang chọn phát mỗi event đúng một lần; ghi lại mọi lần hụt hoặc lặp."],
@@ -375,7 +376,7 @@ const guardianProduction = {
     ],
     groups: [
       { title: "BUY NOW · FIT MOCK-UP", items: [["Double-wall cardboard", "2 sheets · full-size fit proof"], ["Paper tape + marker", "1 set · outline and iteration"], ["25 mm nylon webbing", "1.5 m · strap position proof"], ["Adjustable buckles", "2 · verify quick release"], ["EVA offcut", "Small piece · edge and adhesive test"]] },
-      { title: "BUY AFTER FIT PASS", items: [["ESP32-S3 DevKit", "1 · USB-first controller"], ["MPU6050 module", "1 · centre-mounted IMU"], ["Momentary thumb trigger", "1 · deliberate input"], ["WS2812B strip", "1 m · protected rim feedback"], ["Wire + connectors", "1 set · removable service core"]] }
+      { title: "BUY AFTER FIT PASS", items: [["MKE-K01 ESP32-S3 N4", "1 · USB-first controller"], ["MPU6050 module", "1 · centre-mounted IMU"], ["Momentary thumb trigger", "1 · deliberate input"], ["WS2812B strip", "1 m · protected rim feedback"], ["Wire + connectors", "1 set · removable service core"]] }
     ],
     gates: [
       ["G0 · Gameplay contract frozen", "BLOCK_START, BLOCK_END and TAUNT names are accepted by the game."],
@@ -395,7 +396,7 @@ const guardianProduction = {
     ],
     groups: [
       { title: "MUA NGAY · MẪU THỬ ĐỘ VỪA", items: [["Carton hai lớp", "2 tấm · thử kích thước thật"], ["Băng dính giấy + bút", "1 bộ · vẽ biên và chỉnh sửa"], ["Quai nylon 25 mm", "1,5 m · thử vị trí quai"], ["Khóa điều chỉnh", "2 · kiểm tra tháo nhanh"], ["Miếng EVA thừa", "Mảnh nhỏ · thử cạnh và keo"]] },
-      { title: "MUA SAU KHI FIT PASS", items: [["ESP32-S3 DevKit", "1 · bộ điều khiển ưu tiên USB"], ["Module MPU6050", "1 · IMU đặt tại tâm"], ["Cò ngón cái nhấn nhả", "1 · input chủ động"], ["Dải WS2812B", "1 m · LED viền có bảo vệ"], ["Dây + đầu nối", "1 bộ · lõi bảo trì tháo rời"]] }
+      { title: "MUA SAU KHI FIT PASS", items: [["MKE-K01 ESP32-S3 N4", "1 · bộ điều khiển ưu tiên USB"], ["Module MPU6050", "1 · IMU đặt tại tâm"], ["Cò ngón cái nhấn nhả", "1 · input chủ động"], ["Dải WS2812B", "1 m · LED viền có bảo vệ"], ["Dây + đầu nối", "1 bộ · lõi bảo trì tháo rời"]] }
     ],
     gates: [
       ["G0 · Khóa gameplay contract", "Game đã chấp nhận tên BLOCK_START, BLOCK_END và TAUNT."],
@@ -408,11 +409,11 @@ const guardianProduction = {
 };
 
 const pinMap = [
-  { pin: "GPIO25", name: "CAST button", color: "#16a6c9", optional: false },
-  { pin: "GPIO26", name: "SPECIAL button", color: "#7057d9", optional: false },
-  { pin: "GPIO18", name: "LED data", color: "#f0b44d", optional: "led" },
-  { pin: "GPIO27", name: "Buzzer signal", color: "#f29f4b", optional: "buzzer" },
-  { pin: "VIN", name: "5V feedback power", color: "#e05858", optional: "feedback" },
+  { pin: "GPIO10", name: "CAST button", color: "#16a6c9", optional: false },
+  { pin: "GPIO11", name: "SPECIAL button", color: "#7057d9", optional: false },
+  { pin: "GPIO12", name: "LED data", color: "#f0b44d", optional: "led" },
+  { pin: "GPIO13", name: "Buzzer signal", color: "#f29f4b", optional: "buzzer" },
+  { pin: "5V", name: "5V feedback power", color: "#e05858", optional: "feedback" },
   { pin: "GND", name: "Shared ground", color: "#718088", optional: false }
 ];
 
@@ -436,14 +437,14 @@ const guideSteps = [
   "Use USB power only for the first build.", "Keep the ESP32 disconnected while wiring.",
   "Place the delivered board across the breadboard center gap only if its spacing fits without force.", "Using the board labels and vendor documentation, identify power, GND, and the candidate GPIO contract before attaching any wire.",
   "Mark the CAST and SPECIAL buttons.", "Place both buttons across the breadboard center gap.",
-  "Connect one CAST contact to GPIO25.", "Connect the opposite CAST contact to GND.",
-  "Connect one SPECIAL contact to GPIO26.", "Connect the opposite SPECIAL contact to GND.",
-  "Check that neither button connects VIN to GND.", "Confirm the firmware uses INPUT_PULLUP for both buttons.",
-  "Place the passive buzzer on the breadboard.", "Connect buzzer positive to GPIO27.",
+  "Connect one CAST contact to GPIO10.", "Connect the opposite CAST contact to GND.",
+  "Connect one SPECIAL contact to GPIO11.", "Connect the opposite SPECIAL contact to GND.",
+  "Check that neither button connects 5V to GND.", "Confirm the firmware uses INPUT_PULLUP for both buttons.",
+  "Place the passive buzzer on the breadboard.", "Connect buzzer positive to GPIO13.",
   "Connect buzzer negative to GND.", "Place the 74AHCT125 level shifter across the center gap.",
-  "Connect level shifter VCC to VIN and GND to GND.", "Tie the selected channel enable pin low.",
-  "Connect GPIO18 to the selected level shifter input.", "Connect its matching output through 330 Ω to LED ring DIN.",
-  "Connect LED ring VCC to VIN.", "Connect LED ring GND to GND.",
+  "Connect level shifter VCC to 5V and GND to GND.", "Tie the selected channel enable pin low.",
+  "Connect GPIO12 to the selected level shifter input.", "Connect its matching output through 330 Ω to LED ring DIN.",
+  "Connect LED ring VCC to 5V.", "Connect LED ring GND to GND.",
   "Place the 1000 µF capacitor across ring VCC and GND, matching polarity.", "Compare every wire with the candidate pin table and the delivered board labels before connecting USB.",
   "Check for loose strands and accidental shorts.", "Connect the ESP32 with a data capable USB cable.",
   "Build and upload firmware/spell-orb with PlatformIO.", "Open serial monitor at 115200 baud and wait for ATLAS_PROP_READY.",
@@ -455,14 +456,14 @@ const guideStepsVi = [
   "Chỉ dùng nguồn USB cho bản lắp đầu tiên.", "Ngắt ESP32 khỏi nguồn trong lúc đi dây.",
   "Chỉ đặt board thực nhận qua rãnh giữa breadboard nếu khoảng chân vừa mà không phải ép.", "Dùng nhãn trên board và tài liệu nhà bán để xác định nguồn, GND và hợp đồng GPIO ứng viên trước khi nối dây.",
   "Đánh dấu nút CAST và SPECIAL.", "Đặt hai nút bắc qua rãnh giữa breadboard.",
-  "Nối một chân CAST vào GPIO25.", "Nối chân CAST đối diện vào GND.",
-  "Nối một chân SPECIAL vào GPIO26.", "Nối chân SPECIAL đối diện vào GND.",
-  "Kiểm tra không nút nào nối tắt VIN với GND.", "Xác nhận firmware dùng INPUT_PULLUP cho cả hai nút.",
-  "Đặt buzzer thụ động lên breadboard.", "Nối cực dương buzzer vào GPIO27.",
+  "Nối một chân CAST vào GPIO10.", "Nối chân CAST đối diện vào GND.",
+  "Nối một chân SPECIAL vào GPIO11.", "Nối chân SPECIAL đối diện vào GND.",
+  "Kiểm tra không nút nào nối tắt 5V với GND.", "Xác nhận firmware dùng INPUT_PULLUP cho cả hai nút.",
+  "Đặt buzzer thụ động lên breadboard.", "Nối cực dương buzzer vào GPIO13.",
   "Nối cực âm buzzer vào GND.", "Đặt IC chuyển mức 74AHCT125 bắc qua rãnh giữa.",
-  "Nối VCC của IC chuyển mức vào VIN và GND vào GND.", "Kéo chân enable của kênh được chọn xuống mức thấp.",
-  "Nối GPIO18 vào đầu vào kênh đã chọn.", "Nối đầu ra tương ứng qua điện trở 330 Ω tới DIN của vòng LED.",
-  "Nối VCC vòng LED vào VIN.", "Nối GND vòng LED vào GND.",
+  "Nối VCC của IC chuyển mức vào 5V và GND vào GND.", "Kéo chân enable của kênh được chọn xuống mức thấp.",
+  "Nối GPIO12 vào đầu vào kênh đã chọn.", "Nối đầu ra tương ứng qua điện trở 330 Ω tới DIN của vòng LED.",
+  "Nối VCC vòng LED vào 5V.", "Nối GND vòng LED vào GND.",
   "Đặt tụ 1000 µF giữa VCC và GND của vòng LED, đúng cực.", "So từng dây với bảng chân ứng viên và nhãn trên board thực nhận trước khi cắm USB.",
   "Kiểm tra sợi dây lỏng và nguy cơ chập mạch.", "Kết nối ESP32 bằng cáp USB có truyền dữ liệu.",
   "Build và nạp firmware/spell-orb bằng PlatformIO.", "Mở Serial Monitor 115200 baud và đợi ATLAS_PROP_READY.",
@@ -516,12 +517,12 @@ const bomViTerms = {
   "Soft diffuser strip": "Dải tán sáng mềm", "Wrist loop": "Dây giữ cổ tay", "Wrist retention loops": "Dây giữ cổ tay",
   "Light PVC/EVA frame": "Khung PVC/EVA nhẹ", "Linear Hall sensor": "Cảm biến Hall tuyến tính", "Small magnet": "Nam châm nhỏ",
   "Elastic draw cord": "Dây kéo đàn hồi", "Wrist button pad": "Đệm nút đeo cổ tay", "Light PVC tube": "Ống PVC nhẹ",
-  "Light PVC shaft": "Cán PVC nhẹ", "EVA wrap + padding": "EVA bọc + đệm", "Diffused orb shell": "Vỏ cầu tán sáng",
+  "Light PVC shaft": "Cán PVC nhẹ", "Light PVC blade spine": "Lõi PVC nhẹ cho lưỡi kiếm", "EVA wrap + padding": "EVA bọc + đệm", "Diffused orb shell": "Vỏ cầu tán sáng",
   "Armour training bib": "Áo bib làm nền giáp", "LED armour panels": "Tấm LED giáp", "Second receiver core": "Lõi nhận tín hiệu thứ hai",
   "Sewing shop": "Cửa hàng may", "Maker / craft shop": "Cửa hàng linh kiện / thủ công", "Hardware + cosplay shop": "Cửa hàng vật tư + cosplay",
   "Craft shop": "Cửa hàng thủ công", "Maker + sewing shop": "Cửa hàng linh kiện + may", "Hardware shop": "Cửa hàng vật tư",
   "Prop maker / 3D print": "Xưởng đạo cụ / in 3D", "Sports shop": "Cửa hàng thể thao",
-  "ESP32 DevKit V1, 30 pin": "ESP32 DevKit V1, 30 chân", "WS2812B 16 LED ring": "Vòng 16 LED WS2812B",
+  "74AHCT125 level shifter + 330 Ω + 1000 µF": "IC chuyển mức 74AHCT125 + 330 Ω + tụ 1000 µF", "Motor driver 2N2222 + 1N4148 diode": "Transistor 2N2222 + diode 1N4148 cho motor", "WS2812B 16 LED ring": "Vòng 16 LED WS2812B",
   "12 mm momentary button": "Nút nhấn nhả 12 mm", "Passive piezo buzzer": "Buzzer piezo thụ động", "74AHCT125 level shifter": "IC chuyển mức 74AHCT125",
   "330 Ω resistor": "Điện trở 330 Ω", "1000 µF capacitor": "Tụ 1000 µF", "Half size breadboard": "Breadboard nửa cỡ",
   "Dupont jumper set": "Bộ dây Dupont", "5V USB power bank": "Pin dự phòng USB 5V", "Prototype enclosure": "Hộp mẫu thử", "USB power meter": "Đồng hồ đo nguồn USB"
@@ -714,9 +715,10 @@ function blueprintSvg(kind, options = {}) {
     <path d="M294 108H326L320 318H300Z"/><rect x="287" y="138" width="46" height="92" rx="18"/>
     ${dot(1,310,64,494,42)}${dot(2,310,108,112,86)}${dot(3,330,154,504,135)}${dot(4,306,205,104,195)}${dot(5,307,246,508,255)}${dot(6,310,316,108,324)}`, "Lumen Staff");
   return frame(`
-    <rect x="198" y="38" width="224" height="104" rx="34"/><path d="M230 62H390M230 117H390"/><path d="M290 142H330L324 329H296Z"/>
-    <rect x="282" y="174" width="56" height="106" rx="19"/><path d="M450 185l55-28 55 28v72l-55 35-55-35z"/><path d="M470 205h70v42h-70z"/>
-    ${dot(1,220,52,86,42)}${dot(2,382,91,538,67)}${dot(3,330,181,99,148)}${dot(4,310,148,505,132)}${dot(5,308,257,102,290)}${dot(6,505,220,554,300)}`, "Titan Warden Hammer and armour");
+    <path d="M300 18Q318 30 322 50V214H278V50Q282 30 300 18Z"/><path d="M300 56V204" class="bp-led-ring"/>
+    <rect x="226" y="214" width="148" height="18" rx="7"/><rect x="290" y="232" width="20" height="78" rx="9"/><circle cx="300" cy="322" r="13"/>
+    <rect x="291" y="262" width="18" height="34" rx="5" stroke-dasharray="6 5"/><path d="M450 185l55-28 55 28v72l-55 35-55-35z"/><path d="M470 205h70v42h-70z"/>
+    ${dot(1,300,96,86,42)}${dot(2,300,160,538,67)}${dot(3,310,246,99,148)}${dot(4,300,223,505,132)}${dot(5,300,279,102,290)}${dot(6,505,220,554,300)}`, "Dark Knight Greatsword and armour");
 }
 
 function guardianStepSvg(step, view = "overview") {
@@ -827,7 +829,7 @@ function applyStaticTranslations() {
   $$(".language-switch button").forEach(button => button.classList.toggle("is-active", button.dataset.language === currentLanguage));
   const roleOptions = {
     guardian: ["Guardian shield", "Khiên Hộ vệ"], warrior: ["Warrior sword", "Kiếm Chiến binh"], archer: ["Archer bow", "Cung Cung thủ"],
-    assassin: ["Assassin daggers", "Dao găm Sát thủ"], mage: ["Mage staff", "Gậy Pháp sư"], boss: ["Titan Warden", "Titan Warden"]
+    assassin: ["Assassin daggers", "Dao găm Sát thủ"], mage: ["Mage staff", "Gậy Pháp sư"], boss: ["Dark Knight", "Hiệp sĩ Hắc giáp"]
   };
   for (const option of $$("#roleSelect option")) option.textContent = roleOptions[option.value][index];
   const transportOptions = {
@@ -948,21 +950,21 @@ function buildRingDots() {
 function currentDiagram() {
   const profile = electronicsProfiles[activeProp];
   const parts = [
-    { type: "wokwi-esp32-devkit-v1", id: "esp", top: 38.4, left: 8.2, attrs: {} },
+    { type: "board-esp32-s3-devkitc-1", id: "esp", top: 38.4, left: 8.2, attrs: {} },
     { type: "wokwi-pushbutton", id: "primaryButton", top: 28.6, left: 258.1, attrs: { color: profile.color, label: profile.events[0], key: "C" } },
     { type: "wokwi-pushbutton", id: "secondaryButton", top: 106.8, left: 258.1, attrs: { color: "#7057d9", label: profile.events[1], key: "S" } }
   ];
   const connections = [
-    ["esp:25", "primaryButton:1.l", profile.color, []], ["primaryButton:2.l", "esp:GND.1", "#5d6672", []],
-    ["esp:26", "secondaryButton:1.l", "#7057d9", []], ["secondaryButton:2.l", "esp:GND.1", "#5d6672", []]
+    ["esp:10", "primaryButton:1.l", profile.color, []], ["primaryButton:2.l", "esp:GND.1", "#5d6672", []],
+    ["esp:11", "secondaryButton:1.l", "#7057d9", []], ["secondaryButton:2.l", "esp:GND.1", "#5d6672", []]
   ];
   if (state.led) {
     parts.push({ type: "wokwi-led-ring", id: "ring", top: 190.1, left: 234.4, attrs: { pixels: "16" } });
-    connections.push(["esp:18", "ring:DIN", "#f2c94c", []], ["esp:VIN", "ring:VCC", "#e05858", []], ["esp:GND.1", "ring:GND", "#5d6672", []]);
+    connections.push(["esp:12", "ring:DIN", "#f2c94c", []], ["esp:5V", "ring:VCC", "#e05858", []], ["esp:GND.1", "ring:GND", "#5d6672", []]);
   }
   if (state.buzzer) {
     parts.push({ type: "wokwi-buzzer", id: "buzzer", top: 221.4, left: 34.7, attrs: { volume: "0.2" } });
-    connections.push(["esp:27", "buzzer:2", "#f29f4b", []], ["esp:GND.1", "buzzer:1", "#5d6672", []]);
+    connections.push(["esp:13", "buzzer:2", "#f29f4b", []], ["esp:GND.1", "buzzer:1", "#5d6672", []]);
   }
   return { version: 1, author: "Atlas Prop Lab", editor: "wokwi", parts, connections, dependencies: {}, atlasProfile: { prop: activeProp, deviceId: profile.deviceId, exactParts: profile.parts, pinContract: profile.pins, events: profile.events, note: "Buttons proxy motion/special sensors in browser. Validate thresholds on real hardware." } };
 }
@@ -1014,8 +1016,8 @@ function renderCoreOverview() {
       <label><input type="checkbox" data-core-proof="${index}" ${index === 0 || checks.includes(index) ? "checked" : ""} ${index === 0 ? "disabled" : ""}/><span><strong>${title}</strong><small>${note}</small></span></label>
     </li>`).join("");
   $("#coreProxyWarning").innerHTML = currentLanguage === "vi"
-    ? "<strong>Proxy logic Wokwi:</strong> hướng dẫn breadboard 32 bước bên dưới dùng bố cục ESP32 DevKit V1. Không chuyển vị trí chân đó sang MKE-K01 trước khi kiểm tra board thực nhận và nhãn in trên board."
-    : "<strong>Wokwi logic proxy:</strong> the 32-step breadboard guide below uses an ESP32 DevKit V1 layout. Do not transfer its pin positions to the MKE-K01 until the delivered board and its labels have been inspected.";
+    ? "<strong>Cùng hợp đồng GPIO ESP32-S3:</strong> hướng dẫn 32 bước bên dưới dùng đúng số GPIO của MKE-K01 (GPIO10/11/12/13). Vẫn đối chiếu nhãn in trên board thực nhận trước khi cắm dây."
+    : "<strong>Same ESP32-S3 GPIO contract:</strong> the 32-step guide below uses the MKE-K01 GPIO numbers (GPIO10/11/12/13). Still match the printed labels on the delivered board before wiring.";
   updateCoreProofProgress();
 }
 
@@ -1026,7 +1028,7 @@ function downloadCoreProofPack() {
   const steps = coreProofSteps[currentLanguage];
   const markdown = `# Atlas Core v1 · ${profile.name}\n\n` +
     `- ${vi ? "Board vật lý tham chiếu" : "Physical controller reference"}: MKE-K01 ESP32-S3 N4\n` +
-    `- ${vi ? "Proxy mô phỏng" : "Simulation proxy"}: Wokwi ESP32 DevKit V1 (${vi ? "chỉ logic, không phải pinout vật lý" : "logic only, not a physical pinout"})\n` +
+    `- ${vi ? "Proxy mô phỏng" : "Simulation proxy"}: Wokwi ESP32-S3 DevKitC-1 (${vi ? "cùng số GPIO, chỉ kiểm logic" : "same GPIO numbers, logic only"})\n` +
     `- ${vi ? "Nguồn thử đầu" : "First proof power"}: USB data + 5 V\n` +
     `- ${vi ? "Thiết bị" : "Device"}: ${profile.deviceId}\n` +
     `- ${vi ? "Bộ dây role" : "Role harness"}: ${profile.parts.slice(1).join(", ")}\n` +

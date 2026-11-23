@@ -26,7 +26,7 @@ Revision 0.11 added the digital contract underneath it:
 - stronger isolation and highlighting for every selectable 3D module
 
 - five selectable hero builds: Guardian shield, Warrior sword, Archer bow, Assassin daggers, and Mage staff
-- one Titan Warden boss build with a two-handed foam hammer and three-zone LED armour
+- one Dark Knight Boss build (the game Boss's phase-2 form) with a two-handed foam greatsword and three-zone LED armour
 - Vietnamese and English UI with a remembered language choice
 - numbered concept drawings, sensor and core placement, role BOMs, supplier reference links, and ordered assembly paths
 - an eight-step guided assembly mode for every role, with drawing highlights, required parts, expected result, PASS gate, and saved per-role progress
@@ -39,7 +39,7 @@ Revision 0.11 added the digital contract underneath it:
 
 The Wokwi/firmware baseline remains a reusable bench proxy while each physical role gets its own contract:
 
-- ESP32 DevKit V1
+- ESP32-S3 DevKitC-1 (same GPIO contract as the MKE-K01 bench board)
 - two simulator buttons that proxy the selected role's sensor events
 - 16 pixel WS2812B LED ring
 - passive buzzer feedback
@@ -48,7 +48,7 @@ The Wokwi/firmware baseline remains a reusable bench proxy while each physical r
 - a browser field simulator for latency, packet loss, cooldowns, damage, and support healing
 - a clear warning that IMU/Hall thresholds, current, heat, radio range, fit, and durability still require real hardware
 - interactive Three.js digital twins for all six props, with orbit controls, exploded layers, electronics visibility, and selectable modules
-- recognizable production-inspired silhouettes for the layered shield, pointed sword, single-string recurve bow, paired daggers, crystal staff, and two-handed Boss hammer
+- recognizable production-inspired silhouettes for the layered shield, pointed sword, single-string recurve bow, paired daggers, crystal staff, and two-handed Boss greatsword
 - upgraded physically based materials, emissive LED channels, softened shadows, filmic tone mapping, fasteners, grips, guards, and protected electronics housings
 - a Blender/glTF-ready model boundary: procedural web twins remain lightweight now and can later be replaced by authored `.glb` assets without changing the lab workflow
 - a lightweight Three.js arena replay that visualizes the same latency/loss events as the existing field simulator without duplicating Unity gameplay

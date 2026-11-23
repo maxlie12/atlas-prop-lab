@@ -103,10 +103,11 @@ for (const token of ["buildGuardian", "buildSword", "buildBow", "buildDaggers", 
 }
 const unityParser = await readFile(resolve(root, "unity/Runtime/AtlasPropLineParser.cs"), "utf8");
 const unityRouter = await readFile(resolve(root, "unity/Runtime/AtlasPropIntentRouter.cs"), "utf8");
-for (const token of ["unsupported_version", "not_player_intent", "missing_required_field"]) {
+for (const token of ["unsupported_version", "not_gameplay_event", "missing_required_field", "SHOT_SEEN"]) {
   if (!unityParser.includes(token)) throw new Error(`Unity parser is missing rejection: ${token}`);
 }
 if (!unityRouter.includes("duplicate_or_stale_sequence")) throw new Error("Unity router is missing sequence deduplication");
+if (!unityRouter.includes("DeviceBooted") || !unityRouter.includes("propEvent.atMs >= last.AtMs")) throw new Error("Unity router is missing reboot detection");
 if (html.includes('data-view="build"')) throw new Error("Legacy disconnected build tab still exists");
 
 console.log("Atlas Prop Lab validation passed: Guardian production pack, 6 bilingual role packs, 6 Three.js digital twins, synchronized role electronics and arena replay, " + diagram.parts.length + " Wokwi proxy parts, " + diagram.connections.length + " wires, " + guideCount + " English + " + viGuideCount + " Vietnamese bench steps.");
