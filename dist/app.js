@@ -136,7 +136,7 @@ const propKitVi = {
 
 const staticTranslations = {
   ".brand-copy span": ["ESP32 prototype workspace", "Không gian thử nghiệm ESP32"],
-  "#headerStatusText": ["V0.12 HARDWARE GATE", "V0.12 CỔNG PHẦN CỨNG"],
+  "#headerStatusText": ["V0.13 SIX-ROLE SYNC", "V0.13 ĐỒNG BỘ 6 VAI"],
   ".mode-tabs [data-view='event-kit']": ["01 Event kit", "01 Bộ thiết bị"],
   ".mode-tabs [data-view='prototype']": ["02 ESP32 lab", "02 Xưởng ESP32"],
   ".mode-tabs [data-view='field']": ["03 Field simulator", "03 Mô phỏng trận"],
@@ -285,7 +285,7 @@ const staticTranslations = {
   "[data-arena-view='logic']": ["Logic map", "Bản đồ logic"],
   ".arena-stats span": ["Boss HP", "Máu Boss"],
   "#resetSim": ["Reset", "Đặt lại"],
-  "footer span:nth-child(2)": ["Planner revision 0.12 · Hardware proof workflow, not field certification", "Bản kế hoạch 0.12 · Quy trình chứng minh phần cứng, chưa phải chứng nhận thực địa"],
+  "footer span:nth-child(2)": ["Planner revision 0.13 · Hardware proof workflow, not field certification", "Bản kế hoạch 0.13 · Quy trình chứng minh phần cứng, chưa phải chứng nhận thực địa"],
   ".telemetry-panel > .panel-label": ["Network conditions", "Điều kiện mạng"],
   "label[for='latencyRange'] span": ["Latency", "Độ trễ"],
   "label[for='lossRange'] span": ["Packet loss", "Mất gói"],
@@ -309,7 +309,7 @@ const staticTranslations = {
   ".download-row a:nth-child(1)": ["Wokwi circuit", "Mạch Wokwi"],
   ".download-row a:nth-child(2)": ["ESP32 firmware", "Firmware ESP32"],
   ".download-row a:nth-child(3)": ["Assembly guide", "Hướng dẫn lắp"],
-  "footer span:nth-child(2)": ["Planner revision 0.12 · Hardware proof workflow, not field certification", "Bản kế hoạch 0.12 · Quy trình chứng minh phần cứng, chưa phải chứng nhận thực địa"]
+  "footer span:nth-child(2)": ["Planner revision 0.13 · Hardware proof workflow, not field certification", "Bản kế hoạch 0.13 · Quy trình chứng minh phần cứng, chưa phải chứng nhận thực địa"]
 };
 
 const roleCardTranslations = {
@@ -326,13 +326,6 @@ let activeAssemblyStep = 0;
 let activeVisualView = "overview";
 let currentLanguage = ["vi", "en"].includes(localStorage.getItem("atlas-language")) ? localStorage.getItem("atlas-language") : "vi";
 
-const roles = {
-  guardian: { label: "GUARDIAN", color: "#f0b44d", cast: { damage: 8 }, special: { shield: 25 } },
-  archer: { label: "ARCHER", color: "#16a6c9", cast: { damage: 18 }, special: { damage: 34 } },
-  assassin: { label: "ASSASSIN", color: "#7057d9", cast: { damage: 14 }, special: { damage: 42 } },
-  support: { label: "SUPPORT", color: "#39cc93", cast: { heal: 8 }, special: { heal: 22 } }
-};
-
 const electronicsProfiles = {
   guardian: { label: "GUARDIAN", name: "Aegis Shield", color: "#f0b44d", deviceId: "guardian-shield-01", parts: ["ESP32-S3", "MPU6050", "Thumb trigger", "WS2812B rim", "Vibration motor"], pins: [["GPIO1/2", "MPU6050 SDA / SCL", "MPU6050 SDA / SCL"], ["GPIO10", "Thumb trigger", "Cò ngón cái"], ["GPIO12", "LED rim data", "Dữ liệu LED viền"], ["GPIO13", "Vibration driver", "Driver motor rung"], ["5V / GND", "Shared power / ground", "Nguồn / GND chung"]], events: ["BLOCK_START", "BLOCK_END", "TAUNT"] },
   warrior: { label: "WARRIOR", name: "Pulse Sword", color: "#16a6c9", deviceId: "warrior-sword-01", parts: ["ESP32-S3", "MPU6050", "Index trigger", "WS2812B spine", "Vibration motor"], pins: [["GPIO1/2", "MPU6050 SDA / SCL", "MPU6050 SDA / SCL"], ["GPIO10", "Index trigger", "Cò ngón trỏ"], ["GPIO12", "LED spine data", "Dữ liệu LED sống kiếm"], ["GPIO13", "Vibration driver", "Driver motor rung"], ["5V / GND", "Shared power / ground", "Nguồn / GND chung"]], events: ["STRIKE", "HEAVY_STRIKE", "PARRY"] },
@@ -341,6 +334,11 @@ const electronicsProfiles = {
   mage: { label: "MAGE", name: "Lumen Staff", color: "#39cc93", deviceId: "mage-staff-01", parts: ["ESP32-S3", "MPU6050", "CAST button", "SPECIAL button", "Orb LEDs"], pins: [["GPIO1/2", "MPU6050 SDA / SCL", "MPU6050 SDA / SCL"], ["GPIO10", "CAST button", "Nút CAST"], ["GPIO11", "SPECIAL button", "Nút SPECIAL"], ["GPIO12", "Orb LED data", "Dữ liệu LED quả cầu"], ["GPIO13", "Vibration driver", "Driver motor rung"]], events: ["CAST_HEAL", "CHANNEL", "TEAM_SHIELD"] },
   boss: { label: "BOSS", name: "Dark Knight", color: "#ef6b68", deviceId: "boss-greatsword-01", parts: ["ESP32-S3", "MPU6050", "Primary trigger", "Secondary trigger", "Blade + armour LEDs"], pins: [["GPIO1/2", "MPU6050 SDA / SCL", "MPU6050 SDA / SCL"], ["GPIO10", "Primary trigger", "Cò chính"], ["GPIO11", "Secondary trigger", "Cò phụ"], ["GPIO12", "Blade LED data", "Dữ liệu LED lưỡi kiếm"], ["GPIO16/17", "Armour receiver UART2", "Bộ nhận áo giáp UART2"]], events: ["SWEEP", "SLAM", "MARK", "PHASE_SKILL"] }
 };
+
+// Field characters and props share one colour per role (dist/gameplay-roster.js).
+for (const [key, character] of Object.entries(window.ATLAS_GAMEPLAY_ROSTER?.roster || {})) {
+  if (electronicsProfiles[key]) electronicsProfiles[key].color = character.color;
+}
 
 const coreProofSteps = {
   en: [
@@ -528,11 +526,8 @@ const bomViTerms = {
   "Dupont jumper set": "Bộ dây Dupont", "5V USB power bank": "Pin dự phòng USB 5V", "Prototype enclosure": "Hộp mẫu thử", "USB power meter": "Đồng hồ đo nguồn USB"
 };
 
-const state = {
-  role: "archer", transport: "usb", led: true, buzzer: true,
-  latency: 60, loss: 5, bossHp: 520, sent: 0, delivered: 0, lost: 0,
-  latencyTotal: 0, sequence: 0, cooldown: { CAST: false, SPECIAL: false }
-};
+// Electronics lab settings. The field simulator keeps its own state in dist/field-ui.js.
+const state = { transport: "usb", led: true, buzzer: true };
 
 const mvpFeedbackCopy = {
   en: {
@@ -890,7 +885,7 @@ function renderGuidedAssembly() {
 function renderPropKit() {
   const kit = localizedKit();
   window.AtlasCad.render(activeProp, currentLanguage, kit);
-  document.documentElement.style.setProperty("--kit-accent", activeProp === "boss" ? "#ef6b68" : activeProp === "mage" ? "#39cc93" : activeProp === "guardian" ? "#f0b44d" : "#16a6c9");
+  document.documentElement.style.setProperty("--kit-accent", window.ATLAS_GAMEPLAY_ROSTER?.roster[activeProp]?.color || "#16a6c9");
   $("#propBlueprint").innerHTML = blueprintSvg(kit.kind);
   $("#propSize").textContent = kit.size;
   $("#propRoleLabel").textContent = kit.roleLabel;
@@ -1068,7 +1063,7 @@ function renderConfig() {
   $("#electronicsNextTitle").textContent = vi ? "Bắt buộc thử ngoài đời" : "Required real-world proof";
   $("#electronicsNextText").textContent = vi ? "Ngưỡng IMU/Hall, nhiễu, nhiệt, dòng LED, độ bền dây, tầm sóng và cảm giác khi mặc/cầm. Wokwi ở đây dùng nút làm proxy cho cảm biến chưa được mô phỏng chính xác." : "IMU/Hall thresholds, noise, heat, LED current, cable durability, radio range, and human fit. Wokwi uses buttons as proxies for sensors it cannot reproduce exactly here.";
   renderCoreOverview();
-  $$(".hero-token").forEach(token => token.classList.toggle("is-selected", token.dataset.role === state.role));
+  window.dispatchEvent(new CustomEvent("atlas-active-role", { detail: { role: activeProp } }));
 }
 
 function downloadJson(name, value) {
@@ -1088,74 +1083,6 @@ function showView(id) {
   $$(".view").forEach(view => view.classList.toggle("is-active", view.id === id));
   $$(".tab").forEach(tab => tab.classList.toggle("is-active", tab.dataset.view === id));
   window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-function eventPayload(action) {
-  return { v: 1, deviceId: `${state.role}-orb-01`, role: roles[state.role].label, seq: ++state.sequence, type: "PLAYER_INTENT", action, atMs: Math.round(performance.now()) };
-}
-
-function addLog(status, payload, detail) {
-  const item = document.createElement("li");
-  const stamp = new Date().toLocaleTimeString([], { minute: "2-digit", second: "2-digit" });
-  item.innerHTML = `<span>${stamp}</span><b class="${status}">${payload.action} · ${detail}</b>`;
-  $("#eventLog").prepend(item);
-  while ($("#eventLog").children.length > 12) $("#eventLog").lastElementChild.remove();
-}
-
-function updateMetrics() {
-  $("#sentMetric").textContent = state.sent;
-  $("#deliveredMetric").textContent = state.delivered;
-  $("#lostMetric").textContent = state.lost;
-  $("#avgMetric").textContent = state.delivered ? `${Math.round(state.latencyTotal / state.delivered)} ms` : "—";
-  $("#bossHpText").textContent = `${state.bossHp} / 520`;
-  $("#bossHpBar").style.width = `${(state.bossHp / 520) * 100}%`;
-  window.dispatchEvent(new CustomEvent("atlas-field-state", { detail: { bossHp: state.bossHp, role: state.role } }));
-}
-
-function animatePacket(isLost, duration) {
-  const arena = $("#arena"); const packet = $("#packet");
-  const hero = $(`.hero-token[data-role="${state.role}"]`); const boss = $(".boss-token");
-  const area = arena.getBoundingClientRect(); const start = hero.getBoundingClientRect(); const end = boss.getBoundingClientRect();
-  const x1 = start.left + start.width / 2 - area.left - 6; const y1 = start.top + start.height / 2 - area.top - 6;
-  const x2 = end.left + end.width / 2 - area.left - 6; const y2 = end.top + end.height / 2 - area.top - 6;
-  packet.classList.toggle("is-lost", isLost); packet.style.opacity = "1"; packet.style.left = `${x1}px`; packet.style.top = `${y1}px`;
-  const targetX = isLost ? x1 + (x2 - x1) * .55 : x2; const targetY = isLost ? y1 + (y2 - y1) * .55 : y2;
-  const animation = packet.animate([{ transform: "scale(.8)" }, { left: `${targetX}px`, top: `${targetY}px`, transform: isLost ? "scale(.25)" : "scale(1.3)" }], { duration: Math.max(180, duration), easing: "cubic-bezier(.2,.7,.2,1)" });
-  animation.onfinish = () => { packet.style.opacity = "0"; packet.style.left = `${targetX}px`; packet.style.top = `${targetY}px`; };
-}
-
-function applyAction(action) {
-  const profile = roles[state.role]; const effect = action === "CAST" ? profile.cast : profile.special;
-  if (effect.damage) {
-    state.bossHp = Math.max(0, state.bossHp - effect.damage);
-    return `accepted · ${effect.damage} damage`;
-  }
-  if (effect.heal) return `accepted · team +${effect.heal} HP`;
-  return `accepted · team shield +${effect.shield}`;
-}
-
-function triggerAction(action) {
-  if (!roles[state.role] || !["CAST", "SPECIAL"].includes(action)) throw new Error("Unsupported action");
-  if (state.cooldown[action]) { toast(`${action} is cooling down`); return { status: "cooldown" }; }
-  state.cooldown[action] = true;
-  const button = $(`.action-button[data-action="${action}"]`); button.disabled = true;
-  setTimeout(() => { state.cooldown[action] = false; button.disabled = false; }, action === "CAST" ? 700 : 4000);
-
-  const payload = eventPayload(action); const jitter = Math.round((Math.random() - .5) * state.latency * .25);
-  const travel = Math.max(0, state.latency + jitter); const lost = Math.random() * 100 < state.loss;
-  window.dispatchEvent(new CustomEvent("atlas-field-action", { detail: { role: state.role, action, lost, duration: Math.max(180, travel) } }));
-  state.sent++; updateMetrics(); addLog("", payload, "sent"); animatePacket(lost, travel);
-  setTimeout(() => {
-    if (lost) { state.lost++; addLog("lost", payload, "lost"); }
-    else { state.delivered++; state.latencyTotal += travel; addLog("good", payload, `${applyAction(action)} · ${travel} ms`); }
-    updateMetrics();
-  }, Math.max(180, travel));
-  return { status: lost ? "scheduled_loss" : "scheduled_delivery", payload, latencyMs: travel };
-}
-
-function resetSimulation() {
-  Object.assign(state, { bossHp: 520, sent: 0, delivered: 0, lost: 0, latencyTotal: 0, sequence: 0 });
-  $("#eventLog").innerHTML = ""; updateMetrics(); window.dispatchEvent(new CustomEvent("atlas-field-reset")); toast(currentLanguage === "vi" ? "Đã đặt lại mô phỏng" : "Simulation reset");
 }
 
 function renderBuildPack() {
@@ -1331,24 +1258,24 @@ function registerWebMcp() {
     },
     {
       name: "trigger_atlas_prop_action", title: "Trigger prop action",
-      description: "Send CAST or SPECIAL through the visible Atlas field simulator with the current latency and packet loss.",
-      inputSchema: { type: "object", properties: { action: { enum: ["CAST", "SPECIAL"] } }, required: ["action"], additionalProperties: false },
+      description: "Send one contract action (e.g. BLOCK_START, FIRE, CAST_HEAL, SWEEP) from a character's prop through the visible Atlas field simulator with the current latency and packet loss. Holds (shield block, bow draw) are pressed and released automatically.",
+      inputSchema: { type: "object", properties: { role: { enum: Object.keys(window.ATLAS_GAMEPLAY_ROSTER.roster) }, action: { type: "string" } }, required: ["role", "action"], additionalProperties: false },
       annotations: { readOnlyHint: false, untrustedContentHint: false },
-      execute(input) { showView("field"); return triggerAction(input.action); }
+      execute(input) { showView("field"); return window.AtlasFieldUI.trigger(input.role, input.action); }
     },
     {
       name: "read_atlas_lab_state", title: "Read Atlas lab state",
       description: "Read the active prop configuration and field simulation metrics.",
       inputSchema: { type: "object", properties: {}, additionalProperties: false },
       annotations: { readOnlyHint: true, untrustedContentHint: false },
-      execute() { return { activeBuildPack: activeProp, role: state.role, transport: state.transport, led: state.led, buzzer: state.buzzer, simulation: { bossHp: state.bossHp, sent: state.sent, delivered: state.delivered, lost: state.lost } }; }
+      execute() { return { activeBuildPack: activeProp, transport: state.transport, led: state.led, buzzer: state.buzzer, simulation: window.AtlasFieldUI?.snapshot() }; }
     }
   ];
   tools.forEach(tool => { try { Promise.resolve(context.registerTool(tool)).catch(() => {}); } catch {} });
 }
 
 function init() {
-  buildRingDots(); applyStaticTranslations(); renderGuardianProduction(); renderPropKit(); renderConfig(); renderBuildPack(); updateMetrics();
+  buildRingDots(); applyStaticTranslations(); renderGuardianProduction(); renderPropKit(); renderConfig(); renderBuildPack();
   $$(".tab").forEach(tab => tab.addEventListener("click", () => showView(tab.dataset.view)));
   $("#mvpTargetButtons").addEventListener("click", event => {
     const button = event.target.closest("[data-mvp-zone]");
@@ -1441,12 +1368,11 @@ function init() {
   $("#clearCoreProof").addEventListener("click", () => { localStorage.removeItem(coreProofStorageKey); renderCoreOverview(); });
   $("#downloadCoreProofPack").addEventListener("click", downloadCoreProofPack);
   $("#electronicsEventButtons").addEventListener("click", event => { const button = event.target.closest("[data-electronics-event]"); if (button) testElectronicsEvent(button.dataset.electronicsEvent); });
-  $$(".hero-token").forEach(token => token.addEventListener("click", () => { state.role = token.dataset.role; renderConfig(); }));
-  window.addEventListener("atlas-select-field-role", event => { if (roles[event.detail?.role]) { state.role = event.detail.role; renderConfig(); } });
-  $$(".action-button").forEach(button => button.addEventListener("click", () => triggerAction(button.dataset.action)));
-  $("#resetSim").addEventListener("click", resetSimulation);
-  $("#latencyRange").addEventListener("input", event => { state.latency = Number(event.target.value); $("#latencyValue").textContent = `${state.latency} ms`; });
-  $("#lossRange").addEventListener("input", event => { state.loss = Number(event.target.value); $("#lossValue").textContent = `${state.loss}%`; });
+  window.addEventListener("atlas-select-field-role", event => {
+    const role = event.detail?.role;
+    if (!electronicsProfiles[role] || role === activeProp) return;
+    activeProp = role; activeAssemblyStep = 0; activeVisualView = "overview"; renderPropKit(); renderConfig();
+  });
   $("#guideList").addEventListener("change", updateGuideProgress);
   $("#clearChecklist").addEventListener("click", () => { $$("#guideList input").forEach(input => input.checked = false); updateGuideProgress(); });
   registerWebMcp();

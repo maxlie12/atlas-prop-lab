@@ -465,51 +465,380 @@ function startThreeLab(THREE, OrbitControls) {
   });
   $("#threePropLoading")?.remove(); rebuildProp($("#roleSelect")?.value || "guardian");
 
+  // ---------------------------------------------------------------------------
+  // Gameplay arena: the six roster characters as rigged figures holding the same procedural prop
+  // twins as the assembly lab above. It replays dist/field-ui.js events; it never decides outcomes.
+  // ---------------------------------------------------------------------------
+  const gameplay = window.ATLAS_GAMEPLAY_ROSTER;
+  const roster = gameplay?.roster || {};
   const arenaRoot = $("#threeArenaStage");
-  const arenaWorld = setupRenderer(arenaRoot, [0, 9.5, 10.5], [0, 0, 0]);
-  arenaWorld.controls.minPolarAngle = .45; arenaWorld.controls.maxPolarAngle = 1.2; arenaWorld.controls.minDistance = 9; arenaWorld.controls.maxDistance = 18;
-  const floor = new THREE.Mesh(new THREE.CircleGeometry(6.2, 64), material(0x081920, .1)); floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; arenaWorld.scene.add(floor);
-  const grid = new THREE.GridHelper(12, 12, 0x16a6c9, 0x17303a); grid.position.y = .015; arenaWorld.scene.add(grid);
+  const arenaWorld = setupRenderer(arenaRoot, [0, 8.4, 11.2], [0, .9, .4]);
+  arenaWorld.controls.minPolarAngle = .45; arenaWorld.controls.maxPolarAngle = 1.25; arenaWorld.controls.minDistance = 8; arenaWorld.controls.maxDistance = 28;
+  // Portrait phones: pull the camera back so the whole ring stays in frame.
+  const arenaHome = arenaWorld.camera.position.clone().sub(arenaWorld.controls.target);
+  const fitArena = () => {
+    const rect = arenaRoot.getBoundingClientRect(); if (!rect.width || !rect.height) return;
+    const factor = Math.min(2, Math.max(1, 1.45 / (rect.width / rect.height)));
+    arenaWorld.camera.position.copy(arenaWorld.controls.target).add(arenaHome.clone().multiplyScalar(factor));
+  };
+  new ResizeObserver(fitArena).observe(arenaRoot); fitArena();
+  const arenaKey = arenaWorld.scene.children.find(object => object.isDirectionalLight);
+  if (arenaKey) { Object.assign(arenaKey.shadow.camera, { left: -8, right: 8, top: 8, bottom: -8, far: 40 }); arenaKey.shadow.camera.updateProjectionMatrix(); arenaKey.shadow.mapSize.set(2048, 2048); }
+  const floor = new THREE.Mesh(new THREE.CircleGeometry(6.6, 64), material(0x081920, .1)); floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; arenaWorld.scene.add(floor);
+  const grid = new THREE.GridHelper(13, 13, 0x16a6c9, 0x17303a); grid.position.y = .015; arenaWorld.scene.add(grid);
   [2.2, 4.2, 5.8].forEach((radius, index) => { const ring = new THREE.Mesh(new THREE.RingGeometry(radius - .025, radius + .025, 64), material(index === 0 ? 0xef6b68 : 0xf0b44d, 0, .38)); ring.rotation.x = -Math.PI / 2; ring.position.y = .03; arenaWorld.scene.add(ring); });
-  const boss = new THREE.Group();
-  addPart(boss, new THREE.CylinderGeometry(.65, .85, 1.8, 16), 0x4a2227, "boss", [0, .9, 0]);
-  addPart(boss, new THREE.BoxGeometry(1.5, .45, .65), 0xef6b68, "boss", [0, 1.75, 0]); boss.position.set(0, 0, 0); arenaWorld.scene.add(boss);
-  const rolePositions = { guardian: [-3.4, 0, -2.2], archer: [3.5, 0, -2.4], assassin: [3.2, 0, 3], support: [-3.3, 0, 2.9] };
-  const roleColors = { guardian: 0xf0b44d, archer: 0x16a6c9, assassin: 0x7057d9, support: 0x39cc93 };
-  const heroes = {};
-  Object.entries(rolePositions).forEach(([role, position]) => {
-    const hero = new THREE.Group();
-    addPart(hero, new THREE.CylinderGeometry(.38, .5, 1.15, 16), roleColors[role], role, [0, .58, 0]);
-    addPart(hero, new THREE.SphereGeometry(.34, 16, 12), 0xc5d7db, role, [0, 1.42, 0]);
-    hero.position.set(...position); hero.userData.role = role; heroes[role] = hero; arenaWorld.scene.add(hero);
+
+  const hex = value => new THREE.Color(value).getHex();
+  const flat = (color, opacity = 1) => new THREE.MeshBasicMaterial({ color, transparent: opacity < 1, opacity, depthWrite: opacity >= 1, side: THREE.DoubleSide });
+  const glow = (color, opacity = .3) => new THREE.MeshBasicMaterial({ color, transparent: true, opacity, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending });
+  // Grip point (prop-local units), scale on the rig, and hand pose for each CAD-02/03 prop twin.
+  const propMounts = {
+    guardian: { hand: "left", scale: .2, grip: [0, 0, -.5], rotation: [1.15, 0, -.1], offset: [0, .05, .14] },
+    warrior: { hand: "right", scale: .16, grip: [0, -2.3, 0], rotation: [.55, 0, -.1], offset: [0, 0, .04] },
+    archer: { hand: "left", scale: .18, grip: [.05, 0, 0], rotation: [0, -Math.PI / 2, 0], offset: [0, 0, .06] },
+    assassin: { hand: "both", scale: .11, grip: [1.12, -2.27, 0], rotation: [.4, 0, 0], offset: [0, 0, .04] },
+    mage: { hand: "right", scale: .2, grip: [0, -.46, 0], rotation: [.06, 0, 0], offset: [0, .1, .06] },
+    boss: { hand: "right", scale: .19, grip: [-.9, -2.34, 0], rotation: [.25, 0, -.18], offset: [0, 0, .05] }
+  };
+  const armPose = {
+    guardian: { left: [-1.2, .35, .15], right: [-.35, 0, -.1] }, warrior: { left: [-.25, 0, .12], right: [-.95, 0, -.08] },
+    archer: { left: [-1.45, 0, 0], right: [-1.25, -.3, 0] }, assassin: { left: [-.85, 0, .22], right: [-.85, 0, -.22] },
+    mage: { left: [-.25, 0, .15], right: [-.55, 0, -.12] }, boss: { left: [-.75, 0, .45], right: [-.95, 0, -.2] }
+  };
+
+  function textSprite(accent, width = 512, height = 176) {
+    const canvas = document.createElement("canvas"); canvas.width = width; canvas.height = height;
+    const texture = new THREE.CanvasTexture(canvas); texture.colorSpace = THREE.SRGBColorSpace;
+    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false, depthWrite: false }));
+    sprite.renderOrder = 20;
+    sprite.userData.draw = ({ title, sub, hp, charge, badge }) => {
+      const ctx = canvas.getContext("2d"); ctx.clearRect(0, 0, width, height);
+      const boxH = charge === undefined ? (hp === undefined ? 96 : 136) : 160;
+      ctx.fillStyle = "rgba(4,13,18,.84)"; ctx.strokeStyle = accent; ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.roundRect(8, 8, width - 16, boxH, 22); ctx.fill(); ctx.stroke();
+      ctx.textAlign = "center"; ctx.fillStyle = "#f2fbfd"; ctx.font = "800 44px system-ui, sans-serif"; ctx.fillText(title, width / 2, 56);
+      ctx.fillStyle = accent; ctx.font = "700 25px ui-monospace, monospace"; ctx.fillText(sub, width / 2, 88);
+      if (hp !== undefined) {
+        ctx.fillStyle = "#18272d"; ctx.fillRect(40, 106, width - 80, 16);
+        ctx.fillStyle = hp < .34 ? "#ff8c86" : accent; ctx.fillRect(40, 106, (width - 80) * Math.max(0, hp), 16);
+      }
+      if (charge !== undefined) {
+        ctx.fillStyle = "#18272d"; ctx.fillRect(40, 132, width - 80, 10);
+        ctx.fillStyle = charge >= 1 ? "#ffd1d0" : "#8a5cf0"; ctx.fillRect(40, 132, (width - 80) * Math.min(1, charge), 10);
+      }
+      if (badge) {
+        ctx.font = "800 24px ui-monospace, monospace"; const w = ctx.measureText(badge).width + 22;
+        ctx.fillStyle = "#f0b44d"; ctx.beginPath(); ctx.roundRect(width - 28 - w, 14, w, 34, 10); ctx.fill();
+        ctx.fillStyle = "#041318"; ctx.textAlign = "center"; ctx.fillText(badge, width - 28 - w / 2, 39);
+      }
+      texture.needsUpdate = true;
+    };
+    return sprite;
+  }
+
+  function attachProp(rig, key, accent) {
+    const mount = propMounts[key]; const prop = builders[key](accent);
+    // Wearables that are not held (Boss bib, Assassin wrist pad) are drawn on the body instead.
+    if (key === "boss" || key === "assassin") [...prop.children].filter(mesh => mesh.userData.partKey === "wearable").forEach(mesh => prop.remove(mesh));
+    prop.traverse(object => { if (object.isMesh) { object.castShadow = true; object.material.side = THREE.FrontSide; } });
+    const place = (target, model, grip) => {
+      const holder = new THREE.Group(); holder.rotation.set(...mount.rotation); holder.position.set(...mount.offset);
+      model.scale.setScalar(mount.scale); model.position.set(...grip.map(value => -value * mount.scale));
+      holder.add(model); target.add(holder); return holder;
+    };
+    if (mount.hand === "both") {
+      const left = new THREE.Group(); const right = new THREE.Group();
+      [...prop.children].forEach(mesh => {
+        mesh.geometry.computeBoundingBox();
+        const x = mesh.geometry.boundingBox.getCenter(new THREE.Vector3()).x * mesh.scale.x + mesh.position.x;
+        (x < 0 ? right : left).add(mesh);
+      });
+      place(rig.userData.hands.right, right, [-mount.grip[0], mount.grip[1], mount.grip[2]]);
+      place(rig.userData.hands.left, left, mount.grip);
+    } else place(rig.userData.hands[mount.hand], prop, mount.grip);
+    const leds = []; rig.traverse(object => { if (object.isMesh && object.userData.partKey === "light") leds.push(object); });
+    rig.userData.leds = leds;
+  }
+
+  function buildCharacter(key, character) {
+    const accent = hex(character.color); const isBoss = character.team === "boss";
+    const rig = new THREE.Group(); const body = new THREE.Group(); rig.add(body);
+    const suit = isBoss ? 0x1d1f27 : 0x1a313a; const trim = isBoss ? 0x8a7a5a : 0x7d979d;
+    const armour = new THREE.Color(isBoss ? 0x2b2f3a : 0x28434b).lerp(new THREE.Color(accent), isBoss ? .08 : .32).getHex();
+    [-1, 1].forEach(side => {
+      addPart(body, new THREE.CapsuleGeometry(.12, .46, 4, 12), suit, "body", [side * .15, .44, 0], [0, 0, 0], [1, 1, 1], { roughness: .8 });
+      addPart(body, new THREE.BoxGeometry(.21, .13, .34), armour, "body", [side * .15, .07, .05], [0, 0, 0], [1, 1, 1], { metalness: .35, roughness: .5 });
+      addPart(body, new THREE.SphereGeometry(.09, 12, 10), trim, "body", [side * .15, .5, .1], [0, 0, 0], [1, 1, .7], { metalness: .55 });
+    });
+    addPart(body, new THREE.CylinderGeometry(.27, .24, .22, 16), armour, "body", [0, .8, 0], [0, 0, 0], [1, 1, 1], { metalness: .4 });
+    addPart(body, new THREE.CapsuleGeometry(.27, .4, 6, 16), suit, "body", [0, 1.18, 0], [0, 0, 0], [1, 1, .82], { roughness: .7 });
+    addPart(body, new THREE.BoxGeometry(.46, .42, .12, 2, 2, 1), armour, "body", [0, 1.27, .19], [0, 0, 0], [1, 1, 1], { metalness: .55, roughness: .34, clearcoat: .3 });
+    const chestLed = addPart(body, new THREE.BoxGeometry(isBoss ? .36 : .3, isBoss ? .2 : .05, .03), accent, "led", [0, isBoss ? 1.25 : 1.36, .26], [0, 0, 0], [1, 1, 1], { emissive: true, emissiveIntensity: isBoss ? 1.1 : 1.8 });
+    const shoulders = [-1, 1].map(side => addPart(body, new THREE.SphereGeometry(.16, 18, 12, 0, Math.PI * 2, 0, Math.PI / 1.7), isBoss ? 0x3a3f4c : accent, "body", [side * .37, 1.5, 0], [0, 0, side * -.35], [1.1, .9, 1.1], { metalness: .5, roughness: .32 }));
+    addPart(body, new THREE.CylinderGeometry(.09, .1, .12, 12), suit, "body", [0, 1.67, 0]);
+    addPart(body, new THREE.SphereGeometry(.2, 22, 16), armour, "body", [0, 1.85, 0], [0, 0, 0], [1, 1.08, 1], { metalness: .5, roughness: .3, clearcoat: .4 });
+    const visor = addPart(body, new THREE.BoxGeometry(.3, .07, .09), accent, "led", [0, 1.86, .15], [0, 0, 0], [1, 1, 1], { emissive: true, emissiveIntensity: 2.2 });
+    const zones = {};
+    if (isBoss) {
+      // Dark Knight: horned helm, cape, and the three-zone LED bib (left shoulder, chest, right shoulder).
+      [-1, 1].forEach(side => addPart(body, new THREE.ConeGeometry(.06, .34, 10), trim, "body", [side * .17, 2.05, -.02], [0, 0, side * -.55], [1, 1, 1], { metalness: .6 }));
+      addPart(body, new THREE.BoxGeometry(.7, 1.0, .05), 0x2a1218, "body", [0, 1.0, -.25], [.12, 0, 0], [1, 1, 1], { roughness: .95 });
+      zones.chest = chestLed;
+      [["left", 1], ["right", -1]].forEach(([zone, side]) => {
+        zones[zone] = addPart(body, new THREE.BoxGeometry(.2, .05, .2), accent, "led", [side * .4, 1.63, 0], [0, 0, side * -.35], [1, 1, 1], { emissive: true, emissiveIntensity: 1.1 });
+      });
+    }
+    const hands = {}; const arms = {};
+    [["left", -1], ["right", 1]].forEach(([name, side]) => {
+      const arm = new THREE.Group(); arm.position.set(side * .4, 1.48, 0); body.add(arm);
+      addPart(arm, new THREE.CapsuleGeometry(.08, .48, 4, 10), suit, "body", [0, -.3, 0], [0, 0, 0], [1, 1, 1], { roughness: .8 });
+      addPart(arm, new THREE.CylinderGeometry(.1, .09, .2, 12), armour, "body", [0, -.46, 0], [0, 0, 0], [1, 1, 1], { metalness: .45 });
+      addPart(arm, new THREE.SphereGeometry(.075, 12, 10), trim, "body", [0, -.64, 0]);
+      const hand = new THREE.Group(); hand.position.set(0, -.64, 0); arm.add(hand);
+      const pose = armPose[key]?.[name] || [0, 0, 0]; arm.rotation.set(...pose); arm.userData.basePose = pose;
+      hands[name] = hand; arms[name] = arm;
+    });
+    if (key === "assassin") addPart(arms.left, new THREE.BoxGeometry(.16, .07, .14), accent, "led", [0, -.5, .1], [0, 0, 0], [1, 1, 1], { emissive: true, emissiveIntensity: 1.2 });
+    rig.userData = { key, character, body, hands, arms, chestLed, visor, shoulders, zones };
+    attachProp(rig, key, accent);
+    const shadowDisc = new THREE.Mesh(new THREE.CircleGeometry(.48, 32), flat(0x000000, .35)); shadowDisc.rotation.x = -Math.PI / 2; shadowDisc.position.y = .035; rig.add(shadowDisc);
+    const selectRing = new THREE.Mesh(new THREE.RingGeometry(.56, .66, 48), flat(accent, .95)); selectRing.rotation.x = -Math.PI / 2; selectRing.position.y = .045; selectRing.visible = false; rig.add(selectRing);
+    const focusRing = new THREE.Mesh(new THREE.RingGeometry(.74, .8, 48, 1, 0, Math.PI * 1.7), flat(0xef6b68, .9)); focusRing.rotation.x = -Math.PI / 2; focusRing.position.y = .05; focusRing.visible = false; rig.add(focusRing);
+    const blockDome = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2), glow(accent, .26)); blockDome.scale.set(.95, 1.35, .95); blockDome.visible = false; rig.add(blockDome);
+    const shieldDome = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2), glow(0x39cc93, .22)); shieldDome.scale.set(.82, 1.2, .82); shieldDome.visible = false; rig.add(shieldDome);
+    const tag = textSprite(character.color); tag.position.set(0, isBoss ? 2.5 : 2.55, 0); if (isBoss) tag.scale.set(1.5, .52, 1); else tag.scale.set(1.9, .65, 1); rig.add(tag);
+    Object.assign(rig.userData, { selectRing, focusRing, tag, blockDome, shieldDome });
+    if (isBoss) rig.scale.setScalar(1.55);
+    rig.traverse(object => { if (object.isMesh && !object.material.blending) object.material.side = THREE.FrontSide; });
+    finishModel(rig);
+    return rig;
+  }
+
+  const characters = {};
+  Object.entries(roster).forEach(([key, character]) => {
+    const rig = buildCharacter(key, character);
+    rig.userData.phase = Math.random() * Math.PI * 2; rig.userData.home = new THREE.Vector3();
+    characters[key] = rig; arenaWorld.scene.add(rig);
   });
-  let fieldRole = "archer", bossHp = 520, attackTweens = [], arenaClock = new THREE.Clock();
-  function selectFieldRole(role) {
-    fieldRole = role;
-    Object.entries(heroes).forEach(([key, hero]) => hero.scale.setScalar(key === role ? 1.18 : 1));
-    document.querySelectorAll("[data-field-role]").forEach(button => button.classList.toggle("is-active", button.dataset.fieldRole === role));
+  const boss = characters.boss;
+  const defaultLineup = { hero1: "guardian", hero2: "archer", hero3: "assassin", hero4: "mage", reserve: "warrior" };
+  let snapshot = { lineup: defaultLineup, heroes: {}, boss: { hp: gameplay?.limits.bossHp || 520, charge: 0, focus: "archer" }, traps: [], selected: "guardian" };
+  let effects = [], traps = new Map();
+  // Frame time comes from requestAnimationFrame timestamps so effects stay in step with the event timers.
+  let arenaTime = 0, lastFrameAt;
+  const tmp = new THREE.Vector3();
+  const vi = () => isVi() ? 1 : 0;
+
+  function placeRigs() {
+    Object.entries(characters).forEach(([key, rig]) => {
+      const seat = Object.entries(snapshot.lineup).find(([, value]) => value === key)?.[0];
+      if (key === "boss") { rig.userData.home.set(0, 0, 0); rig.position.set(0, 0, 0); return; }
+      const info = gameplay.seats[seat]; const radius = info.bench ? 5.75 : gameplay.arenaRadiusM; const angle = THREE.MathUtils.degToRad(info.angle);
+      rig.userData.home.set(Math.sin(angle) * radius, 0, -Math.cos(angle) * radius);
+      rig.position.copy(rig.userData.home); rig.lookAt(0, 0, 0);
+      rig.scale.setScalar(info.bench ? .82 : 1); rig.userData.bench = Boolean(info.bench);
+    });
   }
+  function drawTags() {
+    const limits = gameplay.limits;
+    Object.entries(characters).forEach(([key, rig]) => {
+      const character = roster[key]; const h = snapshot.heroes?.[key];
+      if (key === "boss") {
+        rig.userData.tag.userData.draw({ title: character.name[vi()], sub: `${snapshot.boss.hp} HP · ${Math.round(snapshot.boss.charge)}%`, hp: snapshot.boss.hp / limits.bossHp, charge: snapshot.boss.charge / limits.bossCharge });
+        return;
+      }
+      const badge = rig.userData.bench ? (vi() ? "DỰ BỊ" : "RESERVE") : h && !h.connected ? "AI" : h && h.hp <= 0 ? (vi() ? "GỤC" : "DOWN") : "";
+      rig.userData.tag.userData.draw({ title: character.name[vi()], sub: character.propName[vi()], hp: h ? h.hp / limits.heroHp : 1, badge });
+    });
+  }
+  function applySnapshot(next) {
+    const lineupChanged = JSON.stringify(next.lineup || {}) !== JSON.stringify(snapshot.lineup);
+    snapshot = { ...snapshot, ...next };
+    if (lineupChanged) placeRigs();
+    Object.entries(characters).forEach(([key, rig]) => {
+      const h = snapshot.heroes?.[key];
+      rig.userData.selectRing.visible = key === snapshot.selected;
+      rig.userData.focusRing.visible = key !== "boss" && key === snapshot.boss.focus;
+      rig.userData.blockDome.visible = Boolean(h && (h.blocking || h.parrying));
+      rig.userData.shieldDome.visible = Boolean(h?.shielded);
+      const down = key === "boss" ? snapshot.boss.hp <= 0 : h?.hp <= 0;
+      rig.userData.body.rotation.z = down ? 1.35 : 0; rig.userData.body.position.y = down ? .3 : rig.userData.body.position.y;
+      rig.userData.down = down;
+      if (key === "archer" && h) rig.userData.drawing = h.draw !== "rest" && h.connected;
+    });
+    if (boss) boss.userData.visor.material.emissiveIntensity = snapshot.boss.taunted ? 4.5 : snapshot.boss.hp < (gameplay.limits.bossHp / 3) ? 3.5 : 2.2;
+    const ids = new Set((snapshot.traps || []).map(trap => trap.id));
+    for (const [id, mesh] of traps) if (!ids.has(id)) { arenaWorld.scene.remove(mesh); traps.delete(id); }
+    for (const trap of snapshot.traps || []) if (!traps.has(trap.id)) {
+      const mesh = new THREE.Group();
+      const disc = new THREE.Mesh(new THREE.CylinderGeometry(.34, .4, .06, 6), material(0x2b2140, { metalness: .4 })); disc.position.y = .04;
+      const rune = new THREE.Mesh(new THREE.RingGeometry(.2, .3, 6), glow(hex(roster.assassin.color), .9)); rune.rotation.x = -Math.PI / 2; rune.position.y = .08;
+      mesh.add(disc, rune); mesh.position.set(.9, 0, 1.25); arenaWorld.scene.add(mesh); traps.set(trap.id, mesh);
+    }
+    drawTags();
+  }
+  const chestOf = rig => rig.localToWorld(tmp.set(0, 1.25, 0)).clone();
+  const aboveTag = rig => rig.position.clone().add(new THREE.Vector3(0, rig === boss ? 3.55 : 3.15, 0));
+  function pulseLeds(rig, seconds = .5, strength = 4) {
+    [...(rig.userData.leds || []), rig.userData.chestLed, rig.userData.visor].forEach(mesh => { mesh.userData.flashUntil = arenaTime + seconds; mesh.userData.flashStrength = strength; });
+  }
+  function addEffect(effect) { effect.age = 0; effects.push(effect); return effect; }
+  function orb(color, size = .13) {
+    const mesh = new THREE.Mesh(new THREE.SphereGeometry(size, 16, 12), material(color, { emissive: true, emissiveIntensity: 3, metalness: 0 }));
+    arenaWorld.scene.add(mesh); return mesh;
+  }
+  function projectile({ from, to, color, duration, lost, arc = 1.1, arrow = false, size = .13, done }) {
+    let mesh;
+    if (arrow) {
+      mesh = new THREE.Group();
+      const shaft = new THREE.Mesh(new THREE.CylinderGeometry(.025, .025, .9, 8), material(0xe7f3f5, { metalness: .2 }));
+      const head = new THREE.Mesh(new THREE.ConeGeometry(.07, .2, 10), material(color, { emissive: true, emissiveIntensity: 3 })); head.position.y = .52;
+      const halo = new THREE.Mesh(new THREE.SphereGeometry(size, 12, 10), glow(color, .45)); halo.position.y = .42;
+      const trail = new THREE.Mesh(new THREE.CylinderGeometry(size * .55, 0, 1.6, 12, 1, true), glow(color, .55)); trail.position.y = -.45;
+      mesh.add(shaft, head, halo, trail); mesh.scale.setScalar(1.35); arenaWorld.scene.add(mesh);
+    } else mesh = orb(lost ? 0xef6b68 : color, size);
+    const end = lost ? from.clone().lerp(to, .55) : to.clone(); const prev = from.clone();
+    return addEffect({ duration, update(t) {
+      const eased = 1 - Math.pow(1 - t, 3);
+      mesh.position.lerpVectors(from, end, eased); mesh.position.y += Math.sin(t * Math.PI) * arc;
+      if (arrow) { const dir = mesh.position.clone().sub(prev); if (dir.lengthSq() > 1e-6) mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize()); }
+      prev.copy(mesh.position);
+      if (lost) mesh.scale.setScalar(Math.max(.15, 1 - t * .9));
+    }, dispose() { arenaWorld.scene.remove(mesh); done?.(); } });
+  }
+  function ringPulse({ position, color, from = .3, to = 2, duration = .7, y = .08, width = .09, opacity = .9 }) {
+    const mesh = new THREE.Mesh(new THREE.RingGeometry(1 - width, 1, 64), flat(color, opacity)); mesh.rotation.x = -Math.PI / 2;
+    mesh.position.set(position.x, y, position.z); arenaWorld.scene.add(mesh);
+    return addEffect({ duration, update(t) { mesh.scale.setScalar(from + (to - from) * (1 - Math.pow(1 - t, 2))); mesh.material.opacity = opacity * (1 - t); }, dispose() { arenaWorld.scene.remove(mesh); } });
+  }
+  function cone({ toward, color, halfAngle, duration = .55, radius = 4.9 }) {
+    const angle = Math.atan2(toward.x, toward.z);
+    const mesh = new THREE.Mesh(new THREE.CircleGeometry(radius, 48, -halfAngle, halfAngle * 2), glow(color, .45));
+    mesh.rotation.x = -Math.PI / 2; mesh.rotation.z = angle - Math.PI / 2; mesh.position.y = .06; arenaWorld.scene.add(mesh);
+    return addEffect({ duration, update(t) { mesh.scale.setScalar(.25 + .75 * Math.min(1, t * 2.5)); mesh.material.opacity = .45 * (1 - t); }, dispose() { arenaWorld.scene.remove(mesh); } });
+  }
+  function sparkles({ rig, color, duration = 1.1, count = 14 }) {
+    const group = new THREE.Group(); const items = [];
+    for (let i = 0; i < count; i++) {
+      const mesh = new THREE.Mesh(new THREE.OctahedronGeometry(.05, 0), flat(color, .95));
+      const angle = i / count * Math.PI * 2; mesh.userData.seed = [Math.cos(angle) * .45, Math.sin(angle) * .45, Math.random() * .5];
+      group.add(mesh); items.push(mesh);
+    }
+    arenaWorld.scene.add(group);
+    return addEffect({ duration, update(t) { group.position.copy(rig.position); items.forEach(mesh => { const [x, z, d] = mesh.userData.seed; mesh.position.set(x, .2 + (t + d) * 1.9, z); mesh.material.opacity = 1 - t; mesh.rotation.y += .2; }); }, dispose() { arenaWorld.scene.remove(group); } });
+  }
+  function floatText({ position, text, color, duration = 1.2, size = 92 }) {
+    const canvas = document.createElement("canvas"); canvas.width = 384; canvas.height = 160;
+    const ctx = canvas.getContext("2d"); ctx.textAlign = "center"; ctx.font = `900 ${size}px system-ui, sans-serif`; ctx.lineWidth = 10; ctx.strokeStyle = "rgba(4,13,18,.9)";
+    ctx.strokeText(text, 192, 112); ctx.fillStyle = color; ctx.fillText(text, 192, 112);
+    const texture = new THREE.CanvasTexture(canvas); texture.colorSpace = THREE.SRGBColorSpace;
+    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false, depthWrite: false }));
+    sprite.scale.set(1.5, .62, 1); sprite.renderOrder = 30; sprite.position.copy(position); arenaWorld.scene.add(sprite);
+    return addEffect({ duration, update(t) { sprite.position.y = position.y + t * .8; sprite.material.opacity = 1 - Math.max(0, t - .55) / .45; }, dispose() { arenaWorld.scene.remove(sprite); } });
+  }
+  function lunge(rig, target, duration = .42, reach = .45, armAmount = 1.1) {
+    const home = rig.userData.home.clone(); const goal = home.clone().lerp(target, reach); goal.y = 0;
+    const arm = rig.userData.arms.right; const base = arm.userData.basePose[0];
+    return addEffect({ duration, update(t) { const k = Math.sin(t * Math.PI); rig.position.lerpVectors(home, goal, k); arm.rotation.x = base - k * armAmount; }, dispose() { rig.position.copy(rig.userData.home); arm.rotation.x = base; } });
+  }
+  function swing(rig, duration = .5, amount = 1.6, side = "right") {
+    const arm = rig.userData.arms[side]; const base = arm.userData.basePose[0];
+    return addEffect({ duration, update(t) { arm.rotation.x = base - Math.sin(t * Math.PI) * amount; }, dispose() { arm.rotation.x = base; } });
+  }
+  function knockback(rig, duration = .7) {
+    const home = rig.userData.home.clone(); const away = home.clone().setY(0).normalize().multiplyScalar(.9).add(home);
+    return addEffect({ duration, update(t) { const k = t < .3 ? t / .3 : 1 - (t - .3) / .7; rig.position.lerpVectors(home, away, Math.max(0, k)); rig.userData.body.rotation.x = -.35 * Math.max(0, k); }, dispose() { rig.position.copy(rig.userData.home); rig.userData.body.rotation.x = 0; } });
+  }
+  function flinch(rig, duration = .4) {
+    return addEffect({ duration, update(t) { rig.userData.body.position.x = Math.sin(t * 40) * .06 * (1 - t); }, dispose() { rig.userData.body.position.x = 0; } });
+  }
+  function flashZone(zone) {
+    const mesh = boss?.userData.zones[zone]; if (!mesh) return;
+    mesh.userData.flashUntil = arenaTime + .6; mesh.userData.flashStrength = 7; mesh.userData.flashColor = 0xffffff;
+  }
+  function turnBossTo(key) {
+    const target = characters[key]; if (!boss || !target) return;
+    boss.userData.turnTo = Math.atan2(target.position.x, target.position.z);
+  }
+  function bossHitFx(amount, color) {
+    if (!boss || !amount) return;
+    flinch(boss, .35); ringPulse({ position: boss.position, color: hex(color), from: .5, to: 1.6, duration: .45, y: .1 });
+    floatText({ position: aboveTag(boss), text: `-${amount}`, color });
+  }
+  function heroHitFx(map = {}) {
+    Object.entries(map).forEach(([key, amount]) => {
+      const rig = characters[key]; if (!rig) return;
+      flinch(rig, .5); ringPulse({ position: rig.position, color: 0xef6b68, from: .2, to: 1.4, duration: .5, width: .2 });
+      floatText({ position: aboveTag(rig), text: `-${amount}`, color: "#ff8c86", size: 80 });
+    });
+  }
+
+  // Packet in flight: one line from a prop (or the armour) on its way to the game.
   function launchEvent(detail) {
-    const role = detail.role || fieldRole; const origin = heroes[role]?.position.clone() || heroes[fieldRole].position.clone();
-    origin.y = 1.1; const destination = new THREE.Vector3(0, 1.1, 0); const lost = Boolean(detail.lost);
-    if (lost) destination.lerpVectors(origin, destination, .55);
-    const orb = new THREE.Mesh(new THREE.SphereGeometry(.14, 12, 10), material(lost ? 0xef6b68 : roleColors[role] || 0x16a6c9, .2));
-    orb.position.copy(origin); arenaWorld.scene.add(orb);
-    attackTweens.push({ orb, start: origin, end: destination, elapsed: 0, duration: Math.max(.35, Number(detail.duration || 500) / 1000), lost });
+    const rig = characters[detail.role]; if (!rig) return;
+    const color = hex(roster[detail.role].color); const duration = Math.max(.2, Number(detail.duration || 400) / 1000);
+    const target = characters[detail.target] || boss;
+    if (detail.type === "SHOT_SEEN") { projectile({ from: chestOf(boss), to: chestOf(characters.archer), color: 0xf2fbfd, duration, lost: detail.lost, arc: .5, size: .08 }); return; }
+    pulseLeds(rig, duration + .2);
+    if (detail.action === "DRAW_START") rig.userData.drawing = true;
+    if (detail.action === "FIRE") {
+      rig.userData.drawing = false;
+      // The coded IR shot itself is not a network packet: it reaches the armour almost at once.
+      projectile({ from: chestOf(rig), to: chestOf(boss), color, duration: .5, arc: .3, arrow: true });
+    }
+    projectile({ from: chestOf(rig).add(new THREE.Vector3(0, .6, 0)), to: chestOf(target).add(new THREE.Vector3(0, .6, 0)), color, duration, lost: detail.lost, arc: .7, size: .07 });
   }
-  function setBossHp(value) {
-    bossHp = value; const ratio = Math.max(.25, bossHp / 520);
-    boss.scale.y = .8 + ratio * .2;
-    boss.children.forEach(child => { if (child.material?.emissive) { child.material.emissive.setHex(bossHp < 175 ? 0xef6b68 : 0); child.material.emissiveIntensity = bossHp < 175 ? .4 : 0; } });
+  // Accepted / refused / expired results from the game side.
+  function impactEvent(detail) {
+    const key = detail.key; const rig = characters[key]; const o = detail.outcome || {};
+    if (detail.kind === "trap") { bossHitFx(detail.bossDamage, roster.assassin.color); ringPulse({ position: new THREE.Vector3(.9, 0, 1.25), color: hex(roster.assassin.color), from: .2, to: 1.8, duration: .6, width: .25 }); return; }
+    if (detail.kind === "expired") { floatText({ position: aboveTag(boss).add(new THREE.Vector3(1.1, -.6, 0)), text: "MISS", color: "#9fb4ba", size: 70 }); return; }
+    if (detail.kind !== "accepted" || !rig) return;
+    const color = hex(roster[key].color); const target = characters[snapshot.boss.focus] || characters.archer;
+    switch (detail.fx) {
+      case "block": ringPulse({ position: rig.position, color, from: .4, to: 1.2, duration: .4 }); break;
+      case "taunt": turnBossTo(key); swing(rig, .5, -.8, "left"); ringPulse({ position: rig.position, color: 0xef6b68, from: .4, to: 2.4, duration: .9 }); ringPulse({ position: boss.position, color, from: 1.8, to: .6, duration: .7 }); break;
+      case "hit": flashZone(o.zone); bossHitFx(o.bossDamage, roster.archer.color); break;
+      case "melee": lunge(rig, boss.position, .42, .5); setTimeout(() => bossHitFx(o.bossDamage, roster[key].color), 200); break;
+      case "dash": lunge(rig, boss.position, .55, .72, 1.4); ringPulse({ position: rig.position, color, from: .3, to: 1.3, duration: .5 }); setTimeout(() => bossHitFx(o.bossDamage, roster[key].color), 260); break;
+      case "heavy": lunge(rig, boss.position, .55, .62, 1.8); ringPulse({ position: rig.position, color, from: .3, to: 1.3, duration: .5 }); setTimeout(() => bossHitFx(o.bossDamage, roster[key].color), 260); break;
+      case "trap": swing(rig, .4, .7, "left"); break;
+      case "heal": {
+        swing(rig, .5, .9); const healed = characters[o.healed?.target];
+        if (healed) { sparkles({ rig: healed, color }); ringPulse({ position: healed.position, color, from: .2, to: .9, duration: .8 }); floatText({ position: aboveTag(healed), text: `+${o.healed.amount}`, color: roster[key].color, size: 80 }); }
+        break;
+      }
+      case "bolt": swing(rig, .4, 1.1); projectile({ from: chestOf(rig).add(new THREE.Vector3(0, .8, 0)), to: chestOf(boss), color, duration: .35, arc: .3, size: .18, done: () => bossHitFx(o.bossDamage, roster[key].color) }); break;
+      case "team-shield": swing(rig, .6, 1.3); Object.values(characters).filter(item => item !== boss && !item.userData.bench).forEach(item => ringPulse({ position: item.position, color, from: .2, to: 1.1, duration: .7 })); break;
+      case "sweep": turnBossTo(snapshot.boss.focus); swing(boss, .55, 1.9); cone({ toward: target.position, color: 0xef6b68, halfAngle: THREE.MathUtils.degToRad(75) }); setTimeout(() => heroHitFx(o.heroDamage), 180); break;
+      case "slam": swing(boss, .6, 2.4); ringPulse({ position: boss.position, color: 0xef6b68, from: .6, to: 5.2, duration: .7, width: .14 }); (o.knockback || []).forEach(hero => characters[hero] && knockback(characters[hero])); break;
+      case "mark": turnBossTo(snapshot.boss.focus); swing(boss, .4, 1.0); projectile({ from: chestOf(boss).add(new THREE.Vector3(0, .5, 0)), to: chestOf(target), color: 0xef6b68, duration: .4, arc: .6, size: .16, done: () => heroHitFx(o.heroDamage) }); break;
+      case "phase": swing(boss, .8, 2.6); pulseLeds(boss, 1.2, 8); ringPulse({ position: boss.position, color: 0x8a5cf0, from: .5, to: 5.6, duration: 1.0, width: .3 }); ringPulse({ position: boss.position, color: 0xef6b68, from: .3, to: 4.6, duration: .8, width: .1 }); setTimeout(() => heroHitFx(o.heroDamage), 300); break;
+      default: if (o.bossDamage) bossHitFx(o.bossDamage, roster[key].color);
+    }
+    if (detail.fx === "block" || detail.fx === "taunt") pulseLeds(rig, .6, 5);
   }
-  $("#arenaRoleChips").addEventListener("click", event => { const button = event.target.closest("[data-field-role]"); if (button) { selectFieldRole(button.dataset.fieldRole); window.dispatchEvent(new CustomEvent("atlas-select-field-role", { detail: { role: button.dataset.fieldRole } })); } });
+
+  const arenaRaycaster = new THREE.Raycaster(); const arenaPointer = new THREE.Vector2(); let arenaPointerStart = null;
+  arenaWorld.renderer.domElement.addEventListener("pointerdown", event => { arenaPointerStart = [event.clientX, event.clientY]; });
+  arenaWorld.renderer.domElement.addEventListener("pointerup", event => {
+    const moved = arenaPointerStart ? Math.hypot(event.clientX - arenaPointerStart[0], event.clientY - arenaPointerStart[1]) : 0; arenaPointerStart = null;
+    if (moved > 6) return;
+    const rect = arenaWorld.renderer.domElement.getBoundingClientRect();
+    arenaPointer.set((event.clientX - rect.left) / rect.width * 2 - 1, -((event.clientY - rect.top) / rect.height) * 2 + 1);
+    arenaRaycaster.setFromCamera(arenaPointer, arenaWorld.camera);
+    const hit = arenaRaycaster.intersectObjects(Object.values(characters), true).find(item => item.object.isMesh);
+    let node = hit?.object; while (node && !node.userData?.character) node = node.parent;
+    if (node) window.dispatchEvent(new CustomEvent("atlas-select-field-role", { detail: { role: node.userData.key } }));
+  });
   document.querySelectorAll("[data-arena-view]").forEach(button => button.addEventListener("click", () => {
     const mode = button.dataset.arenaView;
     document.querySelectorAll("[data-arena-view]").forEach(item => item.classList.toggle("is-active", item === button));
     arenaRoot.classList.toggle("is-hidden", mode !== "three"); $("#arena").classList.toggle("is-hidden", mode !== "logic");
     $("#arenaViewStatus").textContent = mode === "three" ? "3D EVENT REPLAY" : "LOGIC / PACKET MAP";
   }));
-  $("#threeArenaLoading")?.remove(); selectFieldRole("archer");
+  $("#threeArenaLoading")?.remove();
+  placeRigs(); applySnapshot(window.AtlasFieldUI?.snapshot() || snapshot);
 
   window.addEventListener("atlas-prop-change", event => rebuildProp(event.detail?.prop));
   window.addEventListener("atlas-select-prop-part", event => {
@@ -517,15 +846,16 @@ function startThreeLab(THREE, OrbitControls) {
     if (detail.prop && detail.prop !== currentProp) rebuildProp(detail.prop);
     if (detail.modelKey && modelKeys().includes(detail.modelKey)) selectPartManually(detail.modelKey);
   });
-  window.addEventListener("atlas-language-change", refreshPropLabels);
+  window.addEventListener("atlas-language-change", () => { refreshPropLabels(); drawTags(); });
   window.addEventListener("atlas-guided-step-change", event => applyGuidedStep(event.detail?.prop, event.detail?.step));
   window.addEventListener("atlas-guardian-fit-change", event => {
     guardianDiameter = Number(event.detail?.diameterCm || 50);
     if (currentProp === "guardian" && propModel) propModel.scale.setScalar(guardianDiameter / 50);
   });
   window.addEventListener("atlas-field-action", event => launchEvent(event.detail || {}));
-  window.addEventListener("atlas-field-state", event => setBossHp(Number(event.detail?.bossHp ?? 520)));
-  window.addEventListener("atlas-field-reset", () => { attackTweens.forEach(item => arenaWorld.scene.remove(item.orb)); attackTweens = []; setBossHp(520); });
+  window.addEventListener("atlas-field-impact", event => impactEvent(event.detail || {}));
+  window.addEventListener("atlas-field-state", event => applySnapshot(event.detail || {}));
+  window.addEventListener("atlas-field-reset", () => { effects.forEach(effect => effect.dispose?.()); effects = []; if (boss) boss.userData.turnTo = 0; });
   if (window.ATLAS_PENDING_PART) {
     const pending = window.ATLAS_PENDING_PART;
     if (pending.prop && pending.prop !== currentProp) rebuildProp(pending.prop);
@@ -533,16 +863,44 @@ function startThreeLab(THREE, OrbitControls) {
     window.ATLAS_PENDING_PART = null;
   }
 
-  function animate() {
-    requestAnimationFrame(animate);
-    const delta = Math.min(arenaClock.getDelta(), .05);
-    propModel?.rotateY(.0012);
-    attackTweens = attackTweens.filter(tween => {
-      tween.elapsed += delta; const progress = Math.min(1, tween.elapsed / tween.duration); const eased = 1 - Math.pow(1 - progress, 3);
-      tween.orb.position.lerpVectors(tween.start, tween.end, eased); tween.orb.position.y += Math.sin(progress * Math.PI) * 1.4;
-      if (progress < 1) return true;
-      arenaWorld.scene.remove(tween.orb); return false;
+  function animateCharacters(delta) {
+    const time = arenaTime;
+    Object.values(characters).forEach(rig => {
+      const { body, phase } = rig.userData;
+      if (!rig.userData.down) body.position.y = Math.sin(time * 2.2 + phase) * .025;
+      if (rig.userData.selectRing.visible) rig.userData.selectRing.rotation.z += delta * .8;
+      rig.userData.focusRing.rotation.z -= delta * 1.6;
+      if (rig.userData.key === "archer") {
+        // Drawing the bow pulls the string hand back; release snaps it forward.
+        const arm = rig.userData.arms.right; const target = arm.userData.basePose[1] + (rig.userData.drawing ? -.75 : 0);
+        arm.rotation.y += (target - arm.rotation.y) * Math.min(1, delta * 12);
+      }
     });
+    if (boss && boss.userData.turnTo !== undefined) {
+      const turn = Math.atan2(Math.sin(boss.userData.turnTo - boss.rotation.y), Math.cos(boss.userData.turnTo - boss.rotation.y));
+      boss.rotation.y += turn * Math.min(1, Math.max(0, delta * 6));
+    }
+    for (const mesh of traps.values()) mesh.children[1].rotation.z += delta * 2;
+    arenaWorld.scene.traverse(object => {
+      if (!object.isMesh || object.userData.flashUntil === undefined) return;
+      const active = time < object.userData.flashUntil;
+      const base = object.userData.baseEmissiveIntensity || 0;
+      object.material.emissiveIntensity = active ? base + object.userData.flashStrength * (.6 + .4 * Math.sin(time * 30)) : base;
+      if (object.userData.flashColor !== undefined && object.material.emissive) object.material.emissive.setHex(active ? object.userData.flashColor : object.userData.baseEmissive || 0);
+      if (!active) delete object.userData.flashUntil;
+    });
+  }
+
+  function animate(now = performance.now()) {
+    requestAnimationFrame(animate);
+    const rawDelta = lastFrameAt === undefined ? 0 : Math.max(0, (now - lastFrameAt) / 1000); lastFrameAt = now; arenaTime += Math.min(rawDelta, .25);
+    const delta = Math.min(rawDelta, .05); const effectDelta = Math.min(rawDelta, .25);
+    propModel?.rotateY(.0012);
+    effects = effects.filter(effect => {
+      effect.age += effectDelta; const t = Math.min(1, Math.max(0, effect.age / effect.duration)); effect.update(t);
+      if (t < 1) return true; effect.dispose?.(); return false;
+    });
+    animateCharacters(delta);
     propWorld.controls.update(); arenaWorld.controls.update();
     propWorld.renderer.render(propWorld.scene, propWorld.camera); arenaWorld.renderer.render(arenaWorld.scene, arenaWorld.camera);
   }
