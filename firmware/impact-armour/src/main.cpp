@@ -1,7 +1,9 @@
-// Shared Hero/Boss impact armour — Hardware Gate 01 bench firmware (MKE-K01 ESP32-S3).
+// Shared Hero/Boss impact armour — Hardware Gate 01 bench firmware (MKE-K01 or
+// ESP32-S3-DevKitC-1).
 // Three TSOP38238 receivers decode the Arc Bow's NEC-style packet on interrupts, so the
 // zone that saw a shot is known. Reports SHOT_SEEN / HIT_REJECT over USB serial; Unity
 // decides HIT_CONFIRM and damage. No library beyond the Arduino core.
+// Bench command: '?' prints ATLAS_PROP_INFO (device id + receiver pins) without a reboot.
 #include <Arduino.h>
 
 namespace Pins {
@@ -166,6 +168,11 @@ void handleFrame(const Frame &frame) {
   pendingSince = frame.atMs;
 }
 
+void printIdentity(const char *banner) {
+  Serial.printf("%s v1 impact-armour-01 zones=left:%u,chest:%u,right:%u\n", banner, Pins::ReceiverLeft,
+                Pins::ReceiverChest, Pins::ReceiverRight);
+}
+
 void setup() {
   Serial.begin(115200);
   for (uint8_t pin : zonePins) pinMode(pin, INPUT_PULLUP);  // TSOP output idles high
@@ -173,11 +180,13 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(Pins::ReceiverChest), onFallChest, FALLING);
   attachInterrupt(digitalPinToInterrupt(Pins::ReceiverRight), onFallRight, FALLING);
   setStatus(0, 10, 0);
-  Serial.printf("ATLAS_PROP_READY v1 impact-armour-01 zones=left:%u,chest:%u,right:%u\n", Pins::ReceiverLeft,
-                Pins::ReceiverChest, Pins::ReceiverRight);
+  printIdentity("ATLAS_PROP_READY");
 }
 
 void loop() {
+  while (Serial.available() > 0) {
+    if (Serial.read() == '?') printIdentity("ATLAS_PROP_INFO");
+  }
   const uint32_t now = millis();
   Frame frame;
   while (popFrame(frame)) handleFrame(frame);

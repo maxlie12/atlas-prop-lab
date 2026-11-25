@@ -794,3 +794,21 @@ footer { max-width: 1600px; margin: 0 auto; padding: 22px clamp(18px,4vw,56px); 
 }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto!important; animation-duration: .01ms!important; animation-iteration-count: 1!important; transition-duration: .01ms!important; } }
+
+/* Field signal source: simulation / real boards / replayed log */
+.signal-source { grid-column: 1 / -1; margin: 4px 0 18px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: #08161d; }
+.signal-modes { margin-top: 10px; }
+.signal-modes button { flex: 1; }
+.signal-note { margin: 10px 0 0; color: var(--muted); font-size: .66rem; line-height: 1.5; }
+.signal-live[hidden], .signal-replay[hidden] { display: none; }
+.signal-boards { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.signal-boards span { display: inline-flex; align-items: center; gap: 6px; padding: 5px 9px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font: 700 .62rem ui-monospace, monospace; }
+.signal-boards span i { width: 7px; height: 7px; border-radius: 50%; background: var(--line-strong); }
+.signal-boards span[data-on="true"] { color: var(--green); border-color: rgba(57,204,147,.4); }
+.signal-boards span[data-on="true"] i { background: var(--green); box-shadow: 0 0 8px var(--green); }
+.signal-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; }
+.signal-row small { color: var(--muted); font: .62rem ui-monospace, monospace; flex: 1; }
+.signal-replay textarea { width: 100%; margin-top: 10px; padding: 8px; border: 1px solid var(--line); border-radius: 8px; background: #061219; color: var(--cyan-soft); font: .6rem/1.5 ui-monospace, monospace; resize: vertical; box-sizing: border-box; }
+.signal-speed { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: .64rem; white-space: nowrap; }
+.signal-speed select { padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; background: #061219; color: var(--text); font: .64rem ui-monospace, monospace; }
+.signal-summary { margin: 10px 0 0; color: var(--cyan-soft); font: .62rem/1.5 ui-monospace, monospace; }

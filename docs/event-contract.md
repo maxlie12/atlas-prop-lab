@@ -60,6 +60,8 @@ Every accepted physical action becomes one newline terminated JSON object.
 {"v":1,"deviceId":"impact-armour-01","role":"ARMOUR","seq":1,"type":"SHOT_SEEN","atMs":900,"shot":7,"shooter":1,"zone":"chest","zones":["chest","left"]}
 ```
 
+Both Gate 01 firmwares also answer bench commands with text lines that never start with `{` (`ATLAS_PROP_INFO`, `ATLAS_HALL`, `ATLAS_HALL_MONITOR`, `ATLAS_HALL_REST`); see [hardware-gate-01.md](hardware-gate-01.md#bench-commands). Consumers must skip non-JSON lines, and only `ATLAS_PROP_READY` (printed once at boot) marks a reboot — `ATLAS_PROP_INFO` does not. The `ATLAS_PROP_READY`/`INFO` lines name the board's pins (`hall=4 ir=5` or `zones=left:6,chest:7,right:8`) so a bench tool can check them against the wiring.
+
 The armour never decides damage. The game confirms `HIT_CONFIRM` only when a `SHOT_SEEN` matches an open `FIRE` with the same `shot` inside its confirm window, once per shot. `HIT_REJECT` (invalid code) and `DUPLICATE_IGNORED` are diagnostics.
 
 Local cooldown rejection is diagnostic output and must not enter gameplay:

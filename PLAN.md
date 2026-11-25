@@ -63,6 +63,15 @@ Prove the complete path from a physical action on an ESP32 prop to a game event 
 - Final enclosure, switches, connectors, and physical safety.
 - Reliable radio range around people, costumes, props, and nearby WiFi networks.
 
+## Gate 01 hardware-ready — revision 0.14
+
+- Assembly guide READY: 25 bilingual steps in delivery order with safety ordering validated (flash bare boards, short check before power, meter AO before GPIO, identify E-B-C and pinouts before wiring).
+- Two-stage bench READY: campaign 01 can be recorded with only the bow core on the breadboard; campaign 02 still needs all five checks.
+- Board check READY: identity, pin map and Hall rest level verified on connect; live Hall bar for magnet placement.
+- Digital twin PASS: real bow + armour firmware through a receiver timing model — 100/100 bow, 100/100 hits at ~107 ms through the web judge; reflections, foreign codes, noise, release bounce and let-down covered. Decoder margin ≈ 195 µs edge jitter.
+- Live/Replay READY: real lines drive the 3D arena; replays are rehearsals only. Bridge preview fixed for reboots and reused shot ids.
+- Physical evidence remains EMPTY: nothing in this revision is a hardware measurement.
+
 ## Six-role sync — revision 0.13
 
 - Gameplay roster READY: one roster for the field simulator, logic map, 3D arena and ESP32 lab; Hero seats 1–4 + reserve Warrior + Dark Knight, matching docs/unity-bridge.md and docs/event-kit-v1.md.

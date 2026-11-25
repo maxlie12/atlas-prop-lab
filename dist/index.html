@@ -22,7 +22,7 @@
         <button type="button" data-language="vi">VI</button>
         <button type="button" data-language="en" class="is-active">EN</button>
       </div>
-      <div class="header-status"><i></i><span id="headerStatusText">V0.13 SIX-ROLE SYNC</span></div>
+      <div class="header-status"><i></i><span id="headerStatusText">V0.14 GATE 01 READY</span></div>
     </header>
 
     <nav class="mode-tabs" aria-label="Lab views">
@@ -339,6 +339,16 @@
           <div class="physical-gate-footer"><p id="physicalGateBoundary">Nguồn bán chỉ là đường dẫn tham chiếu. Phải đối chiếu đúng mã linh kiện và đo điện áp trước khi nối ESP32.</p><a class="button secondary" href="#physicalWiring" id="openPhysicalWiring">Tiếp theo: xem sơ đồ dây</a></div>
         </section>
 
+        <section class="panel gate01-assembly-panel" id="gate01Assembly" aria-labelledby="gate01AssemblyTitle">
+          <div class="panel-toolbar gate01-assembly-toolbar">
+            <div><span class="panel-label" id="gate01AssemblyLabel">GATE 01 / LẮP TỪNG BƯỚC</span><strong id="gate01AssemblyTitle">Hàng về là cắm theo thứ tự này</strong></div>
+            <span class="mono-pill" id="gate01AssemblyStatus">0 / 25 BƯỚC</span>
+          </div>
+          <p class="gate01-assembly-note" id="gate01AssemblyNote">Chân GPIO lấy từ Sơ đồ dây bên dưới.</p>
+          <div class="gate01-assembly-phases" id="gate01AssemblyPhases"></div>
+          <div class="physical-gate-footer"><p></p><div class="gate01-assembly-actions"><button type="button" class="button secondary" id="gate01AssemblyPrint">Tải bản in (.md)</button><button type="button" class="button ghost" id="gate01AssemblyReset">Bỏ tick tất cả</button></div></div>
+        </section>
+
         <section class="panel physical-wiring-panel" id="physicalWiring" aria-labelledby="physicalWiringTitle">
           <div class="panel-toolbar physical-wiring-toolbar">
             <div><span class="panel-label" id="physicalWiringLabel">BENCH WIRING / USB ONLY</span><strong id="physicalWiringTitle">Sơ đồ dây an toàn trước khi cấp nguồn</strong></div>
@@ -372,6 +382,13 @@
               <button type="button" class="secondary-button" id="benchConnectBow">Kết nối cung</button>
               <button type="button" class="secondary-button" id="benchConnectArmour">Kết nối giáp</button>
               <span class="mono-pill" id="benchSerialStatus">CHƯA KẾT NỐI</span>
+            </div>
+            <div class="bench-boards" id="benchBoards" aria-live="polite"></div>
+            <div class="bench-hall" id="benchHall" hidden>
+              <div class="bench-hall-head"><strong id="benchHallTitle">Hall trực tiếp (cung)</strong><span id="benchHallValues">—</span></div>
+              <div class="bench-hall-track"><i id="benchHallBar"></i><b id="benchHallStart" title="START"></b><b id="benchHallReady" title="READY"></b></div>
+              <div class="bench-hall-actions"><button type="button" class="secondary-button" id="benchHallToggle">Đo Hall trực tiếp</button><button type="button" class="secondary-button" id="benchHallRest">Đặt lại mức nghỉ</button></div>
+              <small id="benchHallHint"></small>
             </div>
             <ol class="bench-serial-log" id="benchSerialLog"></ol>
           </div>
@@ -837,6 +854,28 @@
               <div><span>Lost</span><strong id="lostMetric">0</strong></div>
               <div><span>Avg latency</span><strong id="avgMetric">—</strong></div>
             </div>
+            <div class="signal-source" id="signalSource">
+              <div class="panel-label" id="signalSourceLabel">Nguồn tín hiệu</div>
+              <div class="segmented-control signal-modes" role="group" aria-label="Signal source">
+                <button type="button" class="is-active" data-signal="sim">Mô phỏng</button>
+                <button type="button" data-signal="live">Board thật</button>
+                <button type="button" data-signal="replay">Phát lại log</button>
+              </div>
+              <p class="signal-note" id="signalSourceNote"></p>
+              <div class="signal-live" id="signalLive" hidden>
+                <div class="signal-boards" id="signalBoards"></div>
+                <div class="signal-row"><small id="signalSessionCount">0</small><button type="button" class="button ghost compact" id="signalDownload">Tải log phiên</button></div>
+              </div>
+              <div class="signal-replay" id="signalReplay" hidden>
+                <textarea id="replayInput" rows="6" spellcheck="false" aria-label="Serial log to replay"></textarea>
+                <div class="signal-row">
+                  <button type="button" class="button ghost compact" id="replaySample">Log mẫu</button>
+                  <label class="signal-speed"><span id="replaySpeedLabel">Tốc độ</span><select id="replaySpeed"><option value="1">1× thật</option><option value="2">2×</option><option value="4">4×</option></select></label>
+                  <button type="button" class="button secondary compact" id="replayRun">Phát lại</button>
+                </div>
+                <p class="signal-summary" id="replaySummary" aria-live="polite"></p>
+              </div>
+            </div>
             <div class="panel-label log-label">Event stream</div>
             <ol id="eventLog" class="event-log" aria-live="polite"></ol>
           </aside>
@@ -845,7 +884,7 @@
 
     </main>
 
-    <footer><span>ATLAS / PROP SYSTEMS</span><span>Planner revision 0.13 · Hardware proof workflow, not field certification</span></footer>
+    <footer><span>ATLAS / PROP SYSTEMS</span><span>Planner revision 0.14 · Hardware proof workflow, not field certification</span></footer>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <script src="prop-manifests.js"></script>
     <script src="gameplay-roster.js"></script>
@@ -863,7 +902,9 @@
     <script src="physical-gate-ui.js"></script>
     <script src="physical-wiring.js"></script>
     <script src="bench-evidence.js"></script>
-<script src="bench-serial.js"></script>
+    <script src="bench-serial.js"></script>
+    <script src="gate01-assembly.js"></script>
+    <script src="field-live.js"></script>
     <script src="armour-fit.js"></script>
     <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"}}</script>
     <script type="module" src="three-lab.js"></script>

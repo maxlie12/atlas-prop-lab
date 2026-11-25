@@ -1,6 +1,12 @@
-// Arc Bow — Hardware Gate 01 bench firmware (MKE-K01 ESP32-S3).
+// Arc Bow — Hardware Gate 01 bench firmware (MKE-K01 or ESP32-S3-DevKitC-1).
 // Hall draw sensing -> DRAW_START / DRAW_READY / FIRE over USB serial, plus one coded
 // 38 kHz IR packet per FIRE for the impact armour. No library beyond the Arduino core.
+//
+// Bench commands (one character over serial, ignored by the Unity bridge):
+//   ?  print ATLAS_PROP_INFO with device id, pins, rest level and thresholds
+//   h  toggle ATLAS_HALL lines (10 Hz raw reading) for placing the magnet
+//   r  re-measure the rest level (string must be at rest)
+// Text lines never start with '{', so JSON consumers skip them.
 #include <Arduino.h>
 
 namespace Pins {
@@ -25,6 +31,9 @@ uint32_t sequenceNumber = 0;
 uint8_t shotId = 0;
 uint32_t lastFireAt = 0;
 uint32_t lastSampleAt = 0;
+bool hallMonitor = false;
+uint32_t lastMonitorAt = 0;
+int lastRaw = 0;
 
 void emit(const char *action, uint32_t now, int deviation) {
   Serial.printf(
@@ -66,8 +75,46 @@ void sendPacket(uint8_t address, uint8_t command) {
   space(0);
 }
 
-int readDeviation() {
-  return abs(analogRead(Pins::HallAnalog) - restLevel);
+const char *drawName() {
+  return draw == Draw::Rest ? "rest" : draw == Draw::Drawing ? "drawing" : "ready";
+}
+
+// banner = "ATLAS_PROP_READY" at boot; "ATLAS_PROP_INFO" on request, so the bridge does not
+// mistake a bench query for a reboot.
+void printIdentity(const char *banner) {
+  Serial.printf("%s v1 archer-bow-01 hall=%u ir=%u hallRest=%d start=%u ready=%u\n", banner, Pins::HallAnalog,
+                Pins::IrTx, restLevel, Tuning::DrawStartCounts, Tuning::DrawReadyCounts);
+}
+
+int measureRest() {
+  long sum = 0;
+  for (int i = 0; i < 64; i++) {
+    sum += analogRead(Pins::HallAnalog);
+    delay(2);
+  }
+  return static_cast<int>(sum / 64);
+}
+
+void handleCommand(char command) {
+  switch (command) {
+    case '?':
+      printIdentity("ATLAS_PROP_INFO");
+      break;
+    case 'h':
+      hallMonitor = !hallMonitor;
+      Serial.printf("ATLAS_HALL_MONITOR %s\n", hallMonitor ? "on" : "off");
+      break;
+    case 'r':
+      if (draw != Draw::Rest) {
+        Serial.print("ATLAS_HALL_REST busy: release the string first\n");
+        break;
+      }
+      restLevel = measureRest();
+      printIdentity("ATLAS_PROP_INFO");
+      break;
+    default:
+      break;
+  }
 }
 
 void setup() {
@@ -77,23 +124,24 @@ void setup() {
   analogReadResolution(12);
 
   // Calibrate the undrawn rest level; the string must be at rest during boot.
-  long sum = 0;
-  for (int i = 0; i < 64; i++) {
-    sum += analogRead(Pins::HallAnalog);
-    delay(2);
-  }
-  restLevel = static_cast<int>(sum / 64);
+  restLevel = measureRest();
   setStatus(0, 0, 12);
-  Serial.printf("ATLAS_PROP_READY v1 archer-bow-01 hallRest=%d start=%u ready=%u\n", restLevel,
-                Tuning::DrawStartCounts, Tuning::DrawReadyCounts);
+  printIdentity("ATLAS_PROP_READY");
 }
 
 void loop() {
+  while (Serial.available() > 0) handleCommand(static_cast<char>(Serial.read()));
+
   const uint32_t now = millis();
   if (now - lastSampleAt < Tuning::SampleMs) return;
   lastSampleAt = now;
 
-  const int deviation = readDeviation();
+  lastRaw = analogRead(Pins::HallAnalog);
+  const int deviation = abs(lastRaw - restLevel);
+  if (hallMonitor && now - lastMonitorAt >= 100) {
+    lastMonitorAt = now;
+    Serial.printf("ATLAS_HALL raw=%d rest=%d dev=%d state=%s\n", lastRaw, restLevel, deviation, drawName());
+  }
   switch (draw) {
     case Draw::Rest:
       if (deviation >= Tuning::DrawStartCounts) {

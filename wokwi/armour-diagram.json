@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "author": "Atlas Prop Lab",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-s3-devkitc-1", "id": "esp", "top": 38.4, "left": 8.2, "attrs": {} },
+    { "type": "wokwi-ir-receiver", "id": "chest", "top": 60, "left": 250, "attrs": {} },
+    { "type": "wokwi-ir-remote", "id": "remote", "top": 40, "left": 360, "attrs": {} }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "chest:VCC", "esp:3V3", "#e05858", [] ],
+    [ "chest:GND", "esp:GND.1", "#5d6672", [] ],
+    [ "chest:DAT", "esp:7", "#16a6c9", [] ]
+  ],
+  "dependencies": {}
+}

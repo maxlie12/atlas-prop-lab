@@ -2,6 +2,15 @@
 
 Atlas Prop Lab is a mobile friendly design and simulation workspace for the physical ESP32 props used by Project Atlas.
 
+Revision 0.14 makes **Hardware Gate 01 ready for the parts to arrive**:
+
+- a 25-step assembly guide ordered by delivery (order 1 bow core, order 2 IR parts, then garment and coverage), with every GPIO taken from the wiring map and a printable checklist ([docs/hardware-gate-01.md](docs/hardware-gate-01.md))
+- a two-stage wiring gate: campaign 01 (bow draw/release) unlocks with the core checks plus "stage 1 · bow core only"; campaign 02 (hits) needs all five checks
+- board identity on connect: the page asks each board `?`, places it by what it is (not which button was pressed), checks its pins against the wiring map and flags a bad Hall rest level; a live Hall bar with START/READY marks and a re-measure-rest button
+- a digital twin that runs the real Arc Bow and armour firmware together through a TSOP38238 timing model, then through the web bench judge and the CSV checker (`scripts/validate-ir-link.mjs`)
+- Live/Replay in the field simulator: real boards or a saved Serial Monitor log drive the 3D arena; replays are judged as a rehearsal and never become evidence
+- the ESP32-S3-DevKitC-1 clone accepted alongside the MKE-K01 reference; Wokwi rehearsal projects for the bow and the armour; the CSV checker reads the web export
+
 Revision 0.13 synchronizes **every gameplay character** and adds the missing role firmware:
 
 - one gameplay roster (`dist/gameplay-roster.js`) shared by the field simulator, the logic map, the 3D arena and the ESP32 lab: Guardian, Archer, Assassin and Mage in Hero seats 1–4, the Warrior as the reserve kit, and the Dark Knight Boss

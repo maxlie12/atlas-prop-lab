@@ -58,6 +58,9 @@
 .wiring-calculation code { color: var(--cyan-soft); }
 .wiring-verdict { margin-top: 10px; padding: 12px; border-left: 3px solid var(--amber); background: rgba(240,180,77,.05); color: var(--amber); font: 750 .63rem ui-monospace, monospace; }
 .wiring-verdict[data-state="ready"] { color: var(--green); border-left-color: var(--green); background: rgba(57,204,147,.05); }
+.wiring-verdict[data-state="partial"] { color: var(--cyan-soft); border-left-color: var(--cyan); background: rgba(22,166,201,.06); }
+.wiring-gates label.wiring-stage { grid-column: 1 / -1; min-height: 0; border-style: dashed; border-color: var(--line-strong); color: var(--cyan-soft); }
+.wiring-gates label.wiring-stage input { accent-color: var(--cyan); }
 .wiring-gates { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; padding: 14px; border-top: 1px solid var(--line); }
 .wiring-gates label { min-height: 86px; display: grid; grid-template-columns: auto 1fr; gap: 9px; align-content: start; padding: 11px; border: 1px solid var(--line); border-radius: 9px; color: #c5d5d9; font-size: .66rem; line-height: 1.45; cursor: pointer; }
 .wiring-gates input { margin-top: 2px; accent-color: var(--green); }
@@ -143,9 +146,58 @@
 .bench-serial-head strong { color: var(--text); font-size: .8rem; }
 .bench-serial-head small { color: var(--muted); font-size: .66rem; line-height: 1.5; }
 .bench-serial-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; }
-.bench-serial-actions button { padding: 8px 12px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--panel-2); color: var(--cyan-soft); font: 700 .7rem inherit; cursor: pointer; }
+.bench-serial-actions button { padding: 8px 12px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--panel-2); color: var(--cyan-soft); font-family: inherit; font-size: .7rem; font-weight: 700; cursor: pointer; }
 .bench-serial-actions button.is-connected { border-color: var(--green); color: var(--green); }
 .bench-serial-actions button:disabled { opacity: .45; cursor: not-allowed; }
 .bench-serial-log { max-height: 132px; overflow: auto; margin: 10px 0 0; padding: 0; list-style: none; font: .62rem/1.6 ui-monospace, monospace; color: var(--muted); }
 .bench-serial-log li b { color: var(--cyan-soft); font-weight: 700; }
 .bench-serial-log li.is-error b { color: var(--red); }
+.bench-boards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+.bench-board { display: grid; gap: 3px; padding: 9px 10px; border: 1px solid var(--line); border-left: 3px solid var(--line-strong); border-radius: 8px; background: rgba(4,12,16,.5); }
+.bench-board b { color: var(--text); font: 750 .62rem ui-monospace, monospace; letter-spacing: .04em; }
+.bench-board span { color: var(--cyan-soft); font: .62rem ui-monospace, monospace; }
+.bench-board small { color: var(--muted); font-size: .62rem; line-height: 1.45; }
+.bench-board small.is-warn { color: var(--amber); }
+.bench-board[data-state="ok"] { border-left-color: var(--green); }
+.bench-board[data-state="warn"] { border-left-color: var(--amber); }
+.bench-board[data-state="empty"] span { color: var(--muted); }
+.bench-hall { margin-top: 10px; padding: 10px; border: 1px dashed var(--line-strong); border-radius: 8px; }
+.bench-hall[hidden] { display: none; }
+.bench-hall-head { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.bench-hall-head strong { color: var(--text); font-size: .72rem; }
+.bench-hall-head span { color: var(--cyan-soft); font: .62rem ui-monospace, monospace; }
+.bench-hall-track { position: relative; height: 14px; margin: 9px 0; border-radius: 7px; background: var(--panel-2, #0f222b); overflow: hidden; }
+.bench-hall-track i { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--muted); transition: width .08s linear; }
+.bench-hall-track i[data-state="drawing"] { background: var(--amber); }
+.bench-hall-track i[data-state="ready"] { background: var(--green); }
+.bench-hall-track b { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--text); opacity: .7; }
+.bench-hall-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.bench-hall-actions button { padding: 6px 10px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--panel-2); color: var(--cyan-soft); font-family: inherit; font-size: .66rem; font-weight: 700; cursor: pointer; }
+.bench-hall small { display: block; margin-top: 8px; color: var(--muted); font-size: .62rem; line-height: 1.5; }
+@media (max-width: 620px) { .bench-boards { grid-template-columns: 1fr; } }
+
+/* Gate 01 step-by-step assembly */
+.gate01-assembly-note { margin: 0; padding: 0 18px 12px; color: var(--muted); font-size: .68rem; line-height: 1.5; }
+.gate01-assembly-phases { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 18px 14px; }
+.assembly-phase { border: 1px solid var(--line); border-radius: 10px; background: rgba(4,12,16,.45); overflow: hidden; }
+.assembly-phase header { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.assembly-phase header span { grid-column: 1; color: var(--amber); font: 750 .6rem ui-monospace, monospace; letter-spacing: .08em; }
+.assembly-phase header strong { grid-column: 1; color: var(--text); font-size: .76rem; }
+.assembly-phase header em { grid-column: 2; grid-row: 1 / 3; align-self: center; color: var(--cyan-soft); font: 750 .68rem ui-monospace, monospace; font-style: normal; }
+.assembly-phase[data-complete="true"] header span, .assembly-phase[data-complete="true"] header em { color: var(--green); }
+.assembly-phase ol { margin: 0; padding: 6px; list-style: none; display: grid; gap: 4px; }
+.assembly-phase li { border-radius: 8px; padding: 7px 8px; }
+.assembly-phase li:hover { background: rgba(22,166,201,.05); }
+.assembly-phase li label { display: grid; grid-template-columns: auto auto 1fr; gap: 8px; align-items: start; cursor: pointer; }
+.assembly-phase li input { margin-top: 3px; accent-color: var(--green); }
+.assembly-phase li b { min-width: 20px; color: var(--cyan-soft); font: 750 .64rem ui-monospace, monospace; padding-top: 2px; }
+.assembly-phase li label > span { display: grid; gap: 3px; }
+.assembly-phase li label > span strong { color: var(--text); font-size: .7rem; }
+.assembly-phase li label > span span { color: #b9cbd0; font-size: .65rem; line-height: 1.5; }
+.assembly-phase li[data-done="true"] label > span strong { color: var(--green); }
+.assembly-phase li[data-done="true"] label > span span { color: var(--muted); }
+.assembly-step-extras { display: flex; gap: 10px; align-items: center; margin: 4px 0 0 52px; }
+.assembly-step-extras small { color: var(--amber); font: .58rem ui-monospace, monospace; }
+.assembly-step-extras a { color: var(--cyan-soft); font-size: .62rem; text-decoration: none; }
+.gate01-assembly-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+@media (max-width: 1100px) { .gate01-assembly-phases { grid-template-columns: 1fr; } }

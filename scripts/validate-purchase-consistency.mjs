@@ -15,7 +15,13 @@ const kitBoard = context.window.ATLAS_PHYSICAL_KIT.parts.find(part => part.id ==
 const manifestSource = read("dist/prop-manifests.js");
 const manifestPrice = manifestSource.match(/id: "mke-k01-esp32-s3"[^\n]*priceVnd: \[(\d+), (\d+)\]/);
 if (!kitBoard || !manifestPrice) failures.push("controller entry missing from physical-kit.js or prop-manifests.js");
-else if (kitBoard.priceVnd.map(total => total / kitBoard.qty).join() !== `${manifestPrice[1]},${manifestPrice[2]}`) failures.push(`controller unit price differs: bench kit ${kitBoard.priceVnd} for ${kitBoard.qty} vs manifest ${manifestPrice.slice(1)}`);
+else {
+  // The bench kit accepts the cheaper ESP32-S3-DevKitC-1 clone or the MKE-K01 reference, so its
+  // per-board range must contain the manifest's MKE-K01 price and name both boards.
+  const [low, high] = kitBoard.priceVnd.map(total => total / kitBoard.qty);
+  if (low > Number(manifestPrice[1]) || high < Number(manifestPrice[2])) failures.push(`controller unit price range ${low}–${high} does not contain the manifest MKE-K01 price ${manifestPrice.slice(1)}`);
+  if (!/MKE-K01/.test(kitBoard.name.en) || !/ESP32-S3-DevKitC-1/.test(kitBoard.name.en)) failures.push("bench kit controller must name the MKE-K01 reference and the DevKitC-1 substitute");
+}
 
 const lists = {
   "dist/app.js commonPropBom + role BOMs": read("dist/app.js").match(/const commonPropBom = \[[\s\S]*?\n\];/)[0] + (read("dist/app.js").match(/bom: \[\[.*\]\]/g) || []).join("\n"),
@@ -34,4 +40,4 @@ if (failures.length) {
   console.error(failures.join("\n"));
   process.exit(1);
 }
-console.log("Purchase consistency PASS: one MKE-K01 name and price everywhere; WS2812 lists carry a level shifter and motor lists carry a driver and flyback diode.");
+console.log("Purchase consistency PASS: MKE-K01 reference (DevKitC-1 accepted on the bench) with consistent pricing; WS2812 lists carry a level shifter and motor lists carry a driver and flyback diode.");

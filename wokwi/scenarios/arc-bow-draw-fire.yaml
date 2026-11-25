@@ -1,0 +1,17 @@
+name: 'Arc Bow draw and fire (slider stands in for the KY-024 AO)'
+version: 1
+author: 'Atlas Prop Lab'
+# The slider rests where it booted (the firmware calibrates that as rest); moving it to the
+# far end is a full draw, moving it back is the release.
+steps:
+  - wait-serial: 'ATLAS_PROP_READY v1 archer-bow-01'
+  - set-control:
+      part-id: draw
+      control: position
+      value: 1
+  - wait-serial: '"action":"DRAW_READY"'
+  - set-control:
+      part-id: draw
+      control: position
+      value: 0
+  - wait-serial: '"action":"FIRE"'
