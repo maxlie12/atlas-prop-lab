@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "author": "Atlas Prop Lab",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-s3-devkitc-1", "id": "esp", "top": 38.4, "left": 8.2, "attrs": {} },
+    { "type": "wokwi-slide-potentiometer", "id": "draw", "top": 40, "left": 230, "rotate": 270, "attrs": { "travelLength": "30" } },
+    { "type": "wokwi-resistor", "id": "irResistor", "top": 230, "left": 210, "attrs": { "value": "220" } },
+    { "type": "wokwi-led", "id": "irLed", "top": 200, "left": 300, "attrs": { "color": "purple", "label": "IR (visible stand-in)" } }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "draw:VCC", "esp:3V3", "#e05858", [] ],
+    [ "draw:GND", "esp:GND.1", "#5d6672", [] ],
+    [ "draw:SIG", "esp:4", "#f2c94c", [] ],
+    [ "esp:5", "irResistor:1", "#7057d9", [] ],
+    [ "irResistor:2", "irLed:A", "#7057d9", [] ],
+    [ "irLed:C", "esp:GND.1", "#5d6672", [] ]
+  ],
+  "dependencies": {}
+}

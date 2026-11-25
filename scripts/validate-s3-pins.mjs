@@ -54,7 +54,7 @@ for (const [, name, pin] of wiring.matchAll(/(\w+): (\d+)/g)) {
   if (name === "hall" && !adc1.has(Number(pin))) failures.push(`physical-wiring: Hall GPIO${pin} is not on ADC1`);
 }
 
-for (const diagram of ["wokwi/diagram.json", "wokwi/guardian-diagram.json"]) {
+for (const diagram of ["wokwi/diagram.json", "wokwi/guardian-diagram.json", "wokwi/arc-bow-diagram.json", "wokwi/armour-diagram.json"]) {
   const json = JSON.parse(read(diagram));
   if (json.parts[0].type !== "board-esp32-s3-devkitc-1") failures.push(`${diagram}: board must be board-esp32-s3-devkitc-1`);
   for (const connection of json.connections) for (const end of connection.slice(0, 2)) {

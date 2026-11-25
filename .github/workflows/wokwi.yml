@@ -1,4 +1,4 @@
-name: Simulate Spell Orb in Wokwi
+name: Simulate Spell Orb and Arc Bow in Wokwi
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
       - "firmware/**"
       - "wokwi/**"
       - "wokwi.toml"
+      - "wokwi-arc-bow.toml"
       - ".github/workflows/wokwi.yml"
   workflow_dispatch:
 
@@ -33,3 +34,16 @@ jobs:
           scenario: wokwi/scenarios/cast-and-special.yaml
           expect_text: '"action":"SPECIAL"'
 
+      - name: Build Arc Bow firmware
+        run: pio run --project-dir firmware/arc-bow
+      - name: Stage the Arc Bow project for Wokwi
+        run: mkdir -p /tmp/arc && cp -r firmware wokwi /tmp/arc/ && cp wokwi-arc-bow.toml /tmp/arc/wokwi.toml
+      - name: Run Arc Bow draw/fire scenario
+        if: ${{ env.WOKWI_CLI_TOKEN != '' }}
+        uses: wokwi/wokwi-ci-action@v1
+        with:
+          token: ${{ secrets.WOKWI_CLI_TOKEN }}
+          path: /tmp/arc
+          timeout: 15000
+          scenario: wokwi/scenarios/arc-bow-draw-fire.yaml
+          expect_text: '"action":"FIRE"'

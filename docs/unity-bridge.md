@@ -4,6 +4,8 @@ Copy `unity/Runtime` into the Unity project under an assembly that can reference
 
 ## Boundary
 
+Bench note (revision 0.14): the Gate 01 boards may also print `ATLAS_PROP_INFO …`, `ATLAS_HALL …` text lines when a bench tool queries them. Treat only a line that starts with `ATLAS_PROP_READY` as a reboot banner; ignore other non-JSON lines. A bow's `shot` ids are 1–255 and restart after a reboot, so a confirmed id must not be blocked beyond the 1.5 s confirm window.
+
 The transport reads newline-delimited UTF-8 strings. Pass each complete line to `AtlasPropIntentRouter.PushLine`. The router validates protocol v1, resets a device on its `ATLAS_PROP_READY` banner or when its uptime goes backwards (reboot), rejects duplicate or stale sequence numbers, and raises `IntentAccepted` for `PLAYER_INTENT` and `ShotSeen` for armour `SHOT_SEEN`. It does **not** apply damage, block success, healing, score or cooldown; gameplay remains authoritative.
 
 ## Role action map (all six roles)
