@@ -8,13 +8,20 @@
   const lang = () => localStorage.getItem("atlas-language") === "en" ? "en" : "vi";
   const copy = {
     vi: {
-      label: "BẰNG CHỨNG PHẦN CỨNG THẬT", title: "Ghi 100 lần kéo/thả và 100 packet hit", status: n => `${n} / 2 CAMPAIGNS PASS`, tabs: ["01 · Nhả dây cung", "02 · Giáp nhận hit"], kicker: ["CAMPAIGN 01", "CAMPAIGN 02"], names: ["Độ tin cậy Hall kéo/thả", "Độ tin cậy receiver và chống lặp"], latency: "Latency đo được", note: "Ghi chú tùy chọn", placeholder: "Ánh sáng, góc, khoảng cách…", total: "TỔNG", success: "PASS", error: "LỖI", p95: "P95 LATENCY", export: "Tải CSV", clear: "Xóa campaign này", lock: "Phải PASS đủ 5 wiring gates trước khi ghi test phần cứng.", unlocked: "Wiring gates đã PASS. Mỗi nút bấm phải tương ứng đúng một thử nghiệm thật.", outcomes: { pass: "PASS", miss: "MISS", duplicate: "DUPLICATE", reject: "REJECT" }, rule: "PASS khi đủ 100 thử nghiệm, không MISS, không DUPLICATE và không REJECT.", passed: "CAMPAIGN PASS · 100/100 sạch", empty: "Chưa có phép thử thật", confirm: "Xóa toàn bộ kết quả campaign đang mở?" },
+      label: "BẰNG CHỨNG PHẦN CỨNG THẬT", title: "Ghi 100 lần kéo/thả và 100 packet hit", status: n => `${n} / 2 CAMPAIGNS PASS`, tabs: ["01 · Nhả dây cung", "02 · Giáp nhận hit"], kicker: ["CAMPAIGN 01", "CAMPAIGN 02"], names: ["Độ tin cậy Hall kéo/thả", "Độ tin cậy receiver và chống lặp"], latency: "Latency đo được", note: "Ghi chú tùy chọn", placeholder: "Ánh sáng, góc, khoảng cách…", total: "TỔNG", success: "PASS", error: "LỖI", p95: "P95 LATENCY", export: "Tải CSV", clear: "Xóa campaign này", lock: "Campaign 01 cần kiểm tra 1, 2, 5 và (3–4 hoặc giai đoạn 1 chỉ lõi cung). Campaign 02 cần đủ 5 kiểm tra.", unlocked: "Wiring gates đã PASS. Mỗi nút bấm phải tương ứng đúng một thử nghiệm thật.", outcomes: { pass: "PASS", miss: "MISS", duplicate: "DUPLICATE", reject: "REJECT" }, rule: "PASS khi đủ 100 thử nghiệm, không MISS, không DUPLICATE và không REJECT.", passed: "CAMPAIGN PASS · 100/100 sạch", empty: "Chưa có phép thử thật", confirm: "Xóa toàn bộ kết quả campaign đang mở?" },
     en: {
-      label: "REAL HARDWARE EVIDENCE", title: "Record 100 draw/releases and 100 hit packets", status: n => `${n} / 2 CAMPAIGNS PASS`, tabs: ["01 · Bow release", "02 · Armour hit"], kicker: ["CAMPAIGN 01", "CAMPAIGN 02"], names: ["Hall draw/release reliability", "Receiver and de-duplication reliability"], latency: "Measured latency", note: "Optional note", placeholder: "Light, angle, distance…", total: "TOTAL", success: "PASS", error: "ERRORS", p95: "P95 LATENCY", export: "Download CSV", clear: "Clear this campaign", lock: "All five wiring gates must pass before recording hardware evidence.", unlocked: "Wiring gates passed. Each click must represent exactly one real trial.", outcomes: { pass: "PASS", miss: "MISS", duplicate: "DUPLICATE", reject: "REJECT" }, rule: "PASS requires 100 trials with zero MISS, DUPLICATE, or REJECT events.", passed: "CAMPAIGN PASS · CLEAN 100/100", empty: "No real trials recorded", confirm: "Delete every result in the active campaign?" }
+      label: "REAL HARDWARE EVIDENCE", title: "Record 100 draw/releases and 100 hit packets", status: n => `${n} / 2 CAMPAIGNS PASS`, tabs: ["01 · Bow release", "02 · Armour hit"], kicker: ["CAMPAIGN 01", "CAMPAIGN 02"], names: ["Hall draw/release reliability", "Receiver and de-duplication reliability"], latency: "Measured latency", note: "Optional note", placeholder: "Light, angle, distance…", total: "TOTAL", success: "PASS", error: "ERRORS", p95: "P95 LATENCY", export: "Download CSV", clear: "Clear this campaign", lock: "Campaign 01 needs checks 1, 2, 5 and (3–4 or stage 1 bow core only). Campaign 02 needs all five checks.", unlocked: "Wiring gates passed. Each click must represent exactly one real trial.", outcomes: { pass: "PASS", miss: "MISS", duplicate: "DUPLICATE", reject: "REJECT" }, rule: "PASS requires 100 trials with zero MISS, DUPLICATE, or REJECT events.", passed: "CAMPAIGN PASS · CLEAN 100/100", empty: "No real trials recorded", confirm: "Delete every result in the active campaign?" }
   };
   const records = () => state[active];
   const campaignPass = name => state[name].length === 100 && state[name].every(row => row.outcome === "pass");
-  const wiringReady = () => { try { return (JSON.parse(localStorage.getItem("atlas-physical-wiring-v1") || "{}").gates || []).length === 5; } catch { return false; } };
+  // Campaign 01 (bow) needs the core checks 0, 1, 4 plus either the IR checks 2, 3 or the stage-1
+  // promise that no IR part is on the breadboard. Campaign 02 (hit) needs all five.
+  const wiringState = () => { try { return JSON.parse(localStorage.getItem("atlas-physical-wiring-v1") || "{}"); } catch { return {}; } };
+  const wiringReady = (campaign = active) => {
+    const wiring = wiringState(); const gates = new Set(wiring.gates || []);
+    const core = [0, 1, 4].every(index => gates.has(index)); const ir = [2, 3].every(index => gates.has(index));
+    return campaign === "hit" ? core && ir : core && (ir || wiring.bowOnly === true);
+  };
   const save = () => localStorage.setItem(key, JSON.stringify(state));
   function percentile(values, p) { if (!values.length) return null; const sorted = [...values].sort((a,b) => a-b); return sorted[Math.ceil(p * sorted.length) - 1]; }
   function render() {
@@ -34,7 +41,7 @@
   // One trial = one row. Manual buttons and the Web Serial bench (bench-serial.js) both record
   // through here, so the wiring-gate lock and the 100-trial cap apply to either source.
   function recordTrial(campaign, outcome, latencyMs, note, source) {
-    if (!wiringReady() || !state[campaign] || state[campaign].length >= 100) return false;
+    if (!wiringReady(campaign) || !state[campaign] || state[campaign].length >= 100) return false;
     state[campaign].push({ trial: state[campaign].length + 1, outcome, latencyMs: latencyMs == null || latencyMs === "" ? null : Math.max(0, Math.min(5000, Math.round(Number(latencyMs) || 0))), note: note || "", source, recordedAt: new Date().toISOString() });
     save(); render(); return true;
   }
@@ -42,5 +49,5 @@
   $("#benchOutcomeActions").addEventListener("click", event => { const button = event.target.closest("[data-outcome]"); if (!button || button.disabled) return; if (recordTrial(active, button.dataset.outcome, $("#benchLatency").value, $("#benchNote").value.trim(), "manual")) $("#benchNote").value = ""; });
   $("#clearBenchCampaign").addEventListener("click", () => { if (!records().length || !confirm(copy[lang()].confirm)) return; state[active] = []; save(); render(); });
   $("#exportBenchCsv").addEventListener("click", () => { const header = "campaign,trial,outcome,latency_ms,source,note,recorded_at"; const rows = records().map(row => [active,row.trial,row.outcome,row.latencyMs,row.source || "manual",`\"${row.note.replaceAll('"','""')}\"`,row.recordedAt].join(",")); const blob = new Blob([[header,...rows].join("\n")], { type: "text/csv" }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `atlas-${active}-bench-evidence.csv`; link.click(); URL.revokeObjectURL(link.href); });
-  window.addEventListener("storage", render); window.addEventListener("atlas-language-change", render); render();
+  window.addEventListener("storage", render); window.addEventListener("atlas-wiring-change", render); window.addEventListener("atlas-language-change", render); render();
 })();

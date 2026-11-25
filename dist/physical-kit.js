@@ -1,7 +1,7 @@
 (function () {
   window.ATLAS_PHYSICAL_KIT = {
     revision: "0.1",
-    checkedAt: "2026-10-16",
+    checkedAt: "2026-11-25",
     projectId: "arc-bow-impact-armour-proof-01",
     currency: "VND",
     rules: {
@@ -12,11 +12,11 @@
     },
     parts: [
       {
-        id: "bench-esp32-s3", group: "controller", buyNow: true, qty: 2, priceVnd: [460000, 460000], evidence: "exact-local-reference",
-        name: { vi: "MKE-K01 ESP32-S3 Dev Kit · bản N4 USB-C", en: "MKE-K01 ESP32-S3 Dev Kit · N4 USB-C" },
-        why: { vi: "Hai board: một làm lõi cung (phát IR), một làm lõi giáp (3 receiver) để thử bắn ở 1–5 m như ma trận phủ yêu cầu; cả hai tái dùng sau khi test đạt.", en: "Two boards: one bow core (IR out) and one armour core (three receivers), so shots can be tested at the 1–5 m the coverage matrix needs; both are reused after proof." },
-        verify: { vi: "Chọn N4, kiểm tra đúng USB-C và ảnh nhãn chân trước khi cấp nguồn.", en: "Choose N4; verify USB-C and photograph the pin labels before power-up." },
-        sources: [{ kind: "local", label: "Hshop · exact reference", url: "https://hshop.vn/mach-phat-trien-mke-k01-esp32-s3-dev-kit" }]
+        id: "bench-esp32-s3", group: "controller", buyNow: true, qty: 2, priceVnd: [220000, 460000], evidence: "exact-local-reference",
+        name: { vi: "ESP32-S3-DevKitC-1 (N8R2/N16R8) hoặc MKE-K01 N4 · USB-C", en: "ESP32-S3-DevKitC-1 (N8R2/N16R8) or MKE-K01 N4 · USB-C" },
+        why: { vi: "Hai board: một làm lõi cung (phát IR), một làm lõi giáp (3 receiver) để thử bắn ở 1–5 m như ma trận phủ yêu cầu; cả hai tái dùng sau khi test đạt. DevKitC-1 là đúng board PlatformIO/Wokwi đang build, nên thay được MKE-K01 khi hết hàng.", en: "Two boards: one bow core (IR out) and one armour core (three receivers), so shots can be tested at the 1–5 m the coverage matrix needs; both are reused after proof. DevKitC-1 is the exact PlatformIO/Wokwi target, so it replaces an out-of-stock MKE-K01." },
+        verify: { vi: "Module in chữ ESP32-S3-WROOM-1 (không phải ESP32-WROOM-32 hay C3), hàn sẵn chân, có chân 4–8 trên nhãn. Bo hai cổng USB-C: cắm cổng COM/UART. Chụp nhãn chân trước khi cấp nguồn.", en: "Module reads ESP32-S3-WROOM-1 (not ESP32-WROOM-32 or C3), headers soldered, GPIO 4–8 on the labels. On two-port boards use the COM/UART port. Photograph the pin labels before power-up." },
+        sources: [{ kind: "market", label: "Shopee · ESP32-S3-DevKitC-1 N16R8", url: "https://shopee.vn/search?keyword=ESP32-S3-DevKitC-1%20N16R8" }, { kind: "local", label: "Hshop · MKE-K01 reference", url: "https://hshop.vn/mach-phat-trien-mke-k01-esp32-s3-dev-kit" }]
       },
       {
         id: "bench-hall", group: "bow-input", buyNow: true, qty: 1, priceVnd: [5000, 30000], evidence: "local-candidate-measure-first",
