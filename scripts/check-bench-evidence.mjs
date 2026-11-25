@@ -24,18 +24,30 @@ export function parseCsv(input) {
   if (field || row.length) { row.push(field.trim()); if (row.some(Boolean)) rows.push(row); }
   if (rows.length < 2) throw new Error('Expected header and at least one trial');
   const headers = rows.shift().map((h, i) => i === 0 ? h.replace(/^\uFEFF/, '').toLowerCase() : h.toLowerCase());
-  for (const h of ['trial_id', 'result', 'latency_ms']) if (!headers.includes(h)) throw new Error('Missing required column: ' + h);
-  const result = rows.map((fields, index) => {
+  // Two accepted layouts: the hand-made sheet (trial_id,result,latency_ms) and the web
+  // export from the Bench evidence panel (campaign,trial,outcome,latency_ms,source,note,recorded_at).
+  const has = name => headers.includes(name);
+  if (!has('trial_id') && !has('trial')) throw new Error('Missing required column: trial_id (or trial)');
+  if (!has('result') && !has('outcome')) throw new Error('Missing required column: result (or outcome)');
+  if (!has('latency_ms')) throw new Error('Missing required column: latency_ms');
+  return rows.map((fields, index) => {
     if (fields.length !== headers.length) throw new Error('CSV column count mismatch, row ' + (index + 2));
-    return Object.fromEntries(headers.map((h, i) => [h, fields[i]]));
+    const row = Object.fromEntries(headers.map((h, i) => [h, fields[i]]));
+    if (!has('trial_id')) row.trial_id = row.campaign ? `${row.campaign}-${row.trial}` : row.trial;
+    if (!has('result')) row.result = row.outcome;
+    return row;
   });
-  return result;
 }
 
 export function evaluate(rows, options = {}) {
   const minTrials = options.minTrials ?? 100;
   const maxP95Ms = options.maxP95Ms ?? 150;
-  const ids = new Set(), counts = { PASS: 0, MISS: 0, DUPLICATE: 0, REJECT: 0 };
+  // The bow campaign (Hall draw/release) has no hit latency; the hit campaign must time every PASS.
+  const campaigns = new Set(rows.map(row => String(row.campaign || 'hit').toLowerCase()));
+  if (campaigns.size > 1) throw new Error('One campaign per file: found ' + [...campaigns].join(', '));
+  const campaign = [...campaigns][0] || 'hit';
+  const timed = campaign !== 'bow';
+  const ids = new Set(), counts = { PASS: 0, MISS: 0, DUPLICATE: 0, REJECT: 0 }, sources = {};
   const latencies = [];
   for (const [index, row] of rows.entries()) {
     const id = String(row.trial_id || '').trim();
@@ -44,35 +56,48 @@ export function evaluate(rows, options = {}) {
     const status = String(row.result || '').toUpperCase();
     if (!Object.hasOwn(counts, status)) throw new Error('Unknown result: ' + row.result);
     counts[status]++;
+    if (row.source) sources[row.source] = (sources[row.source] || 0) + 1;
     const raw = String(row.latency_ms || '').trim();
     if (raw) {
       const ms = Number(raw);
       if (!Number.isFinite(ms) || ms < 0) throw new Error('Invalid latency_ms at row ' + (index + 2));
       if (status !== 'PASS') throw new Error('Only PASS rows may report hit latency (row ' + (index + 2) + ')');
       latencies.push(ms);
-    } else if (status === 'PASS') throw new Error('PASS missing latency_ms at row ' + (index + 2));
+    } else if (status === 'PASS' && timed) throw new Error('PASS missing latency_ms at row ' + (index + 2));
   }
   latencies.sort((a, b) => a - b);
   const p95Ms = latencies.length ? latencies[Math.ceil(latencies.length * .95) - 1] : null;
   const checks = {
     sampleSize: rows.length >= minTrials,
     passesObserved: counts.PASS > 0,
-    p95Latency: p95Ms !== null && p95Ms <= maxP95Ms,
+    // Same rule as the web panel: a campaign passes only with zero MISS, DUPLICATE and REJECT.
+    cleanRun: counts.MISS + counts.DUPLICATE + counts.REJECT === 0,
+    p95Latency: timed ? p95Ms !== null && p95Ms <= maxP95Ms : true,
   };
-  return { total: rows.length, counts, p95Ms, criteria: { minTrials, maxP95Ms }, checks,
+  return { campaign, total: rows.length, counts, sources, p95Ms, criteria: { minTrials, maxP95Ms: timed ? maxP95Ms : null }, checks,
     readyForReview: Object.values(checks).every(Boolean),
     note: 'Review only. This does not certify electrical, IR range, fit, heat, or field safety.' };
 }
 
-function selfTest() {
-  const csv = 'trial_id,result,latency_ms\n1,PASS,34\n2,MISS,\n3,DUPLICATE,\n4,REJECT,';
-  const rows = parseCsv(csv);
-  const report = evaluate(rows, { minTrials: 4, maxP95Ms: 50 });
-  if (!report.readyForReview || report.counts.PASS !== 1 || report.p95Ms !== 34) throw new Error('Basic evaluator test failed');
-  for (const bad of ['trial_id,result,latency_ms\n1,PASS,\n', 'trial_id,result,latency_ms\n1,FAIL,5\n']) {
+export function selfTest() {
+  const csv = 'trial_id,result,latency_ms\n1,PASS,34\n2,PASS,40\n3,PASS,38\n4,PASS,36';
+  const report = evaluate(parseCsv(csv), { minTrials: 4, maxP95Ms: 50 });
+  if (!report.readyForReview || report.counts.PASS !== 4 || report.p95Ms !== 40) throw new Error('Basic evaluator test failed');
+  const dirty = evaluate(parseCsv('trial_id,result,latency_ms\n1,PASS,34\n2,MISS,\n3,DUPLICATE,\n4,REJECT,'), { minTrials: 4, maxP95Ms: 50 });
+  if (dirty.readyForReview || dirty.checks.cleanRun) throw new Error('A run with MISS/DUPLICATE/REJECT must not be ready');
+  // Web export layout, per campaign.
+  const web = 'campaign,trial,outcome,latency_ms,source,note,recorded_at\n' +
+    'hit,1,pass,108,serial,"shot 1 · chest (chest)",2026-11-25T02:00:00.000Z\nhit,2,pass,111,serial,"",2026-11-25T02:00:02.000Z';
+  const webReport = evaluate(parseCsv(web), { minTrials: 2 });
+  if (!webReport.readyForReview || webReport.campaign !== 'hit' || webReport.sources.serial !== 2) throw new Error('Web hit export not understood');
+  const bowCsv = 'campaign,trial,outcome,latency_ms,source,note,recorded_at\nbow,1,pass,,serial,"shot 1",2026-11-25T02:00:00.000Z';
+  const bowReport = evaluate(parseCsv(bowCsv), { minTrials: 1 });
+  if (!bowReport.readyForReview || bowReport.criteria.maxP95Ms !== null) throw new Error('Bow export (no latency) not understood');
+  for (const bad of ['trial_id,result,latency_ms\n1,PASS,\n', 'trial_id,result,latency_ms\n1,FAIL,5\n',
+    'campaign,trial,outcome,latency_ms\nbow,1,pass,\nhit,1,pass,100\n']) {
     let rejected = false;
     try { evaluate(parseCsv(bad)); } catch { rejected = true; }
-    if (!rejected) throw new Error('Invalid evidence accepted');
+    if (!rejected) throw new Error('Invalid evidence accepted: ' + JSON.stringify(bad));
   }
   console.log('Atlas evidence checker self-test PASS');
 }
