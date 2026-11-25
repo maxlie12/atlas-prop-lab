@@ -16,8 +16,8 @@
         lineup,
         heroes: Object.fromEntries(config.heroes.map(key => [key, { hp: limits.heroHp, connected: true, blocking: false, parryUntil: 0, shieldUntil: 0, draw: "rest", drawAt: 0 }])),
         boss: { hp: limits.bossHp, charge: 0, focus: "archer", tauntUntil: 0 },
-        traps: [], openShots: new Map(), heldReports: [], confirmedShots: new Set(),
-        deviceSeq: {}, deviceShot: 0, lastSeenSeq: {}, cooldownUntil: {}, aiNextAt: {},
+        traps: [], openShots: new Map(), heldReports: [], confirmedShots: new Map(),
+        deviceSeq: {}, deviceShot: 0, lastSeenSeq: {}, lastSeenAt: {}, cooldownUntil: {}, aiNextAt: {},
         stats: { intents: 0, accepted: 0, refused: 0, hits: 0, expired: 0 }, now
       };
       emit({ kind: "reset" });
@@ -62,10 +62,15 @@
     function deliver(line, now) {
       s.now = now;
       if (line.v !== 1) return refuse(line, "unsupported_version");
+      // A lower-or-equal seq with a lower device uptime (atMs) is a reboot, not a stale line
+      // (docs/event-contract.md): the counter restarts and the line is accepted.
+      const lastAt = s.lastSeenAt[line.deviceId];
+      if (lastAt != null && Number.isFinite(line.atMs) && line.atMs < lastAt && line.seq <= (s.lastSeenSeq[line.deviceId] || 0)) resetDevice(line.deviceId);
       const last = s.lastSeenSeq[line.deviceId] || 0;
       if (line.seq === last) return refuse(line, "duplicate");
       if (line.seq < last) return refuse(line, "stale");
       s.lastSeenSeq[line.deviceId] = line.seq;
+      if (Number.isFinite(line.atMs)) s.lastSeenAt[line.deviceId] = line.atMs;
       if (line.type === "SHOT_SEEN") return shotSeen(line, now);
       const key = Object.keys(roster).find(item => roster[item].deviceId === line.deviceId);
       if (!key || roster[key].contractRole !== line.role) return refuse(line, "role_mismatch");
@@ -75,6 +80,15 @@
       if (!alive(key)) return refuse(line, "seat_down");
       s.stats.intents++;
       return apply(key, spec, line, now, "prop");
+    }
+
+    // Forget a device's sequence state (its ATLAS_PROP_READY banner, or a switch between a
+    // simulated prop and the real board that uses the same deviceId).
+    function resetDevice(deviceId) {
+      delete s.lastSeenSeq[deviceId]; delete s.lastSeenAt[deviceId];
+      // A rebooted bow restarts its shot ids: forget its in-flight and recently confirmed shots.
+      if (deviceId === roster.archer.deviceId) { s.openShots.clear(); s.confirmedShots.clear(); s.heldReports = []; }
+      emit({ kind: "device-reset", deviceId });
     }
 
     function ready(key, spec, now) {
@@ -169,7 +183,10 @@
     // ---- Arc Bow → impact armour confirmation --------------------------------------------
     function shotSeen(line, now) {
       s.stats.intents++;
-      if (s.confirmedShots.has(line.shot)) return refuse(line, "duplicate_hit");
+      // One hit per FIRE inside the confirm window (like AtlasPropCombatBridge). Shot ids are
+      // 1–255 and restart when the bow reboots, so an old id is a new shot after the window.
+      if (s.confirmedShots.has(line.shot) && now - s.confirmedShots.get(line.shot) <= hitConfirmWindowMs) return refuse(line, "duplicate_hit");
+      s.confirmedShots.delete(line.shot);
       const open = s.openShots.get(line.shot);
       if (!open) {
         s.heldReports.push({ line, at: now });
@@ -179,7 +196,7 @@
       return confirm(line, open, now);
     }
     function confirm(line, open, now) {
-      s.openShots.delete(line.shot); s.confirmedShots.add(line.shot); s.stats.hits++;
+      s.openShots.delete(line.shot); s.confirmedShots.set(line.shot, now); s.stats.hits++;
       const dealt = damageBoss(open.key, roster.archer.actions.find(item => item.event === "FIRE").effect.damage);
       const result = { status: "accepted", key: "archer", action: "HIT_CONFIRM", fx: "hit", source: "armour", line, outcome: { bossDamage: dealt, zone: line.zone, shot: line.shot, latencyMs: Math.round(now - open.firedAt) } };
       s.stats.accepted++; emit({ kind: "accepted", ...result });
@@ -249,7 +266,7 @@
 
     reset(options.now || 0);
     return {
-      reset, makeIntent, makeShotSeen, deliver, tick, setConnected, swapReserve, snapshot, cooldownLeft,
+      reset, makeIntent, makeShotSeen, deliver, tick, setConnected, swapReserve, snapshot, cooldownLeft, resetDevice,
       isActive, seatOf, actionSpec,
       on(listener) { listeners.add(listener); return () => listeners.delete(listener); }
     };

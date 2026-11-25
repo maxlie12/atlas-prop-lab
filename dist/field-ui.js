@@ -9,6 +9,7 @@
   const sim = window.AtlasFieldSim.create(config, { now: performance.now() });
   const net = { latency: 60, loss: 5, sent: 0, delivered: 0, lost: 0, latencyTotal: 0 };
   const holds = {};
+  const liveDevices = new Set();   // deviceIds currently driven by a real board or a replayed log
   let selected = roster[$("#roleSelect")?.value] ? $("#roleSelect").value : "guardian";
 
   const copy = {
@@ -27,7 +28,9 @@
       shot: n => `shot #${n} open · waiting for armour`, hit: (zone, n, ms) => `HIT_CONFIRM · ${zone} · Boss −${n} · ${ms} ms`, expired: (n, why) => `shot #${n} ${why}`,
       knock: "knockback · 0 damage", draw: "presentation only", heroHit: list => list, letDown: "Let down before DRAW_READY — no shot", isDown: who => `${who} is down`,
       plugged: who => `${who}: prop plugged in`, unplugged: (who, rel) => `${who}: prop unplugged → AI${rel ? " · BLOCK_END forced" : ""}`, lineup: (who, seat, out) => `${who} takes ${seat} · ${out} to the bench`,
-      reset: "Simulation reset", zones: { left: "left shoulder", chest: "chest", right: "right shoulder" }
+      reset: "Simulation reset", zones: { left: "left shoulder", chest: "chest", right: "right shoulder" },
+      liveOwns: "A real board (or replayed log) drives this prop — use the prop, not the button.",
+      armourNote: { HIT_REJECT: (zone, why) => `armour rejected a code on ${zone} · ${why}`, DUPLICATE_IGNORED: (zone, shot) => `armour ignored a repeat of shot #${shot} on ${zone}` }
     },
     vi: {
       bossHp: "Máu Boss", charge: "Nạp tuyệt kỹ", focus: "Boss nhắm", taunted: "bị khiêu khích",
@@ -44,7 +47,9 @@
       shot: n => `mở phát #${n} · chờ giáp báo`, hit: (zone, n, ms) => `HIT_CONFIRM · ${zone} · Boss −${n} · ${ms} ms`, expired: (n, why) => `phát #${n} ${why}`,
       knock: "đẩy lùi · 0 sát thương", draw: "chỉ để hiển thị", heroHit: list => list, letDown: "Hạ dây trước DRAW_READY — không bắn", isDown: who => `${who} đã gục`,
       plugged: who => `${who}: đã cắm prop`, unplugged: (who, rel) => `${who}: rút prop → AI${rel ? " · ép BLOCK_END" : ""}`, lineup: (who, seat, out) => `${who} vào ${seat} · ${out} ra ghế chờ`,
-      reset: "Đã đặt lại mô phỏng", zones: { left: "vai trái", chest: "ngực", right: "vai phải" }
+      reset: "Đã đặt lại mô phỏng", zones: { left: "vai trái", chest: "ngực", right: "vai phải" },
+      liveOwns: "Board thật (hoặc log phát lại) đang điều khiển prop này — dùng prop thật, không bấm nút.",
+      armourNote: { HIT_REJECT: (zone, why) => `giáp từ chối mã lạ ở ${zone} · ${why}`, DUPLICATE_IGNORED: (zone, shot) => `giáp bỏ qua phát #${shot} lặp lại ở ${zone}` }
     }
   };
   const lang = () => (document.documentElement.lang === "en" ? "en" : "vi");
@@ -86,6 +91,7 @@
     const spec = roster[key].actions[index]; if (!spec) return null;
     const hero = sim.snapshot(now()).heroes[key];
     if (hero && !hero.connected) { toast(t().aiOwns); return { status: "prop_unplugged" }; }
+    if (liveDevices.has(roster[key].deviceId)) { toast(t().liveOwns); return { status: "live_device" }; }
     const id = `${key}:${index}`; if (holds[id]) return null;
     if (spec.draw) {
       holds[id] = { ready: false };
@@ -314,6 +320,33 @@
   window.addEventListener("atlas-language-change", render);
   setInterval(() => { sim.tick(now()); if ($("#field").classList.contains("is-active")) { renderActions(); renderStats(sim.snapshot(now())); } }, 120);
 
-  window.AtlasFieldUI = { trigger, press, release, select, snapshot: () => ({ ...sim.snapshot(now()), network: { ...net } }), sim };
+  // ---- Real device lines (Live from Web Serial, or a replayed log) -----------------------
+  // No artificial latency or loss: the line already travelled over USB. via = "live" | "replay".
+  // `at` (performance.now() ms) lets a replay keep the log's own spacing even when timers bunch up.
+  function injectDeviceLine(line, via = "live", at) {
+    if (!line || typeof line !== "object") return null;
+    const when = Number.isFinite(at) ? Math.min(at, now()) : now();
+    const armour = line.deviceId === "impact-armour-01";
+    const fromKey = armour ? "boss" : Object.keys(roster).find(key => roster[key].deviceId === line.deviceId);
+    if (!fromKey) return null;
+    if (armour && line.type !== "SHOT_SEEN") {
+      const note = t().armourNote[line.type];
+      if (note) logNote("archer", `${via.toUpperCase()} · ${note(t().zones[line.zone] || line.zone, line.shot ?? line.reason ?? "")}`, line.type === "HIT_REJECT" ? "lost" : "");
+      return { status: "noted", type: line.type };
+    }
+    const to = armour ? "archer" : targetOf(fromKey);
+    log("", line, via);
+    window.dispatchEvent(new CustomEvent("atlas-field-action", { detail: { role: fromKey, action: line.action || line.type, lost: false, duration: 200, target: to, type: line.type, via } }));
+    animatePacket(fromKey, to, false, 200);
+    const result = sim.deliver(line, when);
+    render();
+    return result;
+  }
+  function setLiveDevice(deviceId, on) {
+    if (on && !liveDevices.has(deviceId)) sim.resetDevice(deviceId);
+    if (on) liveDevices.add(deviceId); else liveDevices.delete(deviceId);
+  }
+
+  window.AtlasFieldUI = { trigger, press, release, select, snapshot: () => ({ ...sim.snapshot(now()), network: { ...net } }), sim, injectDeviceLine, setLiveDevice, liveDevices: () => [...liveDevices] };
   render();
 })();
