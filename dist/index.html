@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="journey.css" />
     <link rel="stylesheet" href="physical-gate.css" />
+    <link rel="stylesheet" href="teardown.css" />
   </head>
   <body>
     <header class="topbar">
@@ -22,7 +23,7 @@
         <button type="button" data-language="vi">VI</button>
         <button type="button" data-language="en" class="is-active">EN</button>
       </div>
-      <div class="header-status"><i></i><span id="headerStatusText">V0.14 GATE 01 READY</span></div>
+      <div class="header-status"><i></i><span id="headerStatusText">V0.15 GATE 01 + TEARDOWN</span></div>
     </header>
 
     <nav class="mode-tabs" aria-label="Lab views">
@@ -460,6 +461,14 @@
             <div class="twin-stage" id="threePropStage">
               <div class="three-loading" id="threePropLoading">Loading 3D workspace…</div>
               <div class="twin-axis" aria-hidden="true"><i class="axis-x">X</i><i class="axis-y">Y</i><i class="axis-z">Z</i></div>
+              <div class="td-stage-bar" id="teardownStageBar">
+                <button type="button" class="td-toggle" id="teardownToggle" aria-pressed="false" aria-controls="teardownPanel">Tháo rời (Teardown)</button>
+                <div class="td-stage-nav" id="teardownStageNav" hidden>
+                  <button type="button" id="teardownPrev" aria-label="Bước trước">◀</button>
+                  <span id="teardownStageText" aria-live="polite">Tổng quan</span>
+                  <button type="button" id="teardownNext" aria-label="Bước tiếp">▶</button>
+                </div>
+              </div>
             </div>
             <aside class="twin-controls">
               <p class="eyebrow">EXPLORE BEFORE BUILDING</p>
@@ -474,6 +483,34 @@
               <div id="twinPartInfo" class="twin-part-info" aria-live="polite"><strong>Select a module</strong><p>Its placement, job, and build caution will appear here.</p></div>
               <p class="three-boundary" id="twinBoundary">Concept geometry only. Verify real dimensions with a cardboard or EVA mock-up before cutting final material.</p>
             </aside>
+          </div>
+        </section>
+
+        <section class="panel teardown-panel" id="teardownPanel" aria-labelledby="teardown-title">
+          <div class="panel-toolbar">
+            <div><span class="panel-label" id="teardownEyebrow">TEARDOWN · THÁO RỜI TỪNG LỚP</span><strong id="teardown-title">Tháo rời đạo cụ</strong></div>
+            <span class="mono-pill">TEARDOWN 01</span>
+          </div>
+          <div class="td-grid">
+            <div class="td-steps-col">
+              <p class="td-intro" id="teardownIntro">Tháo đạo cụ theo đúng thứ tự bảo trì.</p>
+              <div class="td-actions">
+                <button type="button" class="button primary" id="teardownToggleMain" aria-pressed="false">Tháo rời (Teardown)</button>
+                <button type="button" class="button secondary" id="teardownPlay">▶ Tự chạy</button>
+                <button type="button" class="button ghost" id="teardownReset">Về đầu</button>
+              </div>
+              <ol class="td-steps" id="teardownSteps"></ol>
+              <p class="td-hint" id="teardownHint"></p>
+            </div>
+            <div class="td-detail" id="teardownDetail" aria-live="polite"></div>
+          </div>
+          <details class="td-bom-wrap">
+            <summary id="teardownBomSummary">Bảng linh kiện</summary>
+            <div class="td-bom-scroll"><table class="td-bom" id="teardownBom"></table></div>
+          </details>
+          <div class="td-foot">
+            <p class="td-note" id="teardownNote"></p>
+            <button type="button" class="button secondary" id="teardownDownload">Tải bảng teardown (.md)</button>
           </div>
         </section>
 
@@ -884,7 +921,7 @@
 
     </main>
 
-    <footer><span>ATLAS / PROP SYSTEMS</span><span>Planner revision 0.14 · Hardware proof workflow, not field certification</span></footer>
+    <footer><span>ATLAS / PROP SYSTEMS</span><span>Planner revision 0.15 · Hardware proof workflow, not field certification</span></footer>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <script src="prop-manifests.js"></script>
     <script src="gameplay-roster.js"></script>
@@ -906,6 +943,8 @@
     <script src="gate01-assembly.js"></script>
     <script src="field-live.js"></script>
     <script src="armour-fit.js"></script>
+    <script src="teardown-data.js"></script>
+    <script src="teardown-ui.js"></script>
     <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"}}</script>
     <script type="module" src="three-lab.js"></script>
   </body>

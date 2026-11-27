@@ -14,12 +14,12 @@ class Shape {
 }
 class Geometry {constructor(...args){this.args=args;}translate(){}computeVertexNormals(){}}
 const meshes=[];
-const context=vm.createContext({THREE:{Group:class{constructor(){this.children=[];this.userData={};}},Shape,ExtrudeGeometry:Geometry,BoxGeometry:Geometry},
+const context=vm.createContext({THREE:{Group:class{constructor(){this.children=[];this.userData={};}},Shape,ExtrudeGeometry:Geometry,BoxGeometry:Geometry,CylinderGeometry:Geometry},
   propManifests:{archer:{modules:[['shell',1,'recurve-limbs'],['wearable',2,'cosmetic-cord'],['control',3,'draw-magnet'],['sensor',4,'hall-sensor'],['core',5,'esp32-riser'],['light',6,'limb-led']].map(([modelKey,callout,id])=>({modelKey,callout,id}))}},
   plateGeometry:(...args)=>new Geometry(...args),
-  addPart:(group,geometry,color,key,position,rotation,scale,options)=>{const mesh={geometry,position,options,userData:{partKey:key,electronic:!!options?.electronic}};group.children.push(mesh);meshes.push(mesh);return mesh;},
+  addPart:(group,geometry,color,key,position,rotation,scale,options)=>{const mesh={geometry,position,options,userData:{partKey:key,electronic:!!options?.electronic,td:options?.td}};group.children.push(mesh);meshes.push(mesh);return mesh;},
   linePart:(group,points,color,key,options)=>{const mesh={points,options,userData:{partKey:key,electronic:!!options.electronic}};group.children.push(mesh);return mesh;},
-  addRivet:(group,position,key)=>group.children.push({position,userData:{partKey:key}}),finishModel:group=>group});
+  addRivet:(group,position,key,color,options)=>group.children.push({position,userData:{partKey:key,td:options?.td}}),finishModel:group=>group});
 vm.runInContext(source.slice(start,end)+'\nthis.bow=buildBow(0x16a6c9);',context);
 const bow=context.bow;
 assert.equal(bow.userData.designEnvelopeMm.height,900);
@@ -33,5 +33,11 @@ assert.equal(cords[0].points[0][1]-cords[0].points[1][1],6);
 const frame=meshes[0].geometry;
 assert.equal(frame.args[0].commands.filter(c=>c[0]==='C').length,8);
 assert.equal(frame.args[1].depth,.24);
+// Gate 01 IR emitter on the arrow side (-x, away from the +x cord) and the hit haptic.
+const emitter=bow.children.filter(m=>m.userData.td==='emitter');
+assert.ok(emitter.length>=3);assert.ok(emitter.some(m=>m.userData.electronic)&&emitter.some(m=>!m.userData.electronic));
+assert.ok(emitter.every(m=>m.position[0]<0));
+assert.equal(bow.children.filter(m=>m.userData.td==='haptic'&&m.userData.electronic).length,1);
+assert.ok(bow.children.filter(m=>m.userData.td==='cover').length>=3);
 assert.ok(source.includes('["shell", "core", "wearable", "sensor", "core", "light", "control", "shell"]'));
-console.log('Bow contract PASS: CAD cubic contour, 900 mm scale, one cosmetic cord, six numbered modules, shell/electronics separation and assembly mapping. No WebGL visual verification.');
+console.log('Bow contract PASS: CAD cubic contour, 900 mm scale, one cosmetic cord, six numbered modules, IR emitter on the arrow side, hit haptic, removable cover, shell/electronics separation and assembly mapping. No WebGL visual verification.');

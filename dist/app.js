@@ -136,7 +136,7 @@ const propKitVi = {
 
 const staticTranslations = {
   ".brand-copy span": ["ESP32 prototype workspace", "Không gian thử nghiệm ESP32"],
-  "#headerStatusText": ["V0.14 GATE 01 READY", "V0.14 GATE 01 SẴN SÀNG"],
+  "#headerStatusText": ["V0.15 GATE 01 + TEARDOWN", "V0.15 GATE 01 + THÁO RỜI"],
   ".mode-tabs [data-view='event-kit']": ["01 Event kit", "01 Bộ thiết bị"],
   ".mode-tabs [data-view='prototype']": ["02 ESP32 lab", "02 Xưởng ESP32"],
   ".mode-tabs [data-view='field']": ["03 Field simulator", "03 Mô phỏng trận"],
@@ -285,7 +285,7 @@ const staticTranslations = {
   "[data-arena-view='logic']": ["Logic map", "Bản đồ logic"],
   ".arena-stats span": ["Boss HP", "Máu Boss"],
   "#resetSim": ["Reset", "Đặt lại"],
-  "footer span:nth-child(2)": ["Planner revision 0.14 · Hardware proof workflow, not field certification", "Bản kế hoạch 0.14 · Quy trình chứng minh phần cứng, chưa phải chứng nhận thực địa"],
+  "footer span:nth-child(2)": ["Planner revision 0.15 · Hardware proof workflow, not field certification", "Bản kế hoạch 0.15 · Quy trình chứng minh phần cứng, chưa phải chứng nhận thực địa"],
   ".telemetry-panel > .panel-label": ["Network conditions", "Điều kiện mạng"],
   "label[for='latencyRange'] span": ["Latency", "Độ trễ"],
   "label[for='lossRange'] span": ["Packet loss", "Mất gói"],
@@ -309,7 +309,7 @@ const staticTranslations = {
   ".download-row a:nth-child(1)": ["Wokwi circuit", "Mạch Wokwi"],
   ".download-row a:nth-child(2)": ["ESP32 firmware", "Firmware ESP32"],
   ".download-row a:nth-child(3)": ["Assembly guide", "Hướng dẫn lắp"],
-  "footer span:nth-child(2)": ["Planner revision 0.14 · Hardware proof workflow, not field certification", "Bản kế hoạch 0.14 · Quy trình chứng minh phần cứng, chưa phải chứng nhận thực địa"]
+  "footer span:nth-child(2)": ["Planner revision 0.15 · Hardware proof workflow, not field certification", "Bản kế hoạch 0.15 · Quy trình chứng minh phần cứng, chưa phải chứng nhận thực địa"]
 };
 
 const roleCardTranslations = {
