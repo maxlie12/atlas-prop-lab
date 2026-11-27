@@ -55,6 +55,7 @@ function startThreeLab(THREE, OrbitControls) {
     mesh.position.set(...position); mesh.rotation.set(...rotation); mesh.scale.set(...scale);
     mesh.castShadow = true; mesh.receiveShadow = true;
     mesh.userData = { partKey: key, electronic: Boolean(options.electronic), explode: options.explode || [0, 0, 0] };
+    if (options.td) mesh.userData.td = options.td; // teardown group when it differs from the module key
     group.add(mesh); return mesh;
   }
   function linePart(group, points, color, key, options = {}) {
@@ -126,7 +127,7 @@ function startThreeLab(THREE, OrbitControls) {
     addPart(group,new THREE.CylinderGeometry(.20,.22,1.53,24),0x182e37,"shell",[0,-2.335,0],[0,0,0],[1,1,1],{roughness:.94,explode:[0,0,-.55]});
     addPart(group,new THREE.SphereGeometry(.22,20,12),0x3c5865,"shell",[0,-3.10,0],[0,0,0],[1,.65,.85],{roughness:.8,explode:[0,-.30,-.55]});
     for(let y=-2.95;y< -1.65;y+=.18) addPart(group,new THREE.TorusGeometry(.205,.014,6,20),0x5e7882,"shell",[0,y,0],[Math.PI/2,0,0],[1,1,1],{roughness:.95,explode:[0,0,-.55]});
-    addPart(group,new THREE.BoxGeometry(.22,.74,.035),0x3d5b66,"shell",[0,-2.33,.22],[0,0,0],[1,1,1],{roughness:.7,explode:[0,0,.7]});
+    addPart(group,new THREE.BoxGeometry(.22,.74,.035),0x3d5b66,"shell",[0,-2.33,.22],[0,0,0],[1,1,1],{roughness:.7,explode:[0,0,.7],td:"cover"});
     linePart(group,[[0,-1.04,.115],[0,.5,.115],[0,2.87,.115]],accent,"light",{radius:.026,segments:28,radialSegments:8,electronic:true,emissive:true,emissiveIntensity:1.15,explode:[.65,.20,.60]});
     addPart(group,new THREE.BoxGeometry(.18,.14,.035),0x2c917b,"sensor",[0,-1.41,.045],[0,0,0],[1,1,1],{electronic:true,explode:[-.75,.15,.60]});
     addPart(group,new THREE.BoxGeometry(.08,.07,.035),0x273d48,"sensor",[0,-1.41,.08],[0,0,0],[1,1,1],{electronic:true,explode:[-.75,.15,.60]});
@@ -163,8 +164,8 @@ function startThreeLab(THREE, OrbitControls) {
     addPart(group, limbs, 0x263e48, "shell", [0,0,0], [0,0,0], [1,1,1], {roughness:.82, metalness:.04, explode:[-.65,0,0]});
     // The grip/cover remain visible with electronics hidden; they are shell parts.
     addPart(group, plateGeometry([[-.16,-.40],[-.22,-.30],[-.22,.30],[-.14,.40],[.20,.40],[.25,.30],[.25,-.30],[.17,-.40]], .34,.025), 0x132b34, "shell", [.05,0,0], [0,0,0], [1,1,1], {roughness:.88,explode:[0,0,-.55]});
-    addPart(group, new THREE.BoxGeometry(.30,.65,.045),0x45616a,"shell",[.07,0,.205],[0,0,0],[1,1,1],{roughness:.65,explode:[0,0,.65]});
-    for (const y of [-.25,-.15,-.05,.05,.15,.25]) linePart(group,[[-.12,y,.232],[.20,y,.232]],0x607b82,"shell",{radius:.012,segments:2,radialSegments:6,roughness:.95,explode:[0,0,.65]});
+    addPart(group, new THREE.BoxGeometry(.30,.65,.045),0x45616a,"shell",[.07,0,.205],[0,0,0],[1,1,1],{roughness:.65,explode:[0,0,.65],td:"cover"});
+    for (const y of [-.25,-.15,-.05,.05,.15,.25]) linePart(group,[[-.12,y,.232],[.20,y,.232]],0x607b82,"shell",{radius:.012,segments:2,radialSegments:6,roughness:.95,explode:[0,0,.65],td:"cover"});
     const ledUpper=[[392,18],[330,55],[230,108],[150,185],[116,250],[130,310],[188,370]];
     for (const side of [1,-1]) linePart(group,ledUpper.map(([x,y])=>[...point(x,side===1?y:900-y),.16]),accent,"light",{radius:.022,segments:40,radialSegments:8,electronic:true,emissive:true,emissiveIntensity:1.2,explode:[0,side*.15,.72]});
     // One straight cosmetic cord only: no projectile or draw/release animation.
@@ -176,7 +177,17 @@ function startThreeLab(THREE, OrbitControls) {
     addPart(group,new THREE.BoxGeometry(.23,.28,.035),0x126652,"core",[.055,-.14,-.035],[0,0,0],[1,1,1],{electronic:true,explode:[.80,-.45,-.60]});
     addPart(group,new THREE.BoxGeometry(.15,.14,.055),0x8c9ca4,"core",[.055,-.10,.015],[0,0,0],[1,1,1],{electronic:true,metalness:.5,explode:[.80,-.45,-.60]});
     addPart(group,new THREE.BoxGeometry(.10,.06,.07),0x9cb0b7,"core",[.055,-.28,0],[0,0,0],[1,1,1],{electronic:true,metalness:.5,explode:[.80,-.45,-.60]});
-    for (const y of [-.32,.32]) addRivet(group,[.055,y,.245],"shell",0x8ea4aa,{explode:[0,0,.65]});
+    for (const y of [-.32,.32]) addRivet(group,[.055,y,.245],"shell",0x8ea4aa,{explode:[0,0,.65],td:"cover"});
+    // Gate 01 IR emitter on the arrow-side face of the riser (the cord is at +x, so shots leave
+    // toward -x): TSAL6200 + 2N2222A driver behind a ~20 mm lens in a 21 mm tube that narrows the
+    // beam. The tube and lens are passive shell parts; the LED and driver are core electronics.
+    const emitterY=.34, emitterOut=[-.85,.35,.30];
+    addPart(group,new THREE.CylinderGeometry(.06,.06,.30,20,1,true),0x2a3d45,"shell",[-.31,emitterY,0],[0,0,Math.PI/2],[1,1,1],{roughness:.7,metalness:.15,explode:emitterOut,td:"emitter"});
+    addPart(group,new THREE.CylinderGeometry(.064,.064,.018,24),0xbfe6f2,"shell",[-.46,emitterY,0],[0,0,Math.PI/2],[1,1,1],{roughness:.12,opacity:.55,transmission:.2,explode:emitterOut,td:"emitter"});
+    addPart(group,new THREE.CylinderGeometry(.026,.026,.07,14),0x5c6fa8,"core",[-.2,emitterY,0],[0,0,Math.PI/2],[1,1,1],{electronic:true,roughness:.3,explode:emitterOut,td:"emitter"});
+    addPart(group,new THREE.BoxGeometry(.10,.07,.025),0x1f6b5a,"core",[-.07,emitterY,.06],[0,0,0],[1,1,1],{electronic:true,explode:emitterOut,td:"emitter"});
+    // Coin vibration motor behind the grip: buzzes a confirmed hit through a transistor.
+    addPart(group,new THREE.CylinderGeometry(.05,.05,.027,20),0xa7b4ba,"core",[.1,.05,-.12],[Math.PI/2,0,0],[1,1,1],{electronic:true,metalness:.55,roughness:.3,explode:[.55,.15,-.75],td:"haptic"});
     group.userData.designEnvelopeMm = {width:430,height:900,depth:60};
     group.userData.modelRevision = "arc-bow-cad-02";
     group.children.forEach(mesh => {
@@ -203,7 +214,7 @@ function startThreeLab(THREE, OrbitControls) {
     addPart(group,new THREE.BoxGeometry(.12,.065,.07),0xa5b2bd,"core",[-1.12,-2.63,.035],[0,0,0],[1,1,1],{electronic:true,explode:[-.85,-.30,.65]});
     addPart(group,new THREE.BoxGeometry(.29,.17,.04),0x368e7d,"sensor",[-1.12,-1.28,.04],[0,0,0],[1,1,1],{electronic:true,explode:[-.85,.20,.65]});
     addPart(group,new THREE.CylinderGeometry(.085,.085,.10,16),accent,"control",[-.85,-1.85,.19],[Math.PI/2,0,0],[1,1,1],{electronic:true,explode:[-.25,.20,.85]});
-    addPart(group,new THREE.BoxGeometry(.29,.72,.04),0x43516b,"shell",[-1.12,-2.27,.30],[0,0,0],[1,1,1],{roughness:.8,explode:[-.25,0,1.0]});
+    addPart(group,new THREE.BoxGeometry(.29,.72,.04),0x43516b,"shell",[-1.12,-2.27,.30],[0,0,0],[1,1,1],{roughness:.8,explode:[-.25,0,1.0],td:"cover"});
     // Separate wrist trap pad; its strap remains visible when electronics are off.
     addPart(group,new THREE.TorusGeometry(.40,.055,8,28),0x4b566c,"wearable",[2.45,-.7,0],[0,Math.PI/2,0],[1,1,1],{roughness:.95,explode:[.65,0,0]});
     addPart(group,new THREE.BoxGeometry(.50,.42,.16),0x29364c,"wearable",[2.45,-.7,.32],[0,0,0],[1,1,1],{roughness:.85,explode:[.65,0,0]});
@@ -222,7 +233,7 @@ function startThreeLab(THREE, OrbitControls) {
     addPart(group,new THREE.TorusGeometry(.29,.04,8,32),0x56776b,"shell",[0,y(122),0],[Math.PI/2,0,0],[1,1,1],{roughness:.82,explode:[0,.25,-.3]});
     for(const side of [-1,1])linePart(group,[[side*.10,y(160),0],[side*.31,y(118),0],[side*.34,y(75),0]],0x385c50,"shell",{radius:.04,segments:20,radialSegments:8,roughness:.9,explode:[side*.5,.2,0]});
     for(const mm of [610,630,650,800,820,840,860,880])addPart(group,new THREE.TorusGeometry(.119,.012,6,20),0x6d8c7b,"shell",[0,y(mm),0],[Math.PI/2,0,0],[1,1,1],{roughness:.95,explode:[0,0,-.45]});
-    addPart(group,new THREE.BoxGeometry(.18,.55,.035),0x406359,"shell",[0,y(850),.137],[0,0,0],[1,1,1],{roughness:.8,explode:[0,0,.60]});
+    addPart(group,new THREE.BoxGeometry(.18,.55,.035),0x406359,"shell",[0,y(850),.137],[0,0,0],[1,1,1],{roughness:.8,explode:[0,0,.60],td:"cover"});
     addPart(group,new THREE.BoxGeometry(.17,.45,.025),0x136b54,"core",[0,y(850),0],[0,0,0],[1,1,1],{electronic:true,explode:[.7,-.1,.50]});
     addPart(group,new THREE.BoxGeometry(.105,.16,.035),0x97aaa4,"core",[0,y(833),.03],[0,0,0],[1,1,1],{electronic:true,metalness:.4,explode:[.7,-.1,.50]});
     addPart(group,new THREE.BoxGeometry(.075,.04,.05),0xa9bbb4,"core",[0,y(890),.025],[0,0,0],[1,1,1],{electronic:true,explode:[.7,-.1,.50]});
@@ -262,15 +273,15 @@ function startThreeLab(THREE, OrbitControls) {
     for(const mm of [905,1065])addPart(group,new THREE.CylinderGeometry(.04,.04,.06,14),accent,"control",[x+.08,y(mm),.06],[Math.PI/2,0,0],[1,1,1],{electronic:true,explode:[.60,0,.60]});
     // Armour is an independent adjustable bib illustration, not greatsword geometry.
     const armourX=1.55;
-    addPart(group,plateGeometry([[-.80,.65],[-.25,.80],[-.18,.46],[.18,.46],[.25,.80],[.80,.65],[.65,-.90],[-.65,-.90]],.06,.025),0x283441,"wearable",[armourX,.05,0],[0,0,0],[1,1,1],{roughness:.98,explode:[.6,0,-.3]});
-    for(const side of [-1,1])linePart(group,[[armourX+side*.72,.48,0],[armourX+side*.88,.0,-.08],[armourX+side*.68,-.55,0]],0x7a6c76,"wearable",{radius:.035,segments:16,radialSegments:6,roughness:.95,explode:[.6,0,-.3]});
+    addPart(group,plateGeometry([[-.80,.65],[-.25,.80],[-.18,.46],[.18,.46],[.25,.80],[.80,.65],[.65,-.90],[-.65,-.90]],.06,.025),0x283441,"wearable",[armourX,.05,0],[0,0,0],[1,1,1],{roughness:.98,explode:[.6,0,-.3],td:"armour-bib"});
+    for(const side of [-1,1])linePart(group,[[armourX+side*.72,.48,0],[armourX+side*.88,.0,-.08],[armourX+side*.68,-.55,0]],0x7a6c76,"wearable",{radius:.035,segments:16,radialSegments:6,roughness:.95,explode:[.6,0,-.3],td:"armour-bib"});
     const zones=[{id:"left-shoulder",dx:-.47,dy:.53,w:.36,h:.23},{id:"chest",dx:0,dy:-.14,w:1.0,h:.58},{id:"right-shoulder",dx:.47,dy:.53,w:.36,h:.23}];
     for(const zone of zones){
-      const led=addPart(group,roundedPanelGeometry(zone.w,zone.h,.018,.05),accent,"wearable",[armourX+zone.dx,zone.dy,.095],[0,0,0],[1,1,1],{electronic:true,emissive:true,emissiveIntensity:1.1,explode:[.6,0,.55]});
+      const led=addPart(group,roundedPanelGeometry(zone.w,zone.h,.018,.05),accent,"wearable",[armourX+zone.dx,zone.dy,.095],[0,0,0],[1,1,1],{electronic:true,emissive:true,emissiveIntensity:1.1,explode:[.6,0,.55],td:"armour-led"});
       led.userData.feedbackZone=zone.id;
-      addPart(group,roundedPanelGeometry(zone.w+.04,zone.h+.04,.022,.06),0xe8dfe3,"wearable",[armourX+zone.dx,zone.dy,.14],[0,0,0],[1,1,1],{roughness:.65,opacity:.45,explode:[.6,0,.70]});
+      addPart(group,roundedPanelGeometry(zone.w+.04,zone.h+.04,.022,.06),0xe8dfe3,"wearable",[armourX+zone.dx,zone.dy,.14],[0,0,0],[1,1,1],{roughness:.65,opacity:.45,explode:[.6,0,.70],td:"armour-led"});
     }
-    const receiver=addPart(group,new THREE.BoxGeometry(.26,.34,.05),0x146258,"wearable",[armourX,-.48,-.08],[0,0,0],[1,1,1],{electronic:true,explode:[.6,-.15,-.6]});
+    const receiver=addPart(group,new THREE.BoxGeometry(.26,.34,.05),0x146258,"wearable",[armourX,-.48,-.08],[0,0,0],[1,1,1],{electronic:true,explode:[.6,-.15,-.6],td:"armour-receiver"});
     receiver.userData.deviceRole="armour-receiver";
     group.userData.designEnvelopeMm={width:360,height:1150,depth:60};
     group.userData.armourSizing="illustrative / fit not verified";
@@ -311,6 +322,8 @@ function startThreeLab(THREE, OrbitControls) {
   const initialHeight = Number($("#playerHeight")?.value || 168);
   let currentProp = "guardian", propModel, selectedKey = null, currentAssemblyStep = 0, guardianDiameter = Math.round(Math.max(45, Math.min(55, initialHeight * .3)));
   let twinStateByProp = {};
+  // Teardown mode (dist/teardown-ui.js owns the step state; this only draws it).
+  const teardown = { active: false, step: 0, tweens: [], focus: [], label: null, flight: null };
   try { twinStateByProp = JSON.parse(localStorage.getItem("atlas-twin-state-v1") || "{}"); } catch { twinStateByProp = {}; }
   const selectedByProp = Object.fromEntries(Object.entries(twinStateByProp).map(([prop, value]) => [prop, value?.selectedKey]).filter(([, key]) => key));
 
@@ -355,7 +368,7 @@ function startThreeLab(THREE, OrbitControls) {
       $("#electronicsLayerToggle").checked = true;
       if (Number($("#explodeRange").value) < 28) $("#explodeRange").value = "28";
     }
-    propModel.traverse(object => {
+    if (!teardown.active) propModel.traverse(object => {
       if (!object.isMesh || !object.material.emissive) return;
       const selected = object.userData.partKey === key;
       object.material.emissive.setHex(selected ? palette[currentProp] : object.userData.baseEmissive || 0);
@@ -388,6 +401,7 @@ function startThreeLab(THREE, OrbitControls) {
     if (!propModel) return;
     const amount = Number($("#explodeRange").value) / 100;
     $("#explodeValue").textContent = `${Math.round(amount * 100)}%`;
+    if (teardown.active) return;
     propModel.traverse(object => {
       if (!object.isMesh || !object.userData.basePosition) return;
       const vector = object.userData.explode || [0, 0, 0];
@@ -397,6 +411,7 @@ function startThreeLab(THREE, OrbitControls) {
   }
   function updateElectronicLayer() {
     const show = $("#electronicsLayerToggle").checked;
+    if (teardown.active) return;
     propModel?.traverse(object => {
       if (!object.isMesh) return;
       if (object.userData.electronic) object.visible = show;
@@ -430,6 +445,8 @@ function startThreeLab(THREE, OrbitControls) {
     refreshPropLabels();
     if ($("#syncTwinToggle")?.checked) applyGuidedStep(prop, currentAssemblyStep);
     else selectPart(selectedKey, { autoReveal: false });
+    teardown.active = false; teardown.tweens = []; teardown.focus = [];
+    applyTeardown({ animate: false });
   }
   function applyGuidedStep(prop, step) {
     currentAssemblyStep = Number(step || 0);
@@ -461,7 +478,134 @@ function startThreeLab(THREE, OrbitControls) {
     propPointer.set((event.clientX - rect.left) / rect.width * 2 - 1, -((event.clientY - rect.top) / rect.height) * 2 + 1);
     propRaycaster.setFromCamera(propPointer, propWorld.camera);
     const hit = propRaycaster.intersectObject(propModel, true).find(item => item.object.userData.partKey);
-    if (hit) selectPartManually(hit.object.userData.partKey);
+    if (hit && teardown.active) window.dispatchEvent(new CustomEvent("atlas-teardown-pick", { detail: { prop: currentProp, id: teardownId(hit.object) } }));
+    else if (hit) selectPartManually(hit.object.userData.partKey);
+  });
+
+  // ---------------------------------------------------------------------------
+  // Teardown: take the prop apart in service order. Each step names the mesh groups it removes
+  // (userData.td, else partKey). Removed groups slide out along their exploded-view vector and dim;
+  // the current group glows; the last step (the bare shell) stays put with everything laid out.
+  // ---------------------------------------------------------------------------
+  const teardownId = mesh => mesh.userData.td || mesh.userData.partKey;
+  const teardownSteps = () => window.ATLAS_TEARDOWN?.props?.[currentProp]?.steps || [];
+  const TEARDOWN_PULL = 1.45, TEARDOWN_MS = 650;
+  function teardownLook(mesh, look) {
+    const data = mesh.userData, mat = mesh.material;
+    if (mat.emissive) { mat.emissive.setHex(look === "focus" ? palette[currentProp] : data.baseEmissive || 0); mat.emissiveIntensity = look === "focus" ? Math.max(.35, data.baseEmissiveIntensity || 0) : data.baseEmissiveIntensity || 0; }
+    const dim = look === "dim";
+    mat.opacity = dim ? Math.min(.42, data.baseOpacity ?? 1) : data.baseOpacity ?? 1;
+    mat.transparent = dim || data.baseTransparent;
+    mat.depthWrite = dim ? false : data.baseDepthWrite;
+    mesh.renderOrder = look === "focus" ? 10 : dim ? -1 : 0;
+  }
+  function teardownLabel() {
+    if (!teardown.label) { teardown.label = document.createElement("div"); teardown.label.className = "td-float"; teardown.label.setAttribute("aria-hidden", "true"); propRoot.append(teardown.label); }
+    return teardown.label;
+  }
+  // Close-up camera: each step flies the orbit target to the parts coming out (where they will end
+  // up), like a teardown video; the overview and the bare shell fly back to the home framing. Only
+  // target and distance move, so the viewer can still orbit and zoom during and after a flight.
+  const TEARDOWN_HOME = { target: new THREE.Vector3(0, 0, 0), distance: new THREE.Vector3(0, .7, 10.8).length() };
+  const flightBox = new THREE.Box3(), flightSize = new THREE.Vector3();
+  function flyTeardownCamera(home) {
+    const controls = propWorld.controls, camera = propWorld.camera;
+    let target = TEARDOWN_HOME.target.clone(), distance = TEARDOWN_HOME.distance;
+    if (!home && teardown.focus.length) {
+      flightBox.makeEmpty();
+      for (const mesh of teardown.focus) {
+        const tween = teardown.tweens.find(item => item.mesh === mesh), saved = mesh.position.clone();
+        if (tween) mesh.position.copy(tween.to);
+        mesh.updateWorldMatrix(true, false); flightBox.expandByObject(mesh);
+        mesh.position.copy(saved); mesh.updateWorldMatrix(true, false);
+      }
+      // Lean a fifth of the way back to the model so the close-up keeps the prop in frame.
+      target = flightBox.getCenter(new THREE.Vector3()).lerp(TEARDOWN_HOME.target, .2);
+      distance = Math.max(4.6, Math.min(TEARDOWN_HOME.distance, flightBox.getSize(flightSize).length() * 2.6 + 3.6));
+    }
+    controls.minDistance = Math.min(controls.minDistance, 3);
+    teardown.flight = { start: performance.now(), fromTarget: controls.target.clone(), toTarget: target,
+      fromDistance: camera.position.distanceTo(controls.target), toDistance: distance, home };
+  }
+  function animateTeardownCamera(now) {
+    const flight = teardown.flight; if (!flight) return;
+    const controls = propWorld.controls, camera = propWorld.camera;
+    const k = Math.min(1, (now - flight.start) / 900), eased = 1 - Math.pow(1 - k, 3);
+    const direction = camera.position.clone().sub(controls.target).normalize();
+    controls.target.lerpVectors(flight.fromTarget, flight.toTarget, eased);
+    camera.position.copy(controls.target).addScaledVector(direction, flight.fromDistance + (flight.toDistance - flight.fromDistance) * eased);
+    if (k < 1) return;
+    teardown.flight = null;
+    if (flight.home && !teardown.active) controls.minDistance = 6;
+  }
+  function applyTeardown({ animate = true } = {}) {
+    const state = window.AtlasTeardown?.state?.();
+    const steps = teardownSteps();
+    const wasActive = teardown.active;
+    teardown.active = Boolean(propModel && state?.active && state.prop === currentProp && steps.length);
+    propRoot.classList.toggle("is-teardown", teardown.active);
+    $("#explodeRange").disabled = teardown.active;
+    if (!teardown.active) {
+      teardown.tweens = []; teardown.focus = [];
+      if (teardown.label) teardown.label.hidden = true;
+      if (wasActive && propModel) { selectPart(selectedKey, { autoReveal: false }); flyTeardownCamera(true); }
+      return;
+    }
+    if (!wasActive) propModel.rotation.y = -.42;
+    const last = steps.length - 1, step = Math.max(0, Math.min(last, Number(state.step) || 0));
+    const stepOf = new Map(); steps.forEach((item, index) => item.detach.forEach(id => stepOf.set(id, index)));
+    const now = performance.now(); teardown.step = step; teardown.tweens = []; teardown.focus = [];
+    propModel.traverse(mesh => {
+      if (!mesh.isMesh || !mesh.userData.basePosition) return;
+      const at = stepOf.get(teardownId(mesh)) ?? last;
+      const target = mesh.userData.basePosition.clone();
+      if (at <= step && at !== last) {
+        const out = new THREE.Vector3(...(mesh.userData.explode || [0, 0, 0]));
+        if (out.lengthSq() < 1e-6) out.set(0, -.35, -.8);
+        target.add(out.multiplyScalar(TEARDOWN_PULL));
+      }
+      const look = step > 0 && at === step ? "focus" : at < step ? "dim" : "normal";
+      mesh.visible = true; teardownLook(mesh, look);
+      if (look === "focus") teardown.focus.push(mesh);
+      if (animate && !mesh.position.equals(target)) teardown.tweens.push({ mesh, from: mesh.position.clone(), to: target, start: now });
+      else mesh.position.copy(target);
+    });
+    const label = teardownLabel(), item = steps[step], lang = isVi() ? "vi" : "en";
+    const count = item.parts.reduce((sum, [, qty]) => sum + qty, 0);
+    label.innerHTML = `<b>${step}/${last}</b> ${item.title[lang]}${count ? `<small>${count} ${lang === "vi" ? "linh kiện" : count === 1 ? "part" : "parts"}</small>` : ""}`;
+    label.hidden = step === 0;
+    if (animate || wasActive || teardown.prop !== currentProp) flyTeardownCamera(step === 0 || step === last);
+    teardown.prop = currentProp;
+  }
+  const teardownBox = new THREE.Box3(), teardownCentre = new THREE.Vector3();
+  function animateTeardown(now) {
+    animateTeardownCamera(now);
+    if (!teardown.active) return;
+    if (teardown.tweens.length) teardown.tweens = teardown.tweens.filter(tween => {
+      const k = Math.min(1, (now - tween.start) / TEARDOWN_MS);
+      const eased = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+      tween.mesh.position.lerpVectors(tween.from, tween.to, eased);
+      return k < 1;
+    });
+    const pulse = .22 + .3 * (.5 + .5 * Math.sin(now / 260));
+    teardown.focus.forEach(mesh => { if (mesh.material.emissive) mesh.material.emissiveIntensity = Math.max(pulse, mesh.userData.baseEmissiveIntensity || 0); });
+    const label = teardown.label;
+    if (!label || label.hidden || !teardown.focus.length) return;
+    teardownBox.makeEmpty(); teardown.focus.forEach(mesh => teardownBox.expandByObject(mesh));
+    teardownBox.getCenter(teardownCentre); teardownCentre.y = teardownBox.max.y;
+    teardownCentre.project(propWorld.camera);
+    const rect = propRoot.getBoundingClientRect();
+    const x = Math.max(90, Math.min(rect.width - 90, (teardownCentre.x + 1) / 2 * rect.width));
+    const y = Math.max(46, Math.min(rect.height - 96, (1 - teardownCentre.y) / 2 * rect.height - 14));
+    label.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -100%)`;
+  }
+  window.addEventListener("atlas-teardown-change", () => applyTeardown());
+  window.AtlasTeardown3D = Object.freeze({
+    snapshot: () => ({ active: teardown.active, step: teardown.step, prop: currentProp, moving: teardown.tweens.length,
+      focus: [...new Set(teardown.focus.map(teardownId))],
+      ids: [...new Set((propModel?.children || []).map(teardownId))],
+      out: [...new Set((propModel?.children || []).filter(mesh => mesh.userData.basePosition && !mesh.position.equals(mesh.userData.basePosition)).map(teardownId))] }),
+    pick: id => window.dispatchEvent(new CustomEvent("atlas-teardown-pick", { detail: { prop: currentProp, id } }))
   });
   $("#threePropLoading")?.remove(); rebuildProp($("#roleSelect")?.value || "guardian");
 
@@ -895,7 +1039,8 @@ function startThreeLab(THREE, OrbitControls) {
     requestAnimationFrame(animate);
     const rawDelta = lastFrameAt === undefined ? 0 : Math.max(0, (now - lastFrameAt) / 1000); lastFrameAt = now; arenaTime += Math.min(rawDelta, .25);
     const delta = Math.min(rawDelta, .05); const effectDelta = Math.min(rawDelta, .25);
-    propModel?.rotateY(.0012);
+    if (!teardown.active) propModel?.rotateY(.0012);
+    animateTeardown(now);
     effects = effects.filter(effect => {
       effect.age += effectDelta; const t = Math.min(1, Math.max(0, effect.age / effect.duration)); effect.update(t);
       if (t < 1) return true; effect.dispose?.(); return false;

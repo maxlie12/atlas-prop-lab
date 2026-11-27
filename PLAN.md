@@ -63,6 +63,13 @@ Prove the complete path from a physical action on an ESP32 prop to a game event 
 - Final enclosure, switches, connectors, and physical safety.
 - Reliable radio range around people, costumes, props, and nearby WiFi networks.
 
+## Prop teardown — revision 0.15
+
+- Teardown READY for all six props: service-order steps drive the 3D twin (slide-out, focus glow, close-up camera) and a panel with every component's job, check, unit price range, gate tag and Shopee search link; totals per step, running and whole prop; `.md` export.
+- Arc Bow twin now includes the Gate 01 IR emitter (lens tube on the arrow side) and the hit haptic; validators updated.
+- Contract PASS: every mesh group of every model removed exactly once, catalogue complete and bilingual (`scripts/validate-teardown.mjs`); browser test 31/31 on desktop and phone.
+- Prices are estimates checked 2026-11-25, shipping excluded; they are not quotes. Physical evidence remains EMPTY.
+
 ## Gate 01 hardware-ready — revision 0.14
 
 - Assembly guide READY: 25 bilingual steps in delivery order with safety ordering validated (flash bare boards, short check before power, meter AO before GPIO, identify E-B-C and pinouts before wiring).

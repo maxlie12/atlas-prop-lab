@@ -2,6 +2,14 @@
 
 Atlas Prop Lab is a mobile friendly design and simulation workspace for the physical ESP32 props used by Project Atlas.
 
+Revision 0.15 adds a **teardown mode** to every prop's 3D twin ([docs/teardown.md](docs/teardown.md)):
+
+- each of the six props comes apart in real service order (straps and cord → service cover → ESP32 core → sensors and controls → LEDs → bare shell); the parts of the current step slide out and glow, removed parts stay laid out and dim, and the camera flies to a close-up of what is coming out
+- every step lists the real components that come out: name, job, what to check, unit price range in VND, a Gate 01 / later / shell tag and a Shopee search link, with step, running and whole-prop totals and a downloadable `.md` teardown sheet
+- the Arc Bow twin now shows the Gate 01 IR emitter (TSAL6200 + 2N2222A behind a lens tube, on the arrow side of the riser) and the hit-feedback coin motor; the Dark Knight's armour comes apart as receiver box → three LED zones → bib
+- click any part of the model to jump to the step that removes it; ◀ ▶, arrow keys and Play step through; the panel works even where WebGL does not
+- `scripts/validate-teardown.mjs` checks that every mesh group of every model is removed exactly once and that every listed part has bilingual copy, a price and a link
+
 Revision 0.14 makes **Hardware Gate 01 ready for the parts to arrive**:
 
 - a 25-step assembly guide ordered by delivery (order 1 bow core, order 2 IR parts, then garment and coverage), with every GPIO taken from the wiring map and a printable checklist ([docs/hardware-gate-01.md](docs/hardware-gate-01.md))
@@ -77,7 +85,8 @@ The Wokwi/firmware baseline remains a reusable bench proxy while each physical r
 | Path | Purpose |
 | --- | --- |
 | `dist/` | Bilingual static mobile web lab and downloadable build packs |
-| `dist/three-lab.js` | Three.js prop digital twins and lightweight arena event replay |
+| `dist/three-lab.js` | Three.js prop digital twins, teardown drawing and lightweight arena event replay |
+| `dist/teardown-data.js`, `dist/teardown-ui.js` | Teardown steps, component catalogue with prices, and the teardown panel |
 | `firmware/spell-orb/` | PlatformIO firmware for ESP32 |
 | `firmware/<role>/` | Role firmware: guardian-shield, arc-bow, impact-armour, assassin-daggers, mage-staff, boss-greatsword, warrior-sword |
 | `firmware/test/` | Host Arduino stand-ins and scenario tests for role firmware |
@@ -91,6 +100,7 @@ The Wokwi/firmware baseline remains a reusable bench proxy while each physical r
 | `docs/arc-bow-impact-armour-proof-01.md` | Shared Hero/Boss armour decision, authoritative hit path, and physical proof boundary |
 | `docs/field-simulator.md` | Synced field simulator: roster, controls, rule values and the wireless block finding |
 | `docs/role-firmware.md` | Input → action mapping, thresholds and bench steps for daggers, staff, greatsword and sword |
+| `docs/teardown.md` | Teardown mode: step order per prop, component catalogue, prices and how to extend it |
 | `scripts/validate-project.mjs` | Fast repository consistency checks |
 | `.github/workflows/` | Firmware build, web validation, and optional Wokwi CI |
 
